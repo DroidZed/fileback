@@ -24,3 +24,15 @@ The following guides illustrate how to use some features concretely:
 * [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
 * [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
 * [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
+
+### How To Run
+
+In order to run the project simply follow these steps :
+
+1. Open `CMD` and navigato to the project root
+2. next run `mvnw spring-boot:run`
+
+N.B: You might need to configure the project in [application.properties file](https://github.com/DroidZed/fileback/blob/master/src/main/resources/application.properties)...
+
+You can also clean the porject of previous builds using:
+`mvnw spring-boot:clean`
