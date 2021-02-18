@@ -36,3 +36,7 @@ N.B: You might need to configure the project in [application.properties file](ht
 
 You can also clean the porject of previous builds using:
 `mvnw spring-boot:clean`
+
+### IMPORTANT
+
+THE PROJECT USES Oracle Open 15, so make sure to have it installed either by using your IDE (ie intellij IDEA Ultimate) or just installing it from the [official website](https://openjdk.java.net/projects/jdk/15/).
