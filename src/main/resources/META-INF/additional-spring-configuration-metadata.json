@@ -3,6 +3,6 @@
     {
       "name": "jwt.secretKey",
       "type": "java.lang.String",
-      "description": "jwt secret ket."
-  }
-] }
+      "description": "Description for jwt.secretKey."
+    }
+  ] }
