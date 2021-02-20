@@ -2,21 +2,16 @@ package com.wevioo.fileback.controller;
 
 import com.wevioo.fileback.message.JwtRequest;
 import com.wevioo.fileback.message.JwtResponse;
-import com.wevioo.fileback.model.ConfirmationToken;
 import com.wevioo.fileback.model.User;
-import com.wevioo.fileback.repository.ConfirmationTokenRepository;
-import com.wevioo.fileback.repository.UserRepository;
 import com.wevioo.fileback.securityConfig.UserDetail;
-import com.wevioo.fileback.service.EmailService;
+import com.wevioo.fileback.service.RegisterService;
 import com.wevioo.fileback.service.UserService;
 import com.wevioo.fileback.utility.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -26,14 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class AuthenticationController {
 
     @Autowired
-    EmailService emailService;
-
-    @Autowired
-    private ConfirmationTokenRepository confirmationTokenRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
@@ -42,8 +29,9 @@ public class AuthenticationController {
     @Autowired
     private JwtUtil jwtUtil;
 
+
     @Autowired
-    PasswordEncoder encoder;
+    private RegisterService regService;
 
     @GetMapping(path = "hello")
     public String Greeting (){
@@ -67,62 +55,13 @@ public class AuthenticationController {
     @PostMapping(path = "signUp")
     public String registerUser(ModelAndView modelAndView,@RequestBody User user)
     {
-
-        User existingUser = userRepository.findByEmail(user.getEmail());
-        if(existingUser != null)
-        {
-             modelAndView.addObject("message","This email already exists!");
-            modelAndView.setViewName("error");
-            return "Account already exists !";
-        }
-        else
-        {
-            user.setPasswordUser(encoder.encode(user.getPasswordUser()));
-            userRepository.save(user);
-
-            ConfirmationToken confirmationToken = new ConfirmationToken(user);
-
-            confirmationTokenRepository.save(confirmationToken);
-
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setTo(user.getEmail());
-            mailMessage.setSubject("Complete Registration!");
-
-            mailMessage.setText("To confirm your account, please click here : "
-                    +"http://localhost:8080/confirm-account?token="+confirmationToken.getConfirmationToken());
-
-            emailService.sendEmail(mailMessage);
-
-             modelAndView.addObject("email", user.getEmail());
-
-             modelAndView.setViewName("successfulRegisteration");
-        }
-
-        return "Activate your account !";
+        return regService.addUser(modelAndView, user);
     }
+
     @RequestMapping(value="/confirm-account", method= {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView confirmUserAccount(ModelAndView modelAndView, @RequestParam("token")String confirmationToken)
     {
-        System.out.println("Before token confirmation");
-        ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
-
-        System.out.println("After retrieving token");
-        System.out.println(token);
-
-        if(token != null)
-        {
-            User user = userRepository.findByEmail(token.getUser().getEmail());
-            user.setEtat(true);
-            userRepository.save(user);
-            modelAndView.setViewName("accountVerified");
-        }
-        else
-        {
-            modelAndView.addObject("message","The link is invalid or broken!");
-            modelAndView.setViewName("error");
-        }
-
-        return modelAndView;
+        return regService.confirmAccount(modelAndView, confirmationToken);
     }
 
 
