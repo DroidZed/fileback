@@ -43,7 +43,7 @@ public class User {
     @Column(name = "image", length = 1000)
     private byte[] pic;
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "id_act")
     private Activity activity;
 }
