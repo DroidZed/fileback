@@ -15,8 +15,8 @@ public class Activites {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name="id_infos")
-    private Long id_infos;
+    @Column(name="id_act")
+    private Long idAct;
 
     @Column(name="profession")
     private String profession;
@@ -24,6 +24,10 @@ public class Activites {
     @Column(name="description")
     private String description;
 
+    @OneToOne(fetch = FetchType.LAZY,
+    cascade = CascadeType.ALL,
+    mappedBy = "activites")
+    private Utilisateur utilisateur;
 
     public Activites(String profession,
                      String description) {

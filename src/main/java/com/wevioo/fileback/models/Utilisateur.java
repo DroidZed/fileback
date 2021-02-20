@@ -16,7 +16,7 @@ public class Utilisateur {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="id_user")
-    private Long id_user;
+    private Long idUser;
 
     @Column(name="username")
     private String username;
@@ -45,7 +45,9 @@ public class Utilisateur {
     @Column(name="pic",length = 1000)
     private byte[] pic;
 
-
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_act")
+    private Activites activites;
 
 
     public Utilisateur(String username,

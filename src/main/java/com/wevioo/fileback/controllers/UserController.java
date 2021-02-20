@@ -1,8 +1,8 @@
 package com.wevioo.fileback.controllers;
 
-import com.wevioo.fileback.models.Activites;
+// import com.wevioo.fileback.models.Activites;
 import com.wevioo.fileback.models.Utilisateur;
-import com.wevioo.fileback.repo.ActivitiesRepositeries;
+// import com.wevioo.fileback.repo.ActivitiesRepositeries;
 import com.wevioo.fileback.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +13,8 @@ public class UserController {
 
     private final UserRepo repo;
 
-    @Autowired
-    private ActivitiesRepositeries activitiesRepositeries;
+    // @Autowired
+    // private ActivitiesRepositeries activitiesRepositeries;
 
     @Autowired
     public UserController(UserRepo repo) {
