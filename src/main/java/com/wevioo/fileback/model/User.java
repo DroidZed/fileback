@@ -19,7 +19,7 @@ public class User {
     @Column(name = "user_name")
     private String userName;
 
-    @Column(name = "password_user")
+    @Column(name = "password_user", length= 60)
     private String passwordUser;
 
     @Column(name = "full_name")
@@ -38,9 +38,9 @@ public class User {
     private String tel;
 
     @Column(name = "etat")
-    private Boolean etat;
+    private Boolean etat = false;
 
-    @Column(name = "image")
+    @Column(name = "image", length = 1000)
     private byte[] pic;
 
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)

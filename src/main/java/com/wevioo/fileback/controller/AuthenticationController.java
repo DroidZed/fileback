@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping(path = "/")
+@CrossOrigin(origins ="*")
 public class AuthenticationController {
 
     @Autowired
@@ -64,14 +65,15 @@ public class AuthenticationController {
     }
 
     @PostMapping(path = "signUp")
-    public ModelAndView registerUser(ModelAndView modelAndView,@RequestBody User user)
+    public String registerUser(ModelAndView modelAndView,@RequestBody User user)
     {
 
         User existingUser = userRepository.findByEmail(user.getEmail());
         if(existingUser != null)
         {
-            modelAndView.addObject("message","This email already exists!");
+             modelAndView.addObject("message","This email already exists!");
             modelAndView.setViewName("error");
+            return "Account already exists !";
         }
         else
         {
@@ -91,17 +93,21 @@ public class AuthenticationController {
 
             emailService.sendEmail(mailMessage);
 
-            modelAndView.addObject("email", user.getEmail());
+             modelAndView.addObject("email", user.getEmail());
 
-            modelAndView.setViewName("successfulRegisteration");
+             modelAndView.setViewName("successfulRegisteration");
         }
 
-        return modelAndView;
+        return "Activate your account !";
     }
     @RequestMapping(value="/confirm-account", method= {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView confirmUserAccount(ModelAndView modelAndView, @RequestParam("token")String confirmationToken)
     {
+        System.out.println("Before token confirmation");
         ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
+
+        System.out.println("After retrieving token");
+        System.out.println(token);
 
         if(token != null)
         {
