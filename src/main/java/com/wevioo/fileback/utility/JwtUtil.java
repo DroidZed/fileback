@@ -3,10 +3,10 @@ package com.wevioo.fileback.utility;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,12 +15,13 @@ import java.util.function.Function;
 
 @Component
 public class JwtUtil implements Serializable {
+    @Serial
     private static final long serialVersionUID = 234234523523L;
 
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
-
-    private String SECRET_KEY = "secret12453658965fqmojbfkjvipfvjdbfvipdfnfdfjvpidfvvjnipdbkjdsb4252524kkfllfkhh" +
+    //@Value("${jwt.secretKey}") TODO: 7ottha bech trodou ya9ra el code mel properties
+    private final String SECRET_KEY = "secret12453658965fqmojbfkjvipfvjdbfvipdfnfdfjvpidfvvjnipdbkjdsb4252524kkfllfkhh" +
             "pufgydhjkhjjgjj";
 
     //retrieve username from jwt token
