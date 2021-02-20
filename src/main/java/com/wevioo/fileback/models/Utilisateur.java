@@ -45,8 +45,8 @@ public class Utilisateur {
     @Column(name="pic",length = 1000)
     private byte[] pic;
 
-    @OneToOne(mappedBy = "Activites")
-    private Activites activites;
+
+
 
     public Utilisateur(String username,
                        String passwordUser,
@@ -67,6 +67,5 @@ public class Utilisateur {
         this.tel = tel;
         this.etat = etat;
         this.pic = pic;
-        this.activites = activites;
     }
 }

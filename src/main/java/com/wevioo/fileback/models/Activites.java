@@ -24,13 +24,12 @@ public class Activites {
     @Column(name="description")
     private String description;
 
+
     public Activites(String profession,
                      String description) {
         this.profession = profession;
         this.description = description;
     }
 
-    @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name="id_infos", referencedColumnName = "id_user")
-    private Utilisateur utilisateurs;
+
 }
