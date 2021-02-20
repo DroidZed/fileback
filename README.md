@@ -29,14 +29,14 @@ The following guides illustrate how to use some features concretely:
 
 In order to run the project simply follow these steps :
 
-1. Open `CMD` and navigato to the project root
+1. Open `CMD` and navigate to the project root
 2. next run `mvnw spring-boot:run`
 
 N.B: You might need to configure the project in `application.properties` file
 
-You can also clean the porject of previous builds using:
+You can also clean the project of previous builds using:
 `mvnw spring-boot:clean`
 
 ### IMPORTANT
 
-THE PROJECT USES Oracle Open 15, so make sure to have it installed either by using your IDE (ie intellij IDEA Ultimate) or just installing it from the [official website](https://openjdk.java.net/projects/jdk/15/).
+THE PROJECT USES Oracle Open JDK 15, so make sure to have it installed either by using your IDE (ie intellij IDEA Ultimate) or just installing it from the [official website](https://openjdk.java.net/projects/jdk/15/).
