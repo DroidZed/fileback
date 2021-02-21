@@ -53,7 +53,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(path = "signUp")
-    public String registerUser(ModelAndView modelAndView,@RequestBody User user)
+    public ResponseEntity<?> registerUser(ModelAndView modelAndView,@RequestBody User user)
     {
         return regService.addUser(modelAndView, user);
     }

@@ -1,11 +1,13 @@
 package com.wevioo.fileback.service;
 
+import com.wevioo.fileback.message.ResponseMessage;
 import com.wevioo.fileback.model.ConfirmationToken;
 import com.wevioo.fileback.model.User;
 import com.wevioo.fileback.repository.ConfirmationTokenRepository;
 import com.wevioo.fileback.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,7 +30,7 @@ public class RegisterService {
     @Autowired
     PasswordEncoder encoder;
 
-    public String addUser(ModelAndView modelAndView, User user) {
+    public ResponseEntity<?> addUser(ModelAndView modelAndView, User user) {
 
         User existingUser = userRepository.findByEmail(user.getEmail());
 
@@ -36,7 +38,9 @@ public class RegisterService {
         {
             modelAndView.addObject("message","This email already exists!");
             modelAndView.setViewName("error");
-            return "Account already exists !";
+            return ResponseEntity
+                .badRequest()
+                .body(new ResponseMessage("Error: Account already exists!"));
         }
         else
         {
@@ -58,10 +62,10 @@ public class RegisterService {
 
             modelAndView.addObject("email", user.getEmail());
 
-            modelAndView.setViewName("successfulRegisteration");
+            modelAndView.setViewName("successfulRegistration");
         }
 
-        return "Activate your account !";
+        return ResponseEntity.ok(new ResponseMessage("Activate your account !"));
     }
 
     @Transactional
