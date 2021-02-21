@@ -1,14 +1,13 @@
 package com.wevioo.fileback.securityConfig;
 
 import com.wevioo.fileback.model.User;
-//import jwtdemo.jwt.model.Utilisateur;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+// import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
+// import java.util.Collections;
 @AllArgsConstructor
 public class UserDetail implements UserDetails {
 
@@ -18,6 +17,10 @@ public class UserDetail implements UserDetails {
         //return Collections.singleton(new SimpleGrantedAuthority(utilisateur.getRole()));
       return null;
     }
+
+    public Long getId() { return user.getId_user(); }
+
+    public Boolean getStatus() { return user.getTravailleur(); }
 
     @Override
     public String getPassword() {
