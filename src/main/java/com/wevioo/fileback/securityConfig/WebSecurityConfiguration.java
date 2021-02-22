@@ -54,6 +54,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/confirm-account")
                 .permitAll()
+                .antMatchers("/users/**")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
