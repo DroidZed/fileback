@@ -46,6 +46,9 @@ public class User {
     @Column(name = "image", length = 1000)
     private byte[] pic;
 
+    @Column(name = "is_admin")
+    private Boolean isAdmin = false;
+
     @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "id_act")
     private Activity activity;

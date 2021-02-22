@@ -16,4 +16,9 @@ public class EmailService {
     public void sendEmail(SimpleMailMessage email) {
         javaMailSender.send(email);
     }
+
+    @Async
+    public void inviteUser(SimpleMailMessage email) {
+        javaMailSender.send(email);
+    }
 }

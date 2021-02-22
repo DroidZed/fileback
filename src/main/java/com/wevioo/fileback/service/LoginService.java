@@ -40,6 +40,6 @@ public class LoginService {
 
         final String token = jwtUtil.generateToken(userDetails);
 
-        return ResponseEntity.ok(new JwtResponse(userDetails.getStatus(),userDetails.getId(),token));
+        return ResponseEntity.ok(new JwtResponse(userDetails.getStatus(),userDetails.getId(),userDetails.getIsAdmin(),token));
     }
 }

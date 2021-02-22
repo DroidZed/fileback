@@ -11,5 +11,6 @@ public class JwtResponse {
 
     private Boolean status;
     private Long id;
+    private Boolean isAdmin;
     private String token;
 }

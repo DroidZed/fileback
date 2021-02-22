@@ -26,6 +26,8 @@ public class UserDetail implements UserDetails {
 
     public Boolean getStatus() { return user.getTravailleur(); }
 
+    public Boolean getIsAdmin() { return user.getIsAdmin(); }
+
     @Override
     public String getPassword() {
         return user.getPasswordUser();
