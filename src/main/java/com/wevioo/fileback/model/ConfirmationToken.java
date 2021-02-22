@@ -1,26 +1,26 @@
 package com.wevioo.fileback.model;
 
+import lombok.Data;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
 
+@Data
 @Entity
-@Table(name="confirmationToken")
-@Getter
-@Setter
+@NoArgsConstructor
 @AllArgsConstructor
+@Table(name="confirmation_token")
 public class ConfirmationToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id_token")
-    private long tokenid;
+    private long idToken;
 
-    @Column(name="confirmationToken")
+    @Column(name="confirmation_token")
     private String confirmationToken;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -29,8 +29,6 @@ public class ConfirmationToken {
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "id_user")
     private User user;
-
-    public ConfirmationToken() {}
 
     public ConfirmationToken(User user) {
         this.user = user;

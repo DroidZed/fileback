@@ -2,16 +2,17 @@ package com.wevioo.fileback.controller;
 
 import com.wevioo.fileback.model.User;
 import com.wevioo.fileback.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/")
+@RequestMapping(path = "/users")
 @CrossOrigin("http://localhost:4200")
+@ResponseBody
+@AllArgsConstructor
 public class UsersController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @PostMapping(path = "add")
     public void addUser(@RequestBody User user){

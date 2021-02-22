@@ -24,6 +24,6 @@ public class Activity {
     @Column(name = "description")
     private String description;
 
-    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy ="activity" )
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy ="activity" )
     private User user;
 }

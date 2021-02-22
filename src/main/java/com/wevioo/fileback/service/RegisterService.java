@@ -6,38 +6,33 @@ import com.wevioo.fileback.model.User;
 import com.wevioo.fileback.repository.ConfirmationTokenRepository;
 import com.wevioo.fileback.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.ModelAndView;
+// import org.springframework.web.servlet.ModelAndView;
 
 @Service
 @AllArgsConstructor
 public class RegisterService {
 
-    @Autowired
     private final UserRepository userRepository;
 
-    @Autowired
     private final ConfirmationTokenRepository confirmationTokenRepository;
 
-    @Autowired
     private final EmailService emailService;
 
-    @Autowired
-    PasswordEncoder encoder;
+    private final PasswordEncoder encoder;
 
-    public ResponseEntity<?> addUser(ModelAndView modelAndView, User user) {
+    public ResponseEntity<?> addUser(/*ModelAndView modelAndView,*/ User user) {
 
         User existingUser = userRepository.findByEmail(user.getEmail());
 
         if(existingUser != null)
         {
-            modelAndView.addObject("message","This email already exists!");
-            modelAndView.setViewName("error");
+           // modelAndView.addObject("message","This email already exists!");
+           // modelAndView.setViewName("error");
             return ResponseEntity
                 .badRequest()
                 .body(new ResponseMessage("Error: Account already exists!"));
@@ -52,6 +47,7 @@ public class RegisterService {
             confirmationTokenRepository.save(confirmationToken);
 
             SimpleMailMessage mailMessage = new SimpleMailMessage();
+
             mailMessage.setTo(user.getEmail());
             mailMessage.setSubject("Complete Registration!");
 
@@ -60,36 +56,38 @@ public class RegisterService {
 
             emailService.sendEmail(mailMessage);
 
-            modelAndView.addObject("email", user.getEmail());
+            // modelAndView.addObject("email", user.getEmail());
 
-            modelAndView.setViewName("successfulRegistration");
+           // modelAndView.setViewName("successfulRegistration");
         }
 
-        return ResponseEntity.ok(new ResponseMessage("Activate your account !"));
+        return ResponseEntity.ok(new ResponseMessage("Vérifier votre boite mail pour un lien de confirmation !"));
     }
 
     @Transactional
-    public ModelAndView confirmAccount(ModelAndView modelAndView, String confirmationToken) {
-        System.out.println("Before token confirmation");
-        ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
+    public ResponseEntity<?> confirmAccount(/*ModelAndView modelAndView,*/ String confirmationToken) {
 
-        System.out.println("After retrieving token");
-        System.out.println(token);
+        String message;
+
+        ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
 
         if(token != null)
         {
             User user = userRepository.findByEmail(token.getUser().getEmail());
+
             user.setEtat(true);
+
             userRepository.save(user);
-            modelAndView.setViewName("accountVerified");
+
+            //modelAndView.setViewName("accountVerified");
+
+            message = "Compte confirmé !";
         }
         else
         {
-            modelAndView.addObject("message","The link is invalid or broken!");
-            modelAndView.setViewName("error");
+            return ResponseEntity.badRequest().body(new ResponseMessage("Lien invalide !"));
         }
-
-        return modelAndView;
+        return ResponseEntity.ok(new ResponseMessage(message));
     }
 
 }
