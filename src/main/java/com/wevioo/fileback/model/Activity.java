@@ -1,5 +1,6 @@
 package com.wevioo.fileback.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class Activity {
     @Column(name = "description")
     private String description;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy ="activity" )
     private User user;
 }

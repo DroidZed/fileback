@@ -4,6 +4,8 @@ import com.wevioo.fileback.securityConfig.UserDetail;
 import com.wevioo.fileback.service.UserService;
 import com.wevioo.fileback.utility.JwtUtil;
 import lombok.AllArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -17,12 +19,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-@AllArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
-    private final JwtUtil jwtUtil;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     protected void doFilterInternal(

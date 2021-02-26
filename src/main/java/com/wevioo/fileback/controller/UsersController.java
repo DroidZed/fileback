@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/users")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 @ResponseBody
 @AllArgsConstructor
 public class UsersController {

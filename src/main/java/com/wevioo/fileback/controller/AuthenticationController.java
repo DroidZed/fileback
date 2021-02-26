@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/")
-@CrossOrigin(origins ="*")
+@CrossOrigin(origins = "*")
 @AllArgsConstructor
 @ResponseBody
 public class AuthenticationController {
