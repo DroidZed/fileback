@@ -14,6 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+
+import static java.text.MessageFormat.*;
 
 @RestController
 @RequestMapping(path = "/users")
@@ -46,13 +49,11 @@ public class UsersController {
                 {
                     data.setAdresse(newUser.getAdresse());
 
-                    // data.setPasswordUser(newUser.getPasswordUser());
+                    data.setPasswordUser(newUser.getPasswordUser());
 
                     data.setFullName(newUser.getFullName());
 
                     data.setTel(newUser.getTel());
-
-                    data.setActivity(newUser.getActivity());
 
                     return userRepository.save(data);
                 }
@@ -78,5 +79,25 @@ public class UsersController {
         mailMessage.setText("On vous invite à découvrire notre plateforme de recherche de services à l'adresse : http://localhost:4200");
         emailService.sendEmail(mailMessage);
         return ResponseEntity.ok(new ResponseMessage("Email envoyé"));
+    }
+
+    @PutMapping(path="/account/disable/{id}")
+    public @ResponseBody ResponseEntity<?> changeAccountState(@PathVariable Long id, @RequestBody String state)
+    {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if(optionalUser.isEmpty()) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Impossible de modifier l'état du compte !"));
+        }
+
+        User u = optionalUser.get();
+
+        Boolean b = Boolean.parseBoolean(state);
+
+        u.setEtat(b);
+
+        userRepository.save(u);
+
+        return ResponseEntity.ok(new ResponseMessage(format("Le compte ID = {0} à été {1} avec succés !", id, !b ? "désactivé" : "activé")));
     }
 }
