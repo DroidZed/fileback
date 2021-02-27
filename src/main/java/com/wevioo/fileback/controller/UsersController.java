@@ -30,7 +30,7 @@ public class UsersController {
     private final EmailService emailService;
 
     @PostMapping(path = "add")
-    public void addUser(@RequestBody User user){
+    public void addUser(@RequestBody User user) {
         this.userRepository.save(user);
     }
 
@@ -39,34 +39,27 @@ public class UsersController {
         return userRepository.findAll();
     }
 
-    // TODO: a reviser pour le prochain sprint !
     @PutMapping(path = "update/{id}")
-    public @ResponseBody ResponseEntity<?> updateUser(@PathVariable Long id,
-                                                      @RequestBody User newUser) {
-        User oldUser = userRepository
-                .findById(id)
-                .map(data ->
-                {
-                    data.setAdresse(newUser.getAdresse());
+    public @ResponseBody ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User newUser) {
+        // TODO: a reviser pour le prochain sprint !
+        User oldUser = userRepository.findById(id).map(data -> {
+            data.setAdresse(newUser.getAdresse());
 
-                    data.setPasswordUser(newUser.getPasswordUser());
+            data.setPasswordUser(newUser.getPasswordUser());
 
-                    data.setFullName(newUser.getFullName());
+            data.setFullName(newUser.getFullName());
 
-                    data.setTel(newUser.getTel());
+            data.setTel(newUser.getTel());
 
-                    return userRepository.save(data);
-                }
-        )
-                .orElseThrow(() -> new UserNotFoundException(id));
+            return userRepository.save(data);
+        }).orElseThrow(() -> new UserNotFoundException(id));
 
         return ResponseEntity.ok(oldUser);
     }
 
     // ! modif mt3 taswira kahaw !!!!
     @PutMapping(path = "img/profile/{id}")
-    public @ResponseBody ResponseEntity<?> updateProfilePicture(@RequestBody MultipartFile img,
-                                                  @PathVariable Long id)
+    public @ResponseBody ResponseEntity<?> updateProfilePicture(@RequestBody MultipartFile img, @PathVariable Long id)
             throws IOException {
         return imageService.updateProfilePicture(img, id);
     }
@@ -76,28 +69,26 @@ public class UsersController {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(email);
         mailMessage.setSubject("Venez découvrire notre platforme !");
-        mailMessage.setText("On vous invite à découvrire notre plateforme de recherche de services à l'adresse : http://localhost:4200");
+        mailMessage.setText(
+                "On vous invite à découvrire notre plateforme de recherche de services à l'adresse : http://localhost:4200");
         emailService.sendEmail(mailMessage);
         return ResponseEntity.ok(new ResponseMessage("Email envoyé"));
     }
 
-    @PutMapping(path="/account/disable/{id}")
-    public @ResponseBody ResponseEntity<?> changeAccountState(@PathVariable Long id, @RequestBody String state)
-    {
+    @PutMapping(path = "/account/disable/{id}")
+    public @ResponseBody ResponseEntity<?> disableAccount(@PathVariable Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
 
-        if(optionalUser.isEmpty()) {
+        if (optionalUser.isEmpty())
             return ResponseEntity.badRequest().body(new ResponseMessage("Impossible de modifier l'état du compte !"));
-        }
 
         User u = optionalUser.get();
 
-        Boolean b = Boolean.parseBoolean(state);
-
-        u.setEtat(b);
+        u.setEtat(false);
 
         userRepository.save(u);
 
-        return ResponseEntity.ok(new ResponseMessage(format("Le compte ID = {0} à été {1} avec succés !", id, !b ? "désactivé" : "activé")));
+        return ResponseEntity
+                .ok(new ResponseMessage(format("Le compte ID = {0} à été {1} avec succés !", id, "désactivé")));
     }
 }
