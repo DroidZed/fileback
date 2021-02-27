@@ -3,7 +3,6 @@ package com.wevioo.fileback.filters;
 import com.wevioo.fileback.securityConfig.UserDetail;
 import com.wevioo.fileback.service.UserService;
 import com.wevioo.fileback.utility.JwtUtil;
-import lombok.AllArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

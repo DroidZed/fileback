@@ -1,6 +1,5 @@
 package com.wevioo.fileback.service;
 
-import com.wevioo.fileback.exceptions.UserNotFoundException;
 import com.wevioo.fileback.message.ResponseMessage;
 import com.wevioo.fileback.model.User;
 import com.wevioo.fileback.repository.UserRepository;
