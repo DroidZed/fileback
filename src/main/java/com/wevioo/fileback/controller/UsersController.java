@@ -42,22 +42,9 @@ public class UsersController {
         return userRepository.findAll();
     }
 
-    @PutMapping(path = "update/{id}")
-    public @ResponseBody ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User newUser) {
-        // TODO: a reviser pour le prochain sprint !
-        User oldUser = userRepository.findById(id).map(data -> {
-            data.setAdresse(newUser.getAdresse());
-
-            data.setPasswordUser(newUser.getPasswordUser());
-
-            data.setFullName(newUser.getFullName());
-
-            data.setTel(newUser.getTel());
-
-            return userRepository.save(data);
-        }).orElseThrow(() -> new UserNotFoundException(id));
-
-        return ResponseEntity.ok(oldUser);
+    @GetMapping(path = "one/{id}")
+    public @ResponseBody User getOneUser(@PathVariable Long id) {
+        return this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     // ! modif mt3 taswira kahaw !!!!
@@ -99,4 +86,21 @@ public class UsersController {
     public @ResponseBody Page<User> getUsersPaged(@RequestParam(defaultValue = "0") Integer page) {
         return this.userRepository.findAll(PageRequest.of(page,5));
     }
+
+    @GetMapping(path="count/all")
+    public @ResponseBody Long getCountOfAllUsers() {
+        return this.userRepository.count();
+    }
+
+    @GetMapping(path = "count/jobbers")
+    public @ResponseBody Long getCountOfJobbers() {
+        return this.userRepository.countTravailleurs();
+    }
+
+    @GetMapping(path = "count/normal")
+    public @ResponseBody Long getCountOfNormalUsers() {
+        return this.userRepository.countUsers();
+    }
+
+
 }
