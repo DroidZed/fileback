@@ -7,6 +7,9 @@ import com.wevioo.fileback.repository.UserRepository;
 import com.wevioo.fileback.service.EmailService;
 import com.wevioo.fileback.service.ImageService;
 import lombok.AllArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +23,7 @@ import static java.text.MessageFormat.*;
 
 @RestController
 @RequestMapping(path = "/users")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 @ResponseBody
 @AllArgsConstructor
 public class UsersController {
@@ -75,7 +78,7 @@ public class UsersController {
         return ResponseEntity.ok(new ResponseMessage("Email envoyé"));
     }
 
-    @PutMapping(path = "/account/disable/{id}")
+    @PutMapping(path = "/disable/{id}")
     public @ResponseBody ResponseEntity<?> disableAccount(@PathVariable Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
 
@@ -90,5 +93,10 @@ public class UsersController {
 
         return ResponseEntity
                 .ok(new ResponseMessage(format("Le compte ID = {0} à été {1} avec succés !", id, "désactivé")));
+    }
+
+    @GetMapping(path="/list")
+    public @ResponseBody Page<User> getUsersPaged(@RequestParam(defaultValue = "0") Integer page) {
+        return this.userRepository.findAll(PageRequest.of(page,5));
     }
 }

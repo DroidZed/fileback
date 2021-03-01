@@ -11,7 +11,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-// import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.ModelAndView;
 
 @Service
 @AllArgsConstructor
@@ -25,14 +25,12 @@ public class RegisterService {
 
     private final PasswordEncoder encoder;
 
-    public ResponseEntity<?> addUser(/*ModelAndView modelAndView,*/ User user) {
+    public ResponseEntity<?> addUser(User user) {
 
         User existingUser = userRepository.findByEmail(user.getEmail());
 
         if(existingUser != null)
         {
-           // modelAndView.addObject("message","This email already exists!");
-           // modelAndView.setViewName("error");
             return ResponseEntity
                 .badRequest()
                 .body(new ResponseMessage("Error: Account already exists!"));
@@ -56,18 +54,13 @@ public class RegisterService {
 
             emailService.sendEmail(mailMessage);
 
-            // modelAndView.addObject("email", user.getEmail());
-
-           // modelAndView.setViewName("successfulRegistration");
         }
 
         return ResponseEntity.ok(new ResponseMessage("Vérifier votre boite mail pour un lien de confirmation !"));
     }
 
     @Transactional
-    public ResponseEntity<?> confirmAccount(/*ModelAndView modelAndView,*/ String confirmationToken) {
-
-        String message;
+    public ModelAndView confirmAccount(ModelAndView modelAndView,String confirmationToken) {
 
         ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
 
@@ -79,15 +72,15 @@ public class RegisterService {
 
             userRepository.save(user);
 
-            //modelAndView.setViewName("accountVerified");
+            modelAndView.setViewName("accountVerified");
 
-            message = "Compte confirmé !";
         }
         else
         {
-            return ResponseEntity.badRequest().body(new ResponseMessage("Lien invalide !"));
+            modelAndView.setViewName("error");
+            modelAndView.addObject("message","The link is invalid or broken!");
         }
-        return ResponseEntity.ok(new ResponseMessage(message));
+        return modelAndView;
     }
 
 }

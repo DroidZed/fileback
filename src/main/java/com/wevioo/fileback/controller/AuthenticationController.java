@@ -8,11 +8,11 @@ import com.wevioo.fileback.service.RegisterService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-//import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping(path = "/")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @AllArgsConstructor
 @ResponseBody
 public class AuthenticationController {
@@ -34,16 +34,15 @@ public class AuthenticationController {
     }
 
     @PostMapping(path = "signUp")
-    public ResponseEntity<?> registerUser(/*ModelAndView modelAndView,*/
-                                          @RequestBody User user)
+    public ResponseEntity<?> registerUser(@RequestBody User user)
     {
-        return regService.addUser(/*modelAndView,*/user);
+        return regService.addUser(user);
     }
 
     @GetMapping(value="/confirm-account")
-    public ResponseEntity<?> confirmUserAccount(/*ModelAndView modelAndView,*/
-                                                @RequestParam("token")String confirmationToken)
+    public ModelAndView confirmUserAccount(ModelAndView modelAndView,
+                                           @RequestParam("token")String confirmationToken)
     {
-        return regService.confirmAccount(/*modelAndView,*/confirmationToken);
+        return regService.confirmAccount(modelAndView,confirmationToken);
     }
 }
