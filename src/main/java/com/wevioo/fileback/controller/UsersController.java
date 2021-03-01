@@ -44,7 +44,10 @@ public class UsersController {
 
     @GetMapping(path = "one/{id}")
     public @ResponseBody User getOneUser(@PathVariable Long id) {
-        return this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        return this.userRepository.findById(id).map(data -> {
+            data.setPic(null);
+            return data;
+        }).orElseThrow(()-> new UserNotFoundException(id));
     }
 
     // ! modif mt3 taswira kahaw !!!!
