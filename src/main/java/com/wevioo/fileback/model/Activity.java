@@ -22,10 +22,15 @@ public class Activity {
 
     @Column(name = "profession")
     private String profession;
+
     @Column(name = "description")
     private String description;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy ="activity" )
+    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy ="activity")
     private User user;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "id_cat")
+    private Category category;
 }

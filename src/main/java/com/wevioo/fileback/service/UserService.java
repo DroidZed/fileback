@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -25,5 +28,10 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("user not found in data base ");
         }
         return  new UserDetail(user) ;
+    }
+
+    @Transactional
+    public List<User> getAllUsers() {
+        return this.userRepository.findAll();
     }
 }

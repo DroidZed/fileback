@@ -6,8 +6,8 @@ import com.wevioo.fileback.model.User;
 import com.wevioo.fileback.repository.UserRepository;
 import com.wevioo.fileback.service.EmailService;
 import com.wevioo.fileback.service.ImageService;
+import com.wevioo.fileback.service.UserService;
 import lombok.AllArgsConstructor;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +21,7 @@ import java.util.Optional;
 
 import static java.text.MessageFormat.*;
 
+
 @RestController
 @RequestMapping(path = "/users")
 @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
@@ -31,6 +32,7 @@ public class UsersController {
     private final UserRepository userRepository;
     private final ImageService imageService;
     private final EmailService emailService;
+    private final UserService userService;
 
     @PostMapping(path = "add")
     public void addUser(@RequestBody User user) {
@@ -39,7 +41,7 @@ public class UsersController {
 
     @GetMapping(path = "all")
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return this.userService.getAllUsers();
     }
 
     @GetMapping(path = "one/{id}")
@@ -104,6 +106,5 @@ public class UsersController {
     public @ResponseBody Long getCountOfNormalUsers() {
         return this.userRepository.countUsers();
     }
-
 
 }

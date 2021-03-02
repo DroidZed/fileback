@@ -4,6 +4,7 @@ package com.wevioo.fileback.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "users")
+@Proxy(lazy = false)
 public class User {
 
     @Id
@@ -52,4 +54,8 @@ public class User {
     @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "id_act")
     private Activity activity;
+
+    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_loc")
+    private Locations location;
 }

@@ -39,6 +39,7 @@ public class AuthenticationController {
         return regService.addUser(user);
     }
 
+
     @GetMapping(value="/confirm-account")
     public ModelAndView confirmUserAccount(ModelAndView modelAndView,
                                            @RequestParam("token")String confirmationToken)
