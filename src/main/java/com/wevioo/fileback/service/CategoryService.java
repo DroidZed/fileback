@@ -4,18 +4,20 @@ import com.wevioo.fileback.exceptions.CategoryNotFoundException;
 import com.wevioo.fileback.helper.Base64Treatment;
 import com.wevioo.fileback.model.Category;
 import com.wevioo.fileback.repository.CategoryRepository;
-import lombok.AllArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 @Service
-@AllArgsConstructor
 public class CategoryService {
 
-    private final CategoryRepository categoryRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    private Base64Treatment base64Treatment;
 
     public List<Category> getAllCategories() {
         List<Category> listOfCategories = categoryRepository.findAll();
@@ -53,17 +55,23 @@ public class CategoryService {
     }
 
     public ResponseEntity<?> updateCategory(Category newCat, Long id) {
-        Base64Treatment base64Treatment = new Base64Treatment(newCat.getImage());
+
+        if(newCat.getImage() != null && newCat.getImage().length > 0) {
+            base64Treatment = new Base64Treatment(newCat.getImage());
+        }
         return this.categoryRepository.findById(id)
                 .map(category -> {
-                    if(newCat.getNom() != null)
+                    if(newCat.getNom() != null && newCat.getNom() != ""){
                         category.setNom(newCat.getNom());
-                    if(newCat.getDescription() != null)
+                    }
+                    if(newCat.getDescription() != null && newCat.getDescription() != ""){
                         category.setDescription(newCat.getDescription());
-                    if(newCat.getImage() != null)
-                        category.setImage(base64Treatment.compressBytes());
+                    }
+                    if(base64Treatment != null){
+                    category.setImage(base64Treatment.compressBytes());
                     this.categoryRepository.save(category);
                     category.setImage(base64Treatment.decompressBytes());
+                    }
                     return ResponseEntity.ok(category);
                 }).orElseGet(() -> {
                     newCat.setIdCat(id);

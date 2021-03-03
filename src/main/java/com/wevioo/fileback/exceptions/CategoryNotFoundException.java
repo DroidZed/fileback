@@ -1,11 +1,11 @@
 package com.wevioo.fileback.exceptions;
 
-import java.io.Serial;
-import java.io.Serializable;
-
 import static java.text.MessageFormat.format;
 
-public class CategoryNotFoundException extends RuntimeException implements Serializable {
+import java.io.Serial;
+
+public class CategoryNotFoundException extends RuntimeException {
+
 
     @Serial
     private static final long serialVersionUID = 1L;
