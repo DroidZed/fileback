@@ -21,12 +21,18 @@ public class CategoryService {
 
     private Base64Treatment base64Treatment;
 
+    public CategoryService() {
+        super();
+    }
+
     public List<Category> getAllCategories() {
         List<Category> listOfCategories = categoryRepository.findAll();
 
+        base64Treatment = new Base64Treatment();
+
         for (Category category : listOfCategories)
             if (category.getImage() != null) {
-                Base64Treatment base64Treatment = new Base64Treatment(category.getImage());
+                base64Treatment.setBase64String(category.getImage());
                 category.setImage(base64Treatment.decompressBytes());
             }
 
@@ -34,14 +40,14 @@ public class CategoryService {
     }
 
     public void createCategory(Category cat) {
-        Base64Treatment base64Treatment = new Base64Treatment(cat.getImage());
+        base64Treatment = new Base64Treatment(cat.getImage());
         cat.setImage(base64Treatment.compressBytes());
         this.categoryRepository.save(cat);
     }
 
     public Category getOneCategory(Long id) {
         return this.categoryRepository.findById(id).map(data -> {
-            Base64Treatment base64Treatment = new Base64Treatment(data.getImage());
+            base64Treatment = new Base64Treatment(data.getImage());
             data.setImage(base64Treatment.decompressBytes());
             return data;
         }).orElseThrow(() -> new CategoryNotFoundException(id));
@@ -57,16 +63,12 @@ public class CategoryService {
 
     public ResponseEntity<?> updateCategory(Category newCat, Long id) throws CategoryNotFoundException
     {
-        Base64Treatment base64Treatment = null;
-
         if(newCat.getImage() != null && newCat.getImage().length > 0)
         {
             base64Treatment = new Base64Treatment(newCat.getImage());
         }
 
        Optional<Category> optionalCat = this.categoryRepository.findById(id);
-
-       ResponseMessage resp = new ResponseMessage();
                
        if(optionalCat.isPresent())
        {
@@ -89,12 +91,11 @@ public class CategoryService {
 
             this.categoryRepository.save(category);
 
-            resp.setMessage("Category mise à jour avec succées !");
+            return ResponseEntity.ok(new ResponseMessage("Category mise à jour avec succées !"));
        }
        else
         {
             throw new CategoryNotFoundException(id);
         }
-        return ResponseEntity.ok(resp);
     }
 }
