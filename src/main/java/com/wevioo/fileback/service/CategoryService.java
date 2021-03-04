@@ -19,59 +19,31 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    private Base64Treatment base64Treatment = new Base64Treatment();
-
-    public CategoryService() {
-        super();
-    }
-
     public List<Category> getAllCategories() {
-
         List<Category> listOfCategories = categoryRepository.findAll();
+        Base64Treatment base64Treatment = new Base64Treatment();
 
         for (Category category : listOfCategories)
-
-            if (category.getImage() != null)
-            {
+            if (category.getImage() != null) {
                 base64Treatment.setBase64String(category.getImage());
-
                 category.setImage(base64Treatment.decompressBytes());
             }
 
         return listOfCategories;
     }
 
-    public void createCategory(Category cat)
-    {   
-        if (cat.getImage() != null)
-        {
-            base64Treatment.setBase64String(cat.getImage());
-            cat.setImage(base64Treatment.compressBytes());
-        }
-
+    public void createCategory(Category cat) {
+        Base64Treatment base64Treatment = new Base64Treatment(cat.getImage());
+        cat.setImage(base64Treatment.compressBytes());
         this.categoryRepository.save(cat);
     }
 
-    public Category getOneCategory(Long id)
-    {
-        return this.categoryRepository
-        .findById(id)
-        .map
-        (
-            data ->
-            {
-                if (data.getImage() != null)
-                {
-                    base64Treatment.setBase64String(data.getImage());
-                    data.setImage(base64Treatment.decompressBytes());
-                }
-
-                return data;
-            }
-        ).orElseThrow
-        (
-            () -> new CategoryNotFoundException(id)
-        );
+    public Category getOneCategory(Long id) {
+        return this.categoryRepository.findById(id).map(data -> {
+            Base64Treatment base64Treatment = new Base64Treatment(data.getImage());
+            data.setImage(base64Treatment.decompressBytes());
+            return data;
+        }).orElseThrow(() -> new CategoryNotFoundException(id));
     }
 
     public void removeCategory(Long id) {
@@ -84,40 +56,44 @@ public class CategoryService {
 
     public ResponseEntity<?> updateCategory(Category newCat, Long id) throws CategoryNotFoundException
     {
-        if (newCat.getImage() != null && newCat.getImage().length > 0)
+        Base64Treatment base64Treatment = null;
+
+        if(newCat.getImage() != null && newCat.getImage().length > 0)
         {
-            base64Treatment.setBase64String(newCat.getImage());
+            base64Treatment = new Base64Treatment(newCat.getImage());
         }
 
        Optional<Category> optionalCat = this.categoryRepository.findById(id);
+
+       ResponseMessage resp = new ResponseMessage();
                
-       if (optionalCat.isPresent())
+       if(optionalCat.isPresent())
        {
             Category category = optionalCat.get();
 
-            if (newCat.getNom() != null && newCat.getNom() != "")
+            if(newCat.getNom() != null && newCat.getNom() != "")
             {
                 category.setNom(newCat.getNom());
             }
 
-            if (newCat.getDescription() != null && newCat.getDescription() != "")
+            if(newCat.getDescription() != null && newCat.getDescription() != "")
             {
                 category.setDescription(newCat.getDescription());
             }
 
-            if (base64Treatment.getBase64String() != null && base64Treatment.getBase64String().length > 0)
+            if(base64Treatment != null && base64Treatment.getBase64String().length > 0)
             {
                 category.setImage(base64Treatment.compressBytes());
             }
 
             this.categoryRepository.save(category);
 
-            return ResponseEntity.ok(new ResponseMessage("Category mise à jour avec succées !"));
+            resp.setMessage("Category mise à jour avec succées !");
        }
-
        else
         {
             throw new CategoryNotFoundException(id);
         }
+        return ResponseEntity.ok(resp);
     }
 }
