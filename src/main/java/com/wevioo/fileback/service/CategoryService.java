@@ -105,7 +105,7 @@ public class CategoryService {
                 category.setDescription(newCat.getDescription());
             }
 
-            if (base64Treatment != null && base64Treatment.getBase64String().length > 0)
+            if (base64Treatment.getBase64String() != null && base64Treatment.getBase64String().length > 0)
             {
                 category.setImage(base64Treatment.compressBytes());
             }
