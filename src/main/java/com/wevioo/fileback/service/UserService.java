@@ -8,9 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -23,15 +20,10 @@ public class UserService implements UserDetailsService {
 
         User user = userRepository.findByUserName(username);
 
-        if (user  == null)
-        {
-            throw new UsernameNotFoundException("user not found in data base ");
+        if (user == null) {
+            throw new UsernameNotFoundException("Utilisateur introuvable !");
         }
-        return  new UserDetail(user) ;
-    }
 
-    @Transactional
-    public List<User> getAllUsers() {
-        return this.userRepository.findAll();
+        return new UserDetail(user);
     }
 }

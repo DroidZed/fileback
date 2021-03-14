@@ -9,10 +9,7 @@ import com.wevioo.fileback.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -20,11 +17,12 @@ public class ImageService {
 
     private final UserRepository userRepository;
 
-    public ResponseEntity<?> updateProfilePicture(MultipartFile img, Long id) throws IOException {
+    @Transactional
+    public ResponseEntity<?> updateProfilePicture(byte[] img, Long id) {
 
         User u = this.collectUserIfExists(id);
 
-        Base64Treatment base64Treatment = new Base64Treatment(img.getBytes());
+        Base64Treatment base64Treatment = new Base64Treatment(img);
 
         u.setPic(base64Treatment.compressBytes());
 

@@ -19,6 +19,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class RegisterService {
 
     private final UserRepository userRepository;
@@ -51,7 +52,6 @@ public class RegisterService {
         return ResponseEntity.ok(new ResponseMessage("Vérifier votre boite mail pour un lien de confirmation !"));
     }
 
-    @Transactional
     public ModelAndView confirmAccount(ModelAndView modelAndView,String confirmationToken) {
 
         ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);

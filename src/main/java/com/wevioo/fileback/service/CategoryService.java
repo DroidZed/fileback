@@ -9,6 +9,7 @@ import com.wevioo.fileback.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,6 @@ public class CategoryService {
                 base64Treatment.setBase64String(category.getImage());
                 category.setImage(base64Treatment.decompressBytes());
             }
-
         return listOfCategories;
     }
 
@@ -54,6 +54,7 @@ public class CategoryService {
         this.categoryRepository.deleteAll();
     }
 
+    @Transactional
     public ResponseEntity<?> updateCategory(Category newCat, Long id) throws CategoryNotFoundException
     {
         Base64Treatment base64Treatment = null;
@@ -71,20 +72,12 @@ public class CategoryService {
        {
             Category category = optionalCat.get();
 
-            if(newCat.getNom() != null && newCat.getNom() != "")
-            {
-                category.setNom(newCat.getNom());
-            }
+            category.setNom(newCat.getNom());
 
-            if(newCat.getDescription() != null && newCat.getDescription() != "")
-            {
-                category.setDescription(newCat.getDescription());
-            }
+            category.setDescription(newCat.getDescription());
 
-            if(base64Treatment != null && base64Treatment.getBase64String().length > 0)
-            {
+            if(base64Treatment != null)
                 category.setImage(base64Treatment.compressBytes());
-            }
 
             this.categoryRepository.save(category);
 
