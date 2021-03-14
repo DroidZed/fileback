@@ -1,5 +1,6 @@
 package com.wevioo.fileback.controller;
 
+import com.wevioo.fileback.message.ImageRequest;
 import com.wevioo.fileback.model.User;
 import com.wevioo.fileback.service.ImageService;
 import com.wevioo.fileback.service.UserManagerLayer;
@@ -71,9 +72,9 @@ public class UsersController {
     // ! This is for the profile picture only !!
     @PutMapping(path = "img/profile/{id}")
     public @ResponseBody
-    ResponseEntity<?> updateProfilePicture(@RequestBody byte[] img, @PathVariable Long id)
+    ResponseEntity<?> updateProfilePicture(@RequestBody ImageRequest imgReq, @PathVariable Long id)
     {
-        return imageService.updateProfilePicture(img, id);
+        return imageService.updateProfilePicture(imgReq, id);
     }
 
     @PutMapping(path = "/disable/{id}")

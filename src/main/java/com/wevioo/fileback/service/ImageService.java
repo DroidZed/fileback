@@ -2,6 +2,7 @@ package com.wevioo.fileback.service;
 
 import com.wevioo.fileback.exceptions.UserNotFoundException;
 import com.wevioo.fileback.helper.Base64Treatment;
+import com.wevioo.fileback.message.ImageRequest;
 import com.wevioo.fileback.message.ImageResponse;
 import com.wevioo.fileback.message.ResponseMessage;
 import com.wevioo.fileback.model.User;
@@ -17,12 +18,11 @@ public class ImageService {
 
     private final UserRepository userRepository;
 
-    @Transactional
-    public ResponseEntity<?> updateProfilePicture(byte[] img, Long id) {
+    public ResponseEntity<?> updateProfilePicture(ImageRequest imgReq, Long id) {
 
         User u = this.collectUserIfExists(id);
 
-        Base64Treatment base64Treatment = new Base64Treatment(img);
+        Base64Treatment base64Treatment = new Base64Treatment(imgReq.getImage());
 
         u.setPic(base64Treatment.compressBytes());
 
@@ -35,9 +35,16 @@ public class ImageService {
 
         User u = this.collectUserIfExists(id);
 
-        Base64Treatment base64Treatment = new Base64Treatment(u.getPic());
+        ImageResponse imgRep = new ImageResponse();
 
-        return ResponseEntity.ok(new ImageResponse(base64Treatment.decompressBytes()));
+        if(u.getPic() != null) {
+
+            Base64Treatment base64Treatment = new Base64Treatment(u.getPic());
+
+            imgRep.setImage(base64Treatment.decompressBytes());
+        }
+
+        return ResponseEntity.ok(imgRep);
     }
 
     private User collectUserIfExists(Long id) {

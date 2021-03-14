@@ -28,9 +28,4 @@ public class Category {
 
     @Column(name = "image")
     private byte[] image;
-/*
-    @JsonIgnore
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private List<Activity> activity = new ArrayList<>();
-*/
 }
