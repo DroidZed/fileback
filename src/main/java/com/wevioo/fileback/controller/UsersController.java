@@ -27,7 +27,6 @@ public class UsersController {
         return this.userManagerLayer.inviteUserByMail(email);
     }
 
-
     @GetMapping(path = "/list")
     public @ResponseBody
     Page<User> getUsersPaged(@RequestParam(defaultValue = "0") Integer page) {

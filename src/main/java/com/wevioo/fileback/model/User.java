@@ -1,6 +1,7 @@
 package com.wevioo.fileback.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -56,6 +57,7 @@ public class User {
     @JoinColumn(name = "id_act")
     private Activity activity;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Needs> needs ;
 

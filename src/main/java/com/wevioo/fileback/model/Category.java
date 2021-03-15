@@ -1,5 +1,6 @@
 package com.wevioo.fileback.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,7 @@ public class Category {
     @Column(name = "image")
     private byte[] image;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "category")
     private List<Needs> needs;
 }
