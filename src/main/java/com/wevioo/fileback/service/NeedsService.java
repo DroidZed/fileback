@@ -7,8 +7,8 @@ import com.wevioo.fileback.repository.CategoryRepository;
 import com.wevioo.fileback.repository.NeedsRepository;
 import com.wevioo.fileback.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -22,8 +22,7 @@ public class NeedsService {
 
     private final CategoryRepository categoryRepository;
 
-    @Transactional
-    public void injectNewNeed (Needs needs, Long catid, Long userid){
+    public ResponseEntity<?> injectNewNeed (Needs needs, Long catid, Long userid){
 
         Optional<User> optUsr = userRepository.findById(userid);
         Optional<Category> optCat = categoryRepository.findById(catid);
@@ -34,6 +33,6 @@ public class NeedsService {
             needs.setCategory(optCat.get());
         }
 
-        this.needsRepository.save(needs);
+        return ResponseEntity.ok(this.needsRepository.save(needs));
     }
 }

@@ -3,19 +3,21 @@ package com.wevioo.fileback.controller;
 import com.wevioo.fileback.model.Needs;
 import com.wevioo.fileback.service.NeedsService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 @RequestMapping(path = "/need")
 public class NeedsController {
 
     private final NeedsService needsService;
 
     @PostMapping(path = "/add-new-need/user/{userid}/category/{catid}")
-    public void addNewNeed(@RequestBody Needs needs,
-                           @PathVariable Long catid,
-                           @PathVariable Long userid){
-        this.needsService.injectNewNeed(needs, catid, userid);
+    public ResponseEntity<?> addNewNeed(@RequestBody Needs needs,
+                                        @PathVariable Long catid,
+                                        @PathVariable Long userid){
+       return this.needsService.injectNewNeed(needs, catid, userid);
     }
 }
