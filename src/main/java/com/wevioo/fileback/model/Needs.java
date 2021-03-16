@@ -41,6 +41,7 @@ public class Needs {
     @JoinColumn(name = "id_user")
     private User user;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "id_cat")
     private Category category;

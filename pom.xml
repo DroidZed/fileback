@@ -91,6 +91,18 @@
             <scope>runtime</scope>
         </dependency>
         -->
+
+        <!--
+
+        // na7i el commentaire bech tactivi el firebase !
+
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>7.1.1</version>
+        </dependency>
+
+        -->
     </dependencies>
 
     <build>

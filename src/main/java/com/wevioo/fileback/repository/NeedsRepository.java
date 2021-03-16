@@ -12,4 +12,7 @@ public interface NeedsRepository extends JpaRepository<Needs,Long> {
 
     @Query("from Needs n WHERE n.user.idUser = ?1")
     List<Needs> findNeedsOfUser(Long id);
+
+    @Query("from Needs n WHERE n.category.idCat = ?1")
+    List<Needs> findNeedsByCategory(Long catid);
 }
