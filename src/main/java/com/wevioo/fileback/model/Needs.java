@@ -1,5 +1,6 @@
 package com.wevioo.fileback.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,7 @@ public class Needs {
     @Column(name = "budget")
     private int budget;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "id_user")
     private User user;

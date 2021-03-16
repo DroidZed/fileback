@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,5 +35,10 @@ public class NeedsService {
         }
 
         return ResponseEntity.ok(this.needsRepository.save(needs));
+    }
+
+    public List<Needs> collectNeedsOfUser(Long userid) {
+
+        return this.needsRepository.findNeedsOfUser(userid);
     }
 }

@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
@@ -19,5 +21,11 @@ public class NeedsController {
                                         @PathVariable Long catid,
                                         @PathVariable Long userid){
        return this.needsService.injectNewNeed(needs, catid, userid);
+    }
+
+    @GetMapping(path="/get/user/{userid}")
+    public List<Needs> getNeedsOfUser(@PathVariable Long userid)
+    {
+        return this.needsService.collectNeedsOfUser(userid);
     }
 }
