@@ -1,9 +1,12 @@
 package com.wevioo.fileback.service;
 
 import com.wevioo.fileback.exceptions.UserNotFoundException;
+import com.wevioo.fileback.geolocationClasses.DisplayLatLng;
 import com.wevioo.fileback.helper.Base64Treatment;
 import com.wevioo.fileback.message.ResponseMessage;
+import com.wevioo.fileback.model.Locations;
 import com.wevioo.fileback.model.User;
+import com.wevioo.fileback.repository.LocationsRepository;
 import com.wevioo.fileback.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +22,8 @@ import java.util.Optional;
 
 import static java.text.MessageFormat.format;
 
+import java.io.IOException;
+
 @AllArgsConstructor
 @Service
 public class UserManagerLayer {
@@ -26,6 +31,8 @@ public class UserManagerLayer {
     private final UserRepository userRepository;
     private final EmailService emailService;
     private final PasswordEncoder encoder;
+    private GeoCoderService geoCoderService;
+    private final LocationService locationService;
 
     public List<User> getAllUsers() {
 
@@ -43,26 +50,14 @@ public class UserManagerLayer {
     }
 
     public User getAUserById(Long id) {
-        return this.userRepository
-                .findById(id)
-                .map(
-                        data ->
-                        {
-                            data.setPic(null);
-                            return data;
-                        }
-                )
-                .orElseThrow(
-                        () -> new UserNotFoundException(id)
-                );
+        return this.userRepository.findById(id).map(data -> {
+            data.setPic(null);
+            return data;
+        }).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     public Page<User> paginateUsers(Integer page) {
-        return this
-                .userRepository
-                .findAll(
-                        PageRequest.of(page, 7)
-                );
+        return this.userRepository.findAll(PageRequest.of(page, 7));
     }
 
     public Long countAll() {
@@ -83,12 +78,7 @@ public class UserManagerLayer {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isEmpty())
-            return ResponseEntity
-                    .badRequest()
-                    .body(
-                            new ResponseMessage(
-                                    "Impossible de modifier l'état du compte !")
-                    );
+            return ResponseEntity.badRequest().body(new ResponseMessage("Impossible de modifier l'état du compte !"));
 
         User u = optionalUser.get();
 
@@ -96,12 +86,7 @@ public class UserManagerLayer {
 
         userRepository.save(u);
 
-        return ResponseEntity
-                .ok(new ResponseMessage(
-                        format("Le compte ID = {0} à été {1} avec succés !",
-                                id,
-                                "désactivé")
-                ));
+        return ResponseEntity.ok(new ResponseMessage(format("Le compte ID = {0} à été désactivé avec succés !", id)));
     }
 
     public ResponseEntity<?> inviteUserByMail(String email) {
@@ -111,7 +96,8 @@ public class UserManagerLayer {
 
         mailMessage.setSubject("Venez découvrire notre platforme !");
 
-        mailMessage.setText("On vous invite à découvrire notre plateforme de recherche de services à l'adresse : http://localhost:4200");
+        mailMessage.setText(
+                "On vous invite à découvrire notre plateforme de recherche de services à l'adresse : http://localhost:4200");
 
         emailService.sendEmail(mailMessage);
 
@@ -119,17 +105,46 @@ public class UserManagerLayer {
     }
 
     @Transactional
-    public ResponseEntity<?> modifyProfile(Long id, User user) {
-        return this.userRepository
-                .findById(id)
-                .map(data -> {
-                    data.setFullName(user.getFullName());
-                    data.setTel(user.getTel());
-                    data.setTravailleur(user.getTravailleur());
-                    data.setAdresse(user.getAdresse());
-                    data.setPasswordUser(encoder.encode(user.getPasswordUser()));
-                    return ResponseEntity.ok(userRepository.save(data));
-                })
-                .orElseThrow(() -> new UserNotFoundException(id));
+    public ResponseEntity<?> modifyProfile(Long id, User user)
+    {
+        Optional<User> opt = this.userRepository.findById(id);
+
+        if (opt.isPresent())
+        {
+            User data = opt.get();
+
+            data.setFullName(user.getFullName());
+
+            data.setTel(user.getTel());
+
+            data.setTravailleur(user.getTravailleur());
+
+            data.setAdresse(user.getAdresse());
+
+            try
+            {
+                DisplayLatLng latlng = geoCoderService.getAddressCoded(user.getAdresse());
+
+                Locations loc = user.getLocation();
+
+                loc.setLatitude(latlng.lat);
+
+                loc.setLongitute(latlng.lng);
+
+                this.locationService.updateLocation(loc.getIdLocation(), loc);
+            }
+            
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+
+            data.setPasswordUser(encoder.encode(user.getPasswordUser()));
+
+            return ResponseEntity.ok(userRepository.save(data));
+        }
+
+        else return ResponseEntity.badRequest().body(new ResponseMessage("Could not update profile !"));
+
     }
 }

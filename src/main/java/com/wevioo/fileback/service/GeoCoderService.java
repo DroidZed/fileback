@@ -3,7 +3,6 @@ package com.wevioo.fileback.service;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GeoCoderService {
 
-    public List<DisplayLatLng> getAddressCoded(String addr)
+    public DisplayLatLng getAddressCoded(String addr)
             throws IOException
     {
         String encodedAddress =  URLEncoder.encode(addr, StandardCharsets.UTF_8);
@@ -48,7 +47,7 @@ public class GeoCoderService {
 
         GeocodeResult result = objectMapper.readValue(responseBody.string(), GeocodeResult.class);
 
-        List<DisplayLatLng> finals = new ArrayList<>();
+        DisplayLatLng final_loc = new DisplayLatLng();
 
         List<Location> locationArray = result.results.get(0).locations;
 
@@ -57,9 +56,9 @@ public class GeoCoderService {
 
         for(Location loc: locationArray)
             if(loc.adminArea5.equals(cityFromAddress) && loc.street.equals(streetFromAddress))
-                finals.add(loc.displayLatLng);
+                final_loc = loc.displayLatLng;
 
-        return finals;
+        return final_loc;
     }
     
 }

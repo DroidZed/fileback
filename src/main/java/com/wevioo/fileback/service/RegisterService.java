@@ -1,8 +1,10 @@
 package com.wevioo.fileback.service;
 
+import com.wevioo.fileback.geolocationClasses.DisplayLatLng;
 import com.wevioo.fileback.message.ResponseMessage;
 import com.wevioo.fileback.model.Category;
 import com.wevioo.fileback.model.ConfirmationToken;
+import com.wevioo.fileback.model.Locations;
 import com.wevioo.fileback.model.User;
 import com.wevioo.fileback.repository.CategoryRepository;
 import com.wevioo.fileback.repository.ConfirmationTokenRepository;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -32,6 +35,8 @@ public class RegisterService {
 
     private final PasswordEncoder encoder;
 
+    private final GeoCoderService geoCoderService;
+
     public ResponseEntity<?> addUser(User user) {
 
         User existingUser = userRepository.findByEmail(user.getEmail());
@@ -45,7 +50,11 @@ public class RegisterService {
         else
         {
             user.setPasswordUser(encoder.encode(user.getPasswordUser()));
+
+            this.setLocation(user);
+
             userRepository.save(user);
+            
             this.sendMailAndSaveToken(user);
         }
 
@@ -95,6 +104,8 @@ public class RegisterService {
 
                 user.setPasswordUser(encoder.encode(user.getPasswordUser()));
 
+                this.setLocation(user);
+
                 this.userRepository.save(user);
 
                 this.sendMailAndSaveToken(user);
@@ -119,4 +130,20 @@ public class RegisterService {
 
         emailService.sendEmail(mailMessage);
     }
+
+
+    private void setLocation(User user)
+    {
+        try
+        {
+            DisplayLatLng latlng = geoCoderService.getAddressCoded(user.getAdresse());
+            user.setLocation(new Locations(latlng.lat,latlng.lng));
+        }
+
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
 }

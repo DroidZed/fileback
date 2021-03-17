@@ -31,4 +31,9 @@ public class Locations {
     @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy ="location" )
     private User user;
 
+    public Locations(Float lat, Float lng) {
+        this.latitude = lat;
+        this.longitute = lng;
+    }
+
 }

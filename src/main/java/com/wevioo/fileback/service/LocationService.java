@@ -27,4 +27,17 @@ public class LocationService {
                         .findById(locId)
                         .orElseThrow(() -> new LocationNotFoundException(locId));
     }
+
+    public Locations updateLocation(Long id, Locations loc)
+    {
+        return this.locationRepository.findById(id)
+            .map(
+                old -> {
+                    old.setLatitude(loc.getLatitude());
+                    old.setLongitute(loc.getLongitute());
+                    return this.locationRepository.save(old);
+                }
+            )
+            .orElseThrow(() -> new LocationNotFoundException(id));
+    }
 }
