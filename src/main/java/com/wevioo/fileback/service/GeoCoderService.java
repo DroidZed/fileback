@@ -52,13 +52,12 @@ public class GeoCoderService {
         List<Location> locationArray = result.results.get(0).locations;
 
         String cityFromAddress = addr.split(",")[1];
-        String streetFromAddress = addr.split(",")[0];
-
+        String StateFromAddress = addr.split(",")[2];
 
         System.out.println("Locations ...\n");
         for(Location loc: locationArray)
         {
-            if (loc.adminArea5.equals(cityFromAddress))
+            if (loc.adminArea5.equals(cityFromAddress) || loc.adminArea5.equals(StateFromAddress))
             {
                 final_loc = loc.displayLatLng;
             }
