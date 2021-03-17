@@ -6,7 +6,6 @@ import com.wevioo.fileback.helper.Base64Treatment;
 import com.wevioo.fileback.message.ResponseMessage;
 import com.wevioo.fileback.model.Locations;
 import com.wevioo.fileback.model.User;
-import com.wevioo.fileback.repository.LocationsRepository;
 import com.wevioo.fileback.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,46 +33,54 @@ public class UserManagerLayer {
     private GeoCoderService geoCoderService;
     private final LocationService locationService;
 
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers()
+    {
 
         List<User> users = this.userRepository.findAll();
 
         Base64Treatment base64Treatment = new Base64Treatment();
 
         for (User u : users)
-            if (u.getPic() != null) {
+            if (u.getPic() != null)
+            {
                 base64Treatment.setBase64String(u.getPic());
                 u.setPic(base64Treatment.decompressBytes());
             }
-
         return users;
     }
 
-    public User getAUserById(Long id) {
-        return this.userRepository.findById(id).map(data -> {
+    public User getAUserById(Long id)
+    {
+        return this.userRepository.findById(id).map(data ->
+        {
             data.setPic(null);
             return data;
         }).orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    public Page<User> paginateUsers(Integer page) {
+    public Page<User> paginateUsers(Integer page)
+    {
         return this.userRepository.findAll(PageRequest.of(page, 7));
     }
 
-    public Long countAll() {
+    public Long countAll()
+    {
         return this.userRepository.count();
     }
 
-    public Long countUsers() {
+    public Long countUsers()
+    {
         return this.userRepository.countUsers();
     }
 
-    public Long countJobbers() {
+    public Long countJobbers()
+    {
         return this.userRepository.countTravailleurs();
     }
 
     @Transactional
-    public ResponseEntity<?> disableUser(Long id) {
+    public ResponseEntity<?> disableUser(Long id)
+    {
 
         Optional<User> optionalUser = userRepository.findById(id);
 
@@ -89,7 +96,8 @@ public class UserManagerLayer {
         return ResponseEntity.ok(new ResponseMessage(format("Le compte ID = {0} à été désactivé avec succés !", id)));
     }
 
-    public ResponseEntity<?> inviteUserByMail(String email) {
+    public ResponseEntity<?> inviteUserByMail(String email)
+    {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
         mailMessage.setTo(email);
@@ -145,6 +153,5 @@ public class UserManagerLayer {
         }
 
         else return ResponseEntity.badRequest().body(new ResponseMessage("Could not update profile !"));
-
     }
 }
