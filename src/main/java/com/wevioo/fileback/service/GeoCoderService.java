@@ -61,9 +61,7 @@ public class GeoCoderService {
             if (loc.adminArea5.equals(cityFromAddress))
             {
                 final_loc = loc.displayLatLng;
-                System.out.println(final_loc);
             }
-            System.out.println(loc.displayLatLng);
         }
         return final_loc;
     }

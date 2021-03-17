@@ -131,15 +131,17 @@ public class UserManagerLayer {
 
             try
             {
-                DisplayLatLng latlng = geoCoderService.getAddressCoded(user.getAdresse());
+                DisplayLatLng LatLng = geoCoderService.getAddressCoded(user.getAdresse());
 
-                Locations loc = data.getLocation();
+                if(LatLng != null) {
+                    Locations loc = data.getLocation();
 
-                loc.setLatitude(latlng.lat);
+                    loc.setLatitude(LatLng.lat);
 
-                loc.setLongitude(latlng.lng);
+                    loc.setLongitude(LatLng.lng);
 
-                this.locationService.updateLocation(loc.getIdLocation(), loc);
+                    this.locationService.updateLocation(loc.getIdLocation(), loc);
+                }
             }
             
             catch (IOException e)
