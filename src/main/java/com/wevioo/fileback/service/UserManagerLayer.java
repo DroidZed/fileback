@@ -133,7 +133,7 @@ public class UserManagerLayer {
             {
                 DisplayLatLng latlng = geoCoderService.getAddressCoded(user.getAdresse());
 
-                Locations loc = user.getLocation();
+                Locations loc = data.getLocation();
 
                 loc.setLatitude(latlng.lat);
 

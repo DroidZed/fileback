@@ -51,13 +51,20 @@ public class GeoCoderService {
 
         List<Location> locationArray = result.results.get(0).locations;
 
-        String cityFromAddress = addr.split(",")[1].trim();
-        String streetFromAddress = addr.split(",")[0].trim();
+        String cityFromAddress = addr.split(",")[1];
+        String streetFromAddress = addr.split(",")[0];
 
+
+        System.out.println("Locations ...\n");
         for(Location loc: locationArray)
-            if(loc.adminArea5.equals(cityFromAddress) && loc.street.equals(streetFromAddress))
+        {
+            if (loc.adminArea5.equals(cityFromAddress))
+            {
                 final_loc = loc.displayLatLng;
-
+                System.out.println(final_loc);
+            }
+            System.out.println(loc.displayLatLng);
+        }
         return final_loc;
     }
     

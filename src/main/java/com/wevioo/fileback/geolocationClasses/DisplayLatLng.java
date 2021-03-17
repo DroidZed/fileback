@@ -16,4 +16,11 @@ public class DisplayLatLng {
     @JsonProperty("lng")
     public Float lng;
 
+    @Override
+    public String toString() {
+        return "DisplayLatLng{" +
+                "lat=" + lat +
+                ", lng=" + lng +
+                '}';
+    }
 }
