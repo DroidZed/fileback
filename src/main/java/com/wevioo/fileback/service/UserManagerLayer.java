@@ -137,7 +137,7 @@ public class UserManagerLayer {
 
                 loc.setLatitude(latlng.lat);
 
-                loc.setLongitute(latlng.lng);
+                loc.setLongitude(latlng.lng);
 
                 this.locationService.updateLocation(loc.getIdLocation(), loc);
             }

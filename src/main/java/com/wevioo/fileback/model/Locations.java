@@ -22,7 +22,7 @@ public class Locations {
     private Long idLocation;
 
     @Column(name = "longitute")
-    private Float longitute;
+    private Float longitude;
 
     @Column(name = "latitude")
     private Float latitude;
@@ -33,7 +33,7 @@ public class Locations {
 
     public Locations(Float lat, Float lng) {
         this.latitude = lat;
-        this.longitute = lng;
+        this.longitude = lng;
     }
 
 }

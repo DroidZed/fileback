@@ -34,7 +34,7 @@ public class LocationService {
             .map(
                 old -> {
                     old.setLatitude(loc.getLatitude());
-                    old.setLongitute(loc.getLongitute());
+                    old.setLongitude(loc.getLongitude());
                     return this.locationRepository.save(old);
                 }
             )
