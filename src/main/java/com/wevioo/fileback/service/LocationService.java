@@ -28,9 +28,9 @@ public class LocationService {
                         .orElseThrow(() -> new LocationNotFoundException(locId));
     }
 
-    public Locations updateLocation(Long id, Locations loc)
+    public void updateLocation(Long id, Locations loc)
     {
-        return this.locationRepository.findById(id)
+       this.locationRepository.findById(id)
             .map(
                 old -> {
                     old.setLatitude(loc.getLatitude());
@@ -39,5 +39,15 @@ public class LocationService {
                 }
             )
             .orElseThrow(() -> new LocationNotFoundException(id));
+    }
+
+    public List<Locations> getLocationsOfUsers()
+    {
+        return this.locationRepository.getLocationsOfUsers();
+    }
+
+    public List<Locations> getLocationsOfJobbers()
+    {
+        return this.locationRepository.getLocationsOfJobbers();
     }
 }

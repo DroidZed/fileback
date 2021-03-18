@@ -35,4 +35,18 @@ public class LocationController {
     {
         return this.locationService.collectOneLocation(id);
     }
+
+    @GetMapping(path = "/get/users")
+    @ResponseBody
+    public List<Locations> getLocationsOfUsers()
+    {
+        return this.locationService.getLocationsOfUsers();
+    }
+
+    @GetMapping(path = "/get/jobbers")
+    @ResponseBody
+    public List<Locations> getLocationsOfJobbers()
+    {
+        return this.locationService.getLocationsOfJobbers();
+    }
 }

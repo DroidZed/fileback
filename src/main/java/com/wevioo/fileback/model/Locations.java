@@ -18,10 +18,10 @@ public class Locations {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_location")
-    private Long idLocation;
+    @Column(name = "id_loc")
+    private Long idLoc;
 
-    @Column(name = "longitute")
+    @Column(name = "longitude")
     private Float longitude;
 
     @Column(name = "latitude")

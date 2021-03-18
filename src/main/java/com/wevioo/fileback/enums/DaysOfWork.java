@@ -1,0 +1,5 @@
+package com.wevioo.fileback.enums;
+
+public enum DaysOfWork {
+    LUNDI,MARDI,MERCREDI,JEUDI,VENDREDI,SAMEDI,DIMANCHE,TOUT_LES_JOURS,LUNDI_VENDREDI,LUNDI_SAMEDI
+}

@@ -30,13 +30,13 @@ public class UserManagerLayer {
     private final UserRepository userRepository;
     private final EmailService emailService;
     private final PasswordEncoder encoder;
-    private GeoCoderService geoCoderService;
+    private final GeoCoderService geoCoderService;
     private final LocationService locationService;
 
     public List<User> getAllUsers()
     {
 
-        List<User> users = this.userRepository.findAll();
+        List<User> users = this.userRepository.getUsersOnly();
 
         Base64Treatment base64Treatment = new Base64Treatment();
 
@@ -51,16 +51,30 @@ public class UserManagerLayer {
 
     public User getAUserById(Long id)
     {
+        Base64Treatment base64Treatment = new Base64Treatment();
         return this.userRepository.findById(id).map(data ->
         {
-            data.setPic(null);
+            if(data.getPic() != null) {
+                base64Treatment.setBase64String(data.getPic());
+                data.setPic(base64Treatment.decompressBytes());
+            }
             return data;
         }).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     public Page<User> paginateUsers(Integer page)
     {
-        return this.userRepository.findAll(PageRequest.of(page, 7));
+        Base64Treatment base64Treatment = new Base64Treatment();
+        Page <User> pu = this.userRepository.findAll(PageRequest.of(page, 7));
+
+        for (User u : pu)
+            if (u.getPic() != null)
+            {
+                base64Treatment.setBase64String(u.getPic());
+                u.setPic(base64Treatment.decompressBytes());
+            }
+
+        return pu;
     }
 
     public Long countAll()
@@ -140,7 +154,7 @@ public class UserManagerLayer {
 
                     loc.setLongitude(LatLng.lng);
 
-                    this.locationService.updateLocation(loc.getIdLocation(), loc);
+                    this.locationService.updateLocation(loc.getIdLoc(), loc);
                 }
             }
             

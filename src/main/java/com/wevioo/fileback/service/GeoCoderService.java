@@ -31,7 +31,9 @@ public class GeoCoderService {
                 .url("http://www.mapquestapi.com/geocoding/v1/address?key="
                         + key
                         + "&location="
-                        + encodedAddress)
+                        + encodedAddress
+                        + "thumbMaps=false"
+                )
                 .get()
                 .build();
 
