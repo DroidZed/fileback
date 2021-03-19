@@ -3,6 +3,7 @@
     {
       "name": "jwt.secretKey",
       "type": "java.lang.String",
-      "description": "jwt secret key for validating the json web token"
+      "description": "jwt secret key for validating the json web token."
     }
-  ] }
+  ]
+}
