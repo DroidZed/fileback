@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 @RequestMapping(path = "/need")
+@AllArgsConstructor
 public class NeedsController {
 
     private final NeedsService needsService;

@@ -16,7 +16,6 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping(path = "/locations")
-@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 @AllArgsConstructor
 public class LocationController {
 

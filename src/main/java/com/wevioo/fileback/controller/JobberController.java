@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/jobbers")
-@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 @ResponseBody
 @AllArgsConstructor
 public class JobberController {

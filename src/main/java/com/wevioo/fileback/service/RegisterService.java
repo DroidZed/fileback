@@ -78,7 +78,7 @@ public class RegisterService {
         }
         else
         {
-            modelAndView.setViewName("error");
+            modelAndView.setViewName("errorpage");
             modelAndView.addObject("message","The link is invalid or broken!");
         }
         return modelAndView;

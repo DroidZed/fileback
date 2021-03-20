@@ -12,7 +12,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping(path = "/")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @AllArgsConstructor
 @ResponseBody
 public class AuthenticationController {

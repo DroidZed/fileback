@@ -10,7 +10,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/categories")
-@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 @ResponseBody
 @AllArgsConstructor
 public class CategoryController {
