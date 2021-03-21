@@ -56,6 +56,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/categories/all")
                 .permitAll()
+                .antMatchers("/jobbers/add")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
