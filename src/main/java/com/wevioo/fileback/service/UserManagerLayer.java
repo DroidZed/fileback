@@ -108,8 +108,6 @@ public class UserManagerLayer {
         {
             User data = opt.get();
 
-            data.setUserName(user.getUserName());
-
             data.setFullName(user.getFullName());
 
             data.setTel(user.getTel());
