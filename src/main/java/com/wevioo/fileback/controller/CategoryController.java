@@ -1,6 +1,5 @@
 package com.wevioo.fileback.controller;
 
-import com.wevioo.fileback.message.ImageResponse;
 import com.wevioo.fileback.model.Category;
 import com.wevioo.fileback.service.CategoryService;
 import lombok.AllArgsConstructor;
@@ -34,7 +33,7 @@ public class CategoryController {
 
     @GetMapping(path = "/image/get/{id}", produces = {MediaType.IMAGE_JPEG_VALUE})
     public @ResponseBody
-    ImageResponse getCategoryImage(@PathVariable Long id) throws IOException {
+    ResponseEntity<?> getCategoryImage(@PathVariable Long id) throws IOException {
         return this.categoryService.getCategoryImage(id);
     }
 
@@ -54,13 +53,16 @@ public class CategoryController {
     }
 
     @PutMapping(path = "/update/{id}")
-    public ResponseEntity<?> updateCategory(@RequestBody Category newCat, @PathVariable Long id) {
+    public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestBody Category newCat) {
         return this.categoryService.updateCategory(newCat, id);
     }
 
-    @PutMapping(path = "/change/pic")
-    public void updateCategoryPicture(@RequestParam Long catId, @RequestBody MultipartFile image)
+    @PostMapping(path = "/update/{catId}/pic")
+    public ResponseEntity<?> updateCategoryPicture(@PathVariable Long catId, @RequestParam("file") MultipartFile image)
     {
-        this.categoryService.setCategoryPhoto(image,catId);
+        System.out.println("-------------------------");
+                System.out.println(image);
+        System.out.println("-------------------------");
+       return this.categoryService.setCategoryPhoto(image,catId);
     }
 }

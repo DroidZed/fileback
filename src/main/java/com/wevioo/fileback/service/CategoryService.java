@@ -1,7 +1,6 @@
 package com.wevioo.fileback.service;
 
 import com.wevioo.fileback.exceptions.CategoryNotFoundException;
-import com.wevioo.fileback.message.ImageResponse;
 import com.wevioo.fileback.message.ResponseMessage;
 import com.wevioo.fileback.model.Category;
 import com.wevioo.fileback.repository.CategoryRepository;
@@ -26,28 +25,31 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public void setCategoryPhoto(MultipartFile photo, Long cat_id) {
+    public ResponseEntity<?> setCategoryPhoto(MultipartFile photo, Long cat_id) {
 
         Optional<Category> opt = this.categoryRepository.findById(cat_id);
 
-        if(opt.isPresent())
-        {
-            Category cat = opt.get();
-
-            if(cat.getImageName() == null) {
-                cat.setImageName(photo.getOriginalFilename());
-                this.categoryRepository.save(cat);
+            if(opt.isEmpty())
+            {
+                return ResponseEntity.badRequest().body("Category not found !");
             }
 
-            if(photo != null)
-                this.imageService
-                        .uploadToLocalFileSystem(photo,
-                                "categories",
-                                "category",
-                                cat.getImageName()
-                        );
-        }
+            Category cat = opt.get();
 
+            if(photo == null) {
+                return ResponseEntity.badRequest().body("Photo is null !");
+            }
+
+            cat.setImageName(photo.getOriginalFilename());
+
+            this.categoryRepository.save(cat);
+
+           return this.imageService
+                    .uploadToLocalFileSystem(photo,
+                            "categories",
+                            "category",
+                            photo.getOriginalFilename()
+                    );
     }
 
     public void createCategory(Category cat) {
@@ -83,14 +85,20 @@ public class CategoryService {
         ).orElseThrow(() -> new CategoryNotFoundException(id));
     }
 
-    public ImageResponse getCategoryImage(Long id) throws IOException
-    {
+    public ResponseEntity<?> getCategoryImage(Long id) throws IOException {
+
         Optional<Category> opt = this.categoryRepository.findById(id);
 
+        if(opt.isEmpty())
+            return ResponseEntity.badRequest().body("Category not found !");
 
-        assert opt.isPresent();
         Category cat = opt.get();
 
-        return new ImageResponse(this.imageService.getImageWithMediaType(cat.getImageName(), "category"));
+        String name = cat.getImageName();
+
+        if(name == null)
+            return ResponseEntity.badRequest().body("Image not found !");
+
+        return ResponseEntity.ok(this.imageService.getImageWithMediaType(name, "category"));
     }
 }

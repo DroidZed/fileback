@@ -2,7 +2,6 @@ package com.wevioo.fileback.service;
 
 import com.wevioo.fileback.exceptions.UserNotFoundException;
 import com.wevioo.fileback.geolocationClasses.DisplayLatLng;
-import com.wevioo.fileback.message.ImageResponse;
 import com.wevioo.fileback.message.ResponseMessage;
 import com.wevioo.fileback.model.Locations;
 import com.wevioo.fileback.model.User;
@@ -113,8 +112,6 @@ public class UserManagerLayer {
 
             data.setTel(user.getTel());
 
-            data.setTravailleur(user.getTravailleur());
-
             data.setAdresse(user.getAdresse());
 
             try
@@ -150,7 +147,7 @@ public class UserManagerLayer {
         Optional<User> opt = this.userRepository.findById(id);
 
         if(opt.isEmpty())
-            return ResponseEntity.badRequest().body(new ResponseMessage("User could not be found !"));
+            return ResponseEntity.badRequest().body("User could not be found !");
 
         User u = opt.get();
 
@@ -170,9 +167,12 @@ public class UserManagerLayer {
         Optional<User> opt = this.userRepository.findById(id);
 
         if(opt.isEmpty())
-            return ResponseEntity.badRequest().body(new ResponseMessage("User could not be found !"));
+            return ResponseEntity.badRequest().body("User could not be found !");
 
         String name = opt.get().getImageName();
+
+        if(name == null)
+            return ResponseEntity.badRequest().body("Image not found !");
 
         return ResponseEntity.ok(imageService.getImageWithMediaType(name,"user"));
     }
