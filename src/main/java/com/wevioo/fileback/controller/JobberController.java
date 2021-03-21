@@ -19,7 +19,7 @@ public class JobberController {
     private final RegisterService regService;
     private final JobberService jobberService;
 
-    @PostMapping(path = "add/")
+    @PostMapping(path = "add")
     @ResponseBody
     public ResponseEntity<?> addJobber(@RequestParam Long cat_id, @RequestBody User user)
     {
