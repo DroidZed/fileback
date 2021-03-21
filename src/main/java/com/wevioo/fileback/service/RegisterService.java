@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -65,11 +66,15 @@ public class RegisterService {
 
         ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
 
-        if(token != null)
+        if(token != null && !token.getExpiresAt().isBefore(LocalDateTime.now()))
         {
             User user = userRepository.findByEmail(token.getUser().getEmail());
 
             user.setEtat(true);
+
+            token.setConfirmedAt(LocalDateTime.now());
+
+            confirmationTokenRepository.save(token);
 
             userRepository.save(user);
 
@@ -97,7 +102,9 @@ public class RegisterService {
         else {
 
             Optional<Category> catOptional = categoryRepository.findById(cat_id);
-            if (catOptional.isPresent()) {
+
+            if (catOptional.isPresent())
+            {
                 Category cat = catOptional.get();
 
                 user.getActivity().setCategory(cat);

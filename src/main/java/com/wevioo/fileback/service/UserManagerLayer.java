@@ -2,7 +2,6 @@ package com.wevioo.fileback.service;
 
 import com.wevioo.fileback.exceptions.UserNotFoundException;
 import com.wevioo.fileback.geolocationClasses.DisplayLatLng;
-import com.wevioo.fileback.helper.Base64Treatment;
 import com.wevioo.fileback.message.ResponseMessage;
 import com.wevioo.fileback.model.Locations;
 import com.wevioo.fileback.model.User;
@@ -15,6 +14,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,49 +32,22 @@ public class UserManagerLayer {
     private final PasswordEncoder encoder;
     private final GeoCoderService geoCoderService;
     private final LocationService locationService;
+    private final ImageService imageService;
 
     public List<User> getAllUsers()
     {
-
-        List<User> users = this.userRepository.getUsersOnly();
-
-        Base64Treatment base64Treatment = new Base64Treatment();
-
-        for (User u : users)
-            if (u.getPic() != null)
-            {
-                base64Treatment.setBase64String(u.getPic());
-                u.setPic(base64Treatment.decompressBytes());
-            }
-        return users;
+        return this.userRepository.getUsersOnly();
     }
 
     public User getAUserById(Long id)
     {
-        Base64Treatment base64Treatment = new Base64Treatment();
-        return this.userRepository.findById(id).map(data ->
-        {
-            if(data.getPic() != null) {
-                base64Treatment.setBase64String(data.getPic());
-                data.setPic(base64Treatment.decompressBytes());
-            }
-            return data;
-        }).orElseThrow(() -> new UserNotFoundException(id));
+        return this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     public Page<User> paginateUsers(Integer page)
     {
-        Base64Treatment base64Treatment = new Base64Treatment();
-        Page <User> pu = this.userRepository.findAll(PageRequest.of(page, 7));
 
-        for (User u : pu)
-            if (u.getPic() != null)
-            {
-                base64Treatment.setBase64String(u.getPic());
-                u.setPic(base64Treatment.decompressBytes());
-            }
-
-        return pu;
+        return this.userRepository.findAll(PageRequest.of(page, 7));
     }
 
     public Long countAll()
@@ -139,8 +112,6 @@ public class UserManagerLayer {
 
             data.setTel(user.getTel());
 
-            data.setTravailleur(user.getTravailleur());
-
             data.setAdresse(user.getAdresse());
 
             try
@@ -169,5 +140,40 @@ public class UserManagerLayer {
         }
 
         else return ResponseEntity.badRequest().body(new ResponseMessage("Could not update profile !"));
+    }
+
+    public ResponseEntity<?> updateProfilePicture(MultipartFile imgreq, Long id) {
+
+        Optional<User> opt = this.userRepository.findById(id);
+
+        if(opt.isEmpty())
+            return ResponseEntity.badRequest().body("User could not be found !");
+
+        User u = opt.get();
+
+        ResponseEntity<?> image = this.imageService.uploadToLocalFileSystem(imgreq,"users", "user", imgreq.getOriginalFilename());
+
+        System.out.println(imgreq.getOriginalFilename());
+
+        u.setImageName(imgreq.getOriginalFilename());
+
+        this.userRepository.save(u);
+
+        return image;
+    }
+
+    public ResponseEntity<?> getProfileImage(Long id) throws IOException {
+
+        Optional<User> opt = this.userRepository.findById(id);
+
+        if(opt.isEmpty())
+            return ResponseEntity.badRequest().body("User could not be found !");
+
+        String name = opt.get().getImageName();
+
+        if(name == null)
+            return ResponseEntity.badRequest().body("Image not found !");
+
+        return ResponseEntity.ok(imageService.getImageWithMediaType(name,"user"));
     }
 }

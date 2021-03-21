@@ -19,40 +19,36 @@ public class WebMvcConfiguration {
             @Override
             public void addCorsMappings(@NotNull CorsRegistry registry)
             {
-                registry.addMapping("/**")
+                registry.addMapping("/*")
                         .allowedMethods("GET","POST")
                         .allowedHeaders("*")
                         .allowedOrigins("*");
 
-                registry.addMapping("/users/**")
+                registry.addMapping("/users/*/**")
                         .allowedMethods("GET","POST","PUT")
                         .allowedHeaders("*")
-                        .allowedOrigins("*")
-                        .maxAge(3600);
+                        .allowedOrigins("*");
 
-                registry.addMapping("/categories/**")
+                registry.addMapping("/categories/*/**")
                         .allowedMethods("GET","POST","PUT","DELETE")
                         .allowedHeaders("*")
-                        .allowedOrigins("*")
-                        .maxAge(3600);
+                        .allowedOrigins("*");
 
-                registry.addMapping("/jobbers/**")
+                registry.addMapping("/jobbers/*/**")
                         .allowedMethods("GET","POST","PUT")
                         .allowedHeaders("*")
-                        .allowedOrigins("*")
-                        .maxAge(3600);
+                        .allowedOrigins("*");
 
-                registry.addMapping("/locations/**")
+                registry.addMapping("/locations/*/**")
                         .allowedMethods("GET")
                         .allowedHeaders("*")
                         .allowedOrigins("*")
                         .maxAge(3600);
 
-                registry.addMapping("/need/**")
+                registry.addMapping("/need/*/**")
                         .allowedMethods("GET","POST","PUT","DELETE")
                         .allowedHeaders("*")
-                        .allowedOrigins("*")
-                        .maxAge(3600);
+                        .allowedOrigins("*");
             }
         };
     }

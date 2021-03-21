@@ -1,14 +1,14 @@
 package com.wevioo.fileback.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -45,4 +45,18 @@ public class Needs {
     @ManyToOne(fetch = FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "id_cat")
     private Category category;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Needs needs = (Needs) o;
+
+        return idNeed != null && idNeed.equals(needs.idNeed);
+    }
+
+    @Override
+    public int hashCode() {
+        return 1283357623;
+    }
 }

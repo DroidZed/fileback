@@ -1,56 +1,80 @@
 package com.wevioo.fileback.service;
 
-import com.wevioo.fileback.exceptions.UserNotFoundException;
-import com.wevioo.fileback.helper.Base64Treatment;
-import com.wevioo.fileback.message.ImageRequest;
-import com.wevioo.fileback.message.ImageResponse;
-import com.wevioo.fileback.message.ResponseMessage;
-import com.wevioo.fileback.model.User;
-import com.wevioo.fileback.repository.UserRepository;
-import lombok.AllArgsConstructor;
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 @Service
-@AllArgsConstructor
 public class ImageService {
 
-    private final UserRepository userRepository;
+    @Value(value = "${images.path}")
+    private String storageDirectoryPath;
 
-    public ResponseEntity<?> updateProfilePicture(ImageRequest imgReq, Long id) {
+    /**
+     * Uploads the image to file system
+     * @param file     the file to upload
+     * @param endPoint the api endpoint to return
+     * @param subdir   the subdir to where it needs to save the picture
+     * @return         api url, you use it so we can download the image
+    */
+    public ResponseEntity<?> uploadToLocalFileSystem(MultipartFile file, String endPoint, String subdir, String fileName) {
 
-        User u = this.collectUserIfExists(id);
+        Path storageDirectory = Paths.get(storageDirectoryPath);
 
-        Base64Treatment base64Treatment = new Base64Treatment(imgReq.getImage());
-
-        u.setPic(base64Treatment.compressBytes());
-
-        userRepository.save(u);
-
-        return ResponseEntity.ok(new ResponseMessage("Image sauvegardée avec succés !"));
-    }
-
-    public ResponseEntity<?> getProfileImage(Long id) {
-
-        User u = this.collectUserIfExists(id);
-
-        ImageResponse imgRep = new ImageResponse();
-
-        if(u.getPic() != null) {
-
-            Base64Treatment base64Treatment = new Base64Treatment(u.getPic());
-
-            imgRep.setImage(base64Treatment.decompressBytes());
+        if (!Files.exists(storageDirectory)) {
+            try {
+                Files.createDirectories(storageDirectory);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
-        return ResponseEntity.ok(imgRep);
+        Path destination = Paths.get(storageDirectory.toString() + "\\" + subdir + "\\" + fileName);
+
+        try
+        {
+            Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+
+        }
+
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        // ! Gives you the link to download the image
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(endPoint + "/image/get/")
+                .path(fileName)
+                .toUriString();
+
+        return ResponseEntity.ok(fileDownloadUri);
     }
 
-    private User collectUserIfExists(Long id) {
-        return userRepository
-                .findById(id)
-                .orElseThrow(
-                        () -> new UserNotFoundException(id)
-                );
+    /**
+    * Returns the pic data as byte array
+     * @param imageName       the image's name
+     * @param subdir          the subdirectory of the image, <br>
+     *                        used to know if we're saving for user or category
+     * @return                byte representation of the image
+     * @throws IOException    if it can't find the picture or open the directory !
+    */
+    public byte[] getImageWithMediaType(String imageName, String subdir)
+            throws IOException {
+        Path destination = Paths.get(storageDirectoryPath + "\\" + subdir + "\\" + imageName);
+
+        System.out.println("-------------------------");
+        System.out.println(destination.toUri());
+        System.out.println("-------------------------");
+
+        return IOUtils.toByteArray(destination.toUri());
     }
 }

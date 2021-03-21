@@ -4,7 +4,6 @@ package com.wevioo.fileback.securityConfig;
 import com.wevioo.fileback.filters.JwtRequestFilter;
 import com.wevioo.fileback.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -54,6 +53,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/signUp")
                 .permitAll()
                 .antMatchers("/confirm-account")
+                .permitAll()
+                .antMatchers("/categories/all")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

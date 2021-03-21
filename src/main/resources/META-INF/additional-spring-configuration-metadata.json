@@ -4,6 +4,16 @@
       "name": "jwt.secretKey",
       "type": "java.lang.String",
       "description": "jwt secret key for validating the json web token."
+    },
+    {
+      "name": "thumbnails.path",
+      "type": "java.lang.String",
+      "description": "thumbnails path."
+    },
+    {
+      "name": "images.path",
+      "type": "java.lang.String",
+      "description": "images path."
     }
   ]
 }
