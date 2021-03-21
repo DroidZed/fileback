@@ -3,9 +3,8 @@ package com.wevioo.fileback.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wevioo.fileback.enums.DaysOfWork;
 import com.wevioo.fileback.enums.RenumerationType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -47,20 +46,4 @@ public class Services {
     @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy ="services" )
     private User user;
-
-    public Services(String description,
-                    String horaire,
-                    String speciality,
-                    DaysOfWork daysOfWork,
-                    RenumerationType renumeration,
-                    Float prixHeure,
-                    Float prixJour) {
-        this.description = description;
-        this.horaire = horaire;
-        this.speciality = speciality;
-        this.daysOfWork = daysOfWork;
-        this.renumeration = renumeration;
-        this.prixHeure = prixHeure;
-        this.prixJour = prixJour;
-    }
 }

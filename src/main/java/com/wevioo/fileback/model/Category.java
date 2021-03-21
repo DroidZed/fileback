@@ -1,18 +1,14 @@
 package com.wevioo.fileback.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Entity
 @Table(name = "category")
 public class Category {
@@ -28,8 +24,8 @@ public class Category {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "image")
-    private byte[] image;
+    @Column(name = "image_name")
+    private String imageName;
 
     @JsonIgnore
     @OneToMany(mappedBy = "category")

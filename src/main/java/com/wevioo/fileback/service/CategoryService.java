@@ -1,53 +1,62 @@
 package com.wevioo.fileback.service;
 
 import com.wevioo.fileback.exceptions.CategoryNotFoundException;
-import com.wevioo.fileback.helper.Base64Treatment;
+import com.wevioo.fileback.message.ImageResponse;
 import com.wevioo.fileback.message.ResponseMessage;
 import com.wevioo.fileback.model.Category;
 import com.wevioo.fileback.repository.CategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class CategoryService {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
+    private final ImageService imageService;
 
     public List<Category> getAllCategories() {
-        List<Category> listOfCategories = categoryRepository.findAll();
-        Base64Treatment base64Treatment = new Base64Treatment();
+        return categoryRepository.findAll();
+    }
 
-        for (Category category : listOfCategories)
-            if (category.getImage() != null) {
-                base64Treatment.setBase64String(category.getImage());
-                category.setImage(base64Treatment.decompressBytes());
+    public void setCategoryPhoto(MultipartFile photo, Long cat_id) {
+
+        Optional<Category> opt = this.categoryRepository.findById(cat_id);
+
+        if(opt.isPresent())
+        {
+            Category cat = opt.get();
+
+            if(cat.getImageName() == null) {
+                cat.setImageName(photo.getOriginalFilename());
+                this.categoryRepository.save(cat);
             }
-        return listOfCategories;
+
+            if(photo != null)
+                this.imageService
+                        .uploadToLocalFileSystem(photo,
+                                "categories",
+                                "category",
+                                cat.getImageName()
+                        );
+        }
+
     }
 
     public void createCategory(Category cat) {
-        if (cat.getImage() != null) {
-            Base64Treatment base64Treatment = new Base64Treatment(cat.getImage());
-            cat.setImage(base64Treatment.compressBytes());
-        }
+
         this.categoryRepository.save(cat);
     }
 
     public Category getOneCategory(Long id) {
-        return this.categoryRepository.findById(id).map(data -> {
-            Base64Treatment base64Treatment = new Base64Treatment();
-            if (data.getImage() != null) {
-                base64Treatment.setBase64String(data.getImage());
-                data.setImage(base64Treatment.decompressBytes());
-            }
-            return data;
-        }).orElseThrow(() -> new CategoryNotFoundException(id));
+        return this.categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id));
     }
 
     public void removeCategory(Long id) {
@@ -60,32 +69,28 @@ public class CategoryService {
 
     @Transactional
     public ResponseEntity<?> updateCategory(Category newCat, Long id) throws CategoryNotFoundException {
-        Base64Treatment base64Treatment = null;
 
-        if (newCat.getImage() != null && newCat.getImage().length > 0) {
-            base64Treatment = new Base64Treatment(newCat.getImage());
-        }
+        return this.categoryRepository.findById(id).map(category ->
+                {
+                    category.setNom(newCat.getNom());
 
-        Optional<Category> optionalCat = this.categoryRepository.findById(id);
+                    category.setDescription(newCat.getDescription());
 
-        ResponseMessage resp = new ResponseMessage();
+                    this.categoryRepository.save(category);
 
-        if (optionalCat.isPresent()) {
-            Category category = optionalCat.get();
+                    return ResponseEntity.ok(new ResponseMessage("Category mise à jour avec succées !"));
+                }
+        ).orElseThrow(() -> new CategoryNotFoundException(id));
+    }
 
-            category.setNom(newCat.getNom());
+    public ImageResponse getCategoryImage(Long id) throws IOException
+    {
+        Optional<Category> opt = this.categoryRepository.findById(id);
 
-            category.setDescription(newCat.getDescription());
 
-            if (base64Treatment != null)
-                category.setImage(base64Treatment.compressBytes());
+        assert opt.isPresent();
+        Category cat = opt.get();
 
-            this.categoryRepository.save(category);
-
-            resp.setMessage("Category mise à jour avec succées !");
-        } else {
-            throw new CategoryNotFoundException(id);
-        }
-        return ResponseEntity.ok(resp);
+        return new ImageResponse(this.imageService.getImageWithMediaType(cat.getImageName(), "category"));
     }
 }

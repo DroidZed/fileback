@@ -1,14 +1,15 @@
 package com.wevioo.fileback.controller;
 
-import com.wevioo.fileback.message.ImageRequest;
 import com.wevioo.fileback.model.User;
-import com.wevioo.fileback.service.ImageService;
 import com.wevioo.fileback.service.UserManagerLayer;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -17,7 +18,6 @@ import java.util.List;
 @AllArgsConstructor
 public class UsersController {
 
-    private final ImageService imageService;
     private final UserManagerLayer userManagerLayer;
 
     @PostMapping(path = "invite")
@@ -61,18 +61,16 @@ public class UsersController {
         return this.userManagerLayer.getAUserById(id);
     }
 
-    @GetMapping(path = "img/profile/{id}")
+    @GetMapping(path = "/image/get/{id}", produces = {MediaType.IMAGE_JPEG_VALUE})
     public @ResponseBody
-    ResponseEntity<?> getProfileImage(@PathVariable Long id) {
-        return imageService.getProfileImage(id);
+    ResponseEntity<?> getProfileImage(@PathVariable Long id) throws IOException {
+        return this.userManagerLayer.getProfileImage(id);
     }
 
-    // ! This is for the profile picture only !!
-    @PutMapping(path = "img/profile/{id}")
-    public @ResponseBody
-    ResponseEntity<?> updateProfilePicture(@RequestBody ImageRequest imgReq, @PathVariable Long id)
+    @PostMapping(value = "profile/{id}/img")
+    public ResponseEntity<?> updateProfilePicture(@PathVariable Long id, @RequestBody MultipartFile file)
     {
-        return imageService.updateProfilePicture(imgReq, id);
+        return this.userManagerLayer.updateProfilePicture(file, id);
     }
 
     @PutMapping(path = "/disable/{id}")
