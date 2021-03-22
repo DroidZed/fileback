@@ -40,7 +40,17 @@ public class CategoryService {
                 return ResponseEntity.badRequest().body("Photo is null !");
             }
 
-            cat.setImageName(photo.getOriginalFilename());
+            String imageName =  photo.getOriginalFilename();
+
+            if (cat.getImageName() != null)
+            {
+                imageName = cat.getImageName();
+            }
+
+            else
+            {
+                cat.setImageName(imageName);
+            }
 
             this.categoryRepository.save(cat);
 
@@ -48,7 +58,7 @@ public class CategoryService {
                     .uploadToLocalFileSystem(photo,
                             "categories",
                             "category",
-                            photo.getOriginalFilename()
+                           imageName
                     );
     }
 
