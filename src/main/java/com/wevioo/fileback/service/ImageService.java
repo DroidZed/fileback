@@ -71,10 +71,6 @@ public class ImageService {
             throws IOException {
         Path destination = Paths.get(storageDirectoryPath + "\\" + subdir + "\\" + imageName);
 
-        System.out.println("-------------------------");
-        System.out.println(destination.toUri());
-        System.out.println("-------------------------");
-
         return IOUtils.toByteArray(destination.toUri());
     }
 }

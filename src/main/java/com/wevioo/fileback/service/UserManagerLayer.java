@@ -151,15 +151,19 @@ public class UserManagerLayer {
 
         User u = opt.get();
 
-        ResponseEntity<?> image = this.imageService.uploadToLocalFileSystem(imgreq,"users", "user", imgreq.getOriginalFilename());
+        String imageName = imgreq.getOriginalFilename();
 
-        System.out.println(imgreq.getOriginalFilename());
+        if (u.getImageName() != null) {
+            imageName = u.getImageName();
+        }
 
-        u.setImageName(imgreq.getOriginalFilename());
+        else {
+            u.setImageName(imageName);
+        }
 
         this.userRepository.save(u);
 
-        return image;
+       return this.imageService.uploadToLocalFileSystem(imgreq,"users", "user", imageName);
     }
 
     public ResponseEntity<?> getProfileImage(Long id) throws IOException {
