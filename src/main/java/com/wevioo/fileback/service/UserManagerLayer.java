@@ -163,7 +163,9 @@ public class UserManagerLayer {
 
         this.userRepository.save(u);
 
-       return this.imageService.uploadToLocalFileSystem(imgreq,"users", "user", imageName);
+       this.imageService.uploadToLocalFileSystem(imgreq,"users", "user", imageName);
+
+        return ResponseEntity.ok(new ResponseMessage("Okay !"));
     }
 
     public ResponseEntity<?> getProfileImage(Long id) throws IOException {

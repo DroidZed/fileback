@@ -1,6 +1,6 @@
 package com.wevioo.fileback.filters;
 
-import com.wevioo.fileback.securityConfig.UserDetail;
+import com.wevioo.fileback.config.UserDetail;
 import com.wevioo.fileback.service.UserService;
 import com.wevioo.fileback.utility.JwtUtil;
 

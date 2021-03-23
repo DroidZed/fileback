@@ -2,7 +2,7 @@ package com.wevioo.fileback.service;
 
 import com.wevioo.fileback.message.JwtRequest;
 import com.wevioo.fileback.message.JwtResponse;
-import com.wevioo.fileback.securityConfig.UserDetail;
+import com.wevioo.fileback.config.UserDetail;
 import com.wevioo.fileback.utility.JwtUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

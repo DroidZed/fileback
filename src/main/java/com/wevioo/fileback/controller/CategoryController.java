@@ -60,9 +60,6 @@ public class CategoryController {
     @PostMapping(path = "/update/{catId}/pic")
     public ResponseEntity<?> updateCategoryPicture(@PathVariable Long catId, @RequestParam("file") MultipartFile image)
     {
-        System.out.println("-------------------------");
-                System.out.println(image);
-        System.out.println("-------------------------");
        return this.categoryService.setCategoryPhoto(image,catId);
     }
 }

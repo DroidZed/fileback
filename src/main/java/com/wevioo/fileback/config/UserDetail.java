@@ -1,4 +1,4 @@
-package com.wevioo.fileback.securityConfig;
+package com.wevioo.fileback.config;
 
 import com.wevioo.fileback.model.User;
 import lombok.AllArgsConstructor;

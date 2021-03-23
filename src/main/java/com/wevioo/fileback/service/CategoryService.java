@@ -54,12 +54,14 @@ public class CategoryService {
 
             this.categoryRepository.save(cat);
 
-           return this.imageService
+           this.imageService
                     .uploadToLocalFileSystem(photo,
                             "categories",
                             "category",
                            imageName
                     );
+
+           return ResponseEntity.ok(new ResponseMessage("Okay !"));
     }
 
     public void createCategory(Category cat) {

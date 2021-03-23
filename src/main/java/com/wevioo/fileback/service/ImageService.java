@@ -23,9 +23,8 @@ public class ImageService {
      * @param file     the file to upload
      * @param endPoint the api endpoint to return
      * @param subdir   the subdir to where it needs to save the picture
-     * @return         api url, you use it so we can download the image
     */
-    public ResponseEntity<?> uploadToLocalFileSystem(MultipartFile file, String endPoint, String subdir, String fileName) {
+    public void uploadToLocalFileSystem(MultipartFile file, String endPoint, String subdir, String fileName) {
 
         Path storageDirectory = Paths.get(storageDirectoryPath);
 
@@ -49,14 +48,6 @@ public class ImageService {
         {
             e.printStackTrace();
         }
-
-        // ! Gives you the link to download the image
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(endPoint + "/image/get/")
-                .path(fileName)
-                .toUriString();
-
-        return ResponseEntity.ok(fileDownloadUri);
     }
 
     /**

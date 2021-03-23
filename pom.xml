@@ -95,11 +95,24 @@
             <artifactId>okhttp</artifactId>
             <version>4.9.1</version>
         </dependency>
-
+        <!-- commons io -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.8.0</version>
+        </dependency>
+        <!-- SpringFox -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
+        <!-- Swagger UI -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>3.0.0</version>
         </dependency>
 
     </dependencies>

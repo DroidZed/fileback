@@ -5,8 +5,10 @@ import com.wevioo.fileback.service.NeedsService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping(path = "/need")
@@ -42,6 +44,30 @@ public class NeedsController {
     public ResponseEntity<?> updateNeed(@PathVariable Long needid, @RequestBody Needs need)
     {
         return this.needsService.modifyNeed(needid, need);
+    }
+
+    @PostMapping(path = "/update/{id}/picA")
+    public CompletableFuture<ResponseEntity<?>> setNeedPictureA(@RequestParam("file") MultipartFile imageA, @PathVariable Long id)
+    {
+        return this.needsService.uploadNeedPicA(imageA,id);
+    }
+
+    @PostMapping(path = "/update/{id}/picB")
+    public CompletableFuture<ResponseEntity<?>> setNeedPictureB(@RequestParam("file") MultipartFile imageB, @PathVariable Long id)
+    {
+        return this.needsService.uploadNeedPicB(imageB,id);
+    }
+
+    @PostMapping(path = "/update/{id}/picC")
+    public CompletableFuture<ResponseEntity<?>> setNeedPictureC(@RequestParam("file") MultipartFile imageC, @PathVariable Long id)
+    {
+        return this.needsService.uploadNeedPicC(imageC,id);
+    }
+
+    @PostMapping(path = "/update/{id}/picD")
+    public CompletableFuture<ResponseEntity<?>> setNeedPictureD(@RequestParam("file") MultipartFile imageD, @PathVariable Long id)
+    {
+        return this.needsService.uploadNeedPicD(imageD,id);
     }
 
     @DeleteMapping(path = "/del/{needid}")

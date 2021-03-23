@@ -2,7 +2,7 @@ package com.wevioo.fileback.service;
 
 import com.wevioo.fileback.model.User;
 import com.wevioo.fileback.repository.UserRepository;
-import com.wevioo.fileback.securityConfig.UserDetail;
+import com.wevioo.fileback.config.UserDetail;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

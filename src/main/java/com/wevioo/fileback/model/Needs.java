@@ -1,14 +1,16 @@
 package com.wevioo.fileback.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@Getter
-@Setter
-@ToString
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -36,6 +38,24 @@ public class Needs {
     @Column(name = "budget")
     private int budget;
 
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "etat_besoin")
+    private Boolean etatBesoin;
+
+    @Column(name = "image_a")
+    private String imageA;
+
+    @Column(name = "image_b")
+    private String imageB;
+
+    @Column(name = "image_c")
+    private String imageC;
+
+    @Column(name = "image_d")
+    private String imageD;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "id_user")
@@ -46,17 +66,8 @@ public class Needs {
     @JoinColumn(name = "id_cat")
     private Category category;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Needs needs = (Needs) o;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_loc")
+    private NeedLocation needLocation;
 
-        return idNeed != null && idNeed.equals(needs.idNeed);
-    }
-
-    @Override
-    public int hashCode() {
-        return 1283357623;
-    }
 }

@@ -1,4 +1,4 @@
-package com.wevioo.fileback.securityConfig;
+package com.wevioo.fileback.config;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
@@ -45,10 +45,11 @@ public class WebMvcConfiguration {
                         .allowedOrigins("*")
                         .maxAge(3600);
 
-                registry.addMapping("/need/*/**")
+                registry.addMapping("/need/*/*/**")
                         .allowedMethods("GET","POST","PUT","DELETE")
                         .allowedHeaders("*")
-                        .allowedOrigins("*");
+                        .allowedOrigins("*")
+                        .maxAge(3600);
             }
         };
     }

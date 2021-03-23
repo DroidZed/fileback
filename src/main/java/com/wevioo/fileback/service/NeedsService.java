@@ -10,10 +10,13 @@ import com.wevioo.fileback.repository.NeedsRepository;
 import com.wevioo.fileback.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import static java.text.MessageFormat.format;
 
@@ -27,18 +30,19 @@ public class NeedsService {
 
     private final CategoryRepository categoryRepository;
 
-    public ResponseEntity<?> injectNewNeed (Needs needs, Long catid, Long userid){
+    private final ImageService imageService;
+
+    public ResponseEntity<?> injectNewNeed(Needs besoin, Long catid, Long userid) {
 
         Optional<User> optUsr = userRepository.findById(userid);
         Optional<Category> optCat = categoryRepository.findById(catid);
 
-        if(optUsr.isPresent() && optCat.isPresent())
-        {
-            needs.setUser(optUsr.get());
-            needs.setCategory(optCat.get());
+        if (optUsr.isPresent() && optCat.isPresent()) {
+            besoin.setUser(optUsr.get());
+            besoin.setCategory(optCat.get());
         }
 
-        return ResponseEntity.ok(this.needsRepository.save(needs));
+        return ResponseEntity.ok(this.needsRepository.save(besoin));
     }
 
     public List<Needs> collectNeedsOfUser(Long userid) {
@@ -72,5 +76,97 @@ public class NeedsService {
                     return ResponseEntity.ok(this.needsRepository.save(oldNeed));
                 })
                 .orElseThrow(() -> new NeedNotFoundException(needid));
+    }
+
+    @Async
+    public CompletableFuture<ResponseEntity<?>> uploadNeedPicA(MultipartFile needImageA, Long need_id) {
+
+        Optional<Needs> opt = this.needsRepository.findById(need_id);
+
+        if (opt.isEmpty())
+            return CompletableFuture.completedFuture(ResponseEntity.badRequest().body("Besoin introuvable !"));
+
+        Needs besoin = opt.get();
+
+        besoin.setImageA(needImageA.getOriginalFilename());
+
+        System.out.println("-------------");
+        System.out.println(besoin.getImageA());
+        System.out.println("-------------");
+
+        this.needsRepository.save(besoin);
+
+        this.imageService.uploadToLocalFileSystem(needImageA, "needs", "need", needImageA.getOriginalFilename());
+
+        return CompletableFuture.completedFuture(ResponseEntity.ok(new ResponseMessage("Success !!")));
+    }
+
+    @Async
+    public CompletableFuture<ResponseEntity<?>> uploadNeedPicB(MultipartFile needImageB, Long need_id) {
+
+        Optional<Needs> opt = this.needsRepository.findById(need_id);
+
+        if (opt.isEmpty())
+            return CompletableFuture.completedFuture(ResponseEntity.badRequest().body("Besoin introuvable !"));
+
+        Needs besoin = opt.get();
+
+        besoin.setImageB(needImageB.getOriginalFilename());
+
+        System.out.println("-------------");
+        System.out.println(besoin.getImageB());
+        System.out.println("-------------");
+
+        this.needsRepository.save(besoin);
+
+        this.imageService.uploadToLocalFileSystem(needImageB, "needs", "need", needImageB.getOriginalFilename());
+
+        return CompletableFuture.completedFuture(ResponseEntity.ok(new ResponseMessage("Success !!")));
+    }
+
+    @Async
+    public CompletableFuture<ResponseEntity<?>> uploadNeedPicC(MultipartFile needImageC, Long need_id) {
+
+        Optional<Needs> opt = this.needsRepository.findById(need_id);
+
+        if (opt.isEmpty())
+            return CompletableFuture.completedFuture(ResponseEntity.badRequest().body("Besoin introuvable !"));
+
+        Needs besoin = opt.get();
+
+        besoin.setImageC(needImageC.getOriginalFilename());
+
+        System.out.println("-------------");
+        System.out.println(besoin.getImageC());
+        System.out.println("-------------");
+
+        this.needsRepository.save(besoin);
+
+        this.imageService.uploadToLocalFileSystem(needImageC, "needs", "need", needImageC.getOriginalFilename());
+
+        return CompletableFuture.completedFuture(ResponseEntity.ok(new ResponseMessage("Success !!")));
+    }
+
+    @Async
+    public CompletableFuture<ResponseEntity<?>> uploadNeedPicD(MultipartFile needImageD, Long need_id) {
+
+        Optional<Needs> opt = this.needsRepository.findById(need_id);
+
+        if (opt.isEmpty())
+            return CompletableFuture.completedFuture(ResponseEntity.badRequest().body("Besoin introuvable !"));
+
+        Needs besoin = opt.get();
+
+        besoin.setImageD(needImageD.getOriginalFilename());
+
+        System.out.println("-------------");
+        System.out.println(besoin.getImageD());
+        System.out.println("-------------");
+
+        this.needsRepository.save(besoin);
+
+        this.imageService.uploadToLocalFileSystem(needImageD, "needs", "need", needImageD.getOriginalFilename());
+
+        return CompletableFuture.completedFuture(ResponseEntity.ok(new ResponseMessage("Success !!")));
     }
 }

@@ -1,4 +1,4 @@
-package com.wevioo.fileback.securityConfig;
+package com.wevioo.fileback.config;
 
 
 import com.wevioo.fileback.filters.JwtRequestFilter;
@@ -48,15 +48,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/signIn")
-                .permitAll()
-                .antMatchers("/signUp")
-                .permitAll()
-                .antMatchers("/confirm-account")
-                .permitAll()
-                .antMatchers("/categories/all")
-                .permitAll()
-                .antMatchers("/jobbers/add/")
+                .antMatchers(
+                        "/signIn",
+                        "/signUp",
+                        "/confirm-account",
+                        "/categories/all",
+                        "/jobbers/add/"
+                )
                 .permitAll()
                 .anyRequest()
                 .authenticated()
