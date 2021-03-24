@@ -1,6 +1,8 @@
 package com.wevioo.fileback.service;
 
 import com.wevioo.fileback.exceptions.CategoryNotFoundException;
+import com.wevioo.fileback.interfaces.CategoryManager;
+import com.wevioo.fileback.interfaces.ImageManager;
 import com.wevioo.fileback.message.ResponseMessage;
 import com.wevioo.fileback.model.Category;
 import com.wevioo.fileback.repository.CategoryRepository;
@@ -16,10 +18,10 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class CategoryService {
+public class CategoryService implements CategoryManager {
 
     private final CategoryRepository categoryRepository;
-    private final ImageService imageService;
+    private final ImageManager imageManager;
 
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
@@ -48,7 +50,7 @@ public class CategoryService {
 
             this.categoryRepository.save(cat);
 
-           this.imageService
+           this.imageManager
                     .uploadToLocalFileSystem(photo,
                             "category",
                            imageName
@@ -104,6 +106,6 @@ public class CategoryService {
         if(name == null)
             return ResponseEntity.badRequest().body("Image not found !");
 
-        return ResponseEntity.ok(this.imageService.getImageWithMediaType(name, "category"));
+        return ResponseEntity.ok(this.imageManager.getImageWithMediaType(name, "category"));
     }
 }

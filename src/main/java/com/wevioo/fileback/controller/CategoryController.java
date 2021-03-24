@@ -1,7 +1,7 @@
 package com.wevioo.fileback.controller;
 
+import com.wevioo.fileback.interfaces.CategoryManager;
 import com.wevioo.fileback.model.Category;
-import com.wevioo.fileback.service.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,49 +17,49 @@ import java.util.List;
 @AllArgsConstructor
 public class CategoryController {
 
-    private final CategoryService categoryService;
+    private final CategoryManager categoryManager;
 
     @GetMapping(path = "/all")
     public @ResponseBody
     List<Category> getCategories() {
-        return this.categoryService.getAllCategories();
+        return this.categoryManager.getAllCategories();
     }
 
     @GetMapping(path = "/one/{id}")
     public @ResponseBody
     Category getOneCategory(@PathVariable Long id) {
-        return this.categoryService.getOneCategory(id);
+        return this.categoryManager.getOneCategory(id);
     }
 
     @GetMapping(path = "/image/get/{id}", produces = {MediaType.IMAGE_JPEG_VALUE})
     public @ResponseBody
     ResponseEntity<?> getCategoryImage(@PathVariable Long id) throws IOException {
-        return this.categoryService.getCategoryImage(id);
+        return this.categoryManager.getCategoryImage(id);
     }
 
     @PostMapping(path = "/add")
     public void addCategory(@RequestBody Category cat) {
-        this.categoryService.createCategory(cat);
+        this.categoryManager.createCategory(cat);
     }
 
     @DeleteMapping(path = "/del/{id}")
     public void deleteOneCategory(@PathVariable Long id) {
-        this.categoryService.removeCategory(id);
+        this.categoryManager.removeCategory(id);
     }
 
     @DeleteMapping(path = "/del/all")
     public void deleteAllCategories() {
-        this.categoryService.removeAllCategories();
+        this.categoryManager.removeAllCategories();
     }
 
     @PutMapping(path = "/update/{id}")
     public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestBody Category newCat) {
-        return this.categoryService.updateCategory(newCat, id);
+        return this.categoryManager.updateCategory(newCat, id);
     }
 
     @PostMapping(path = "/update/{catId}/pic")
     public ResponseEntity<?> updateCategoryPicture(@PathVariable Long catId, @RequestParam("file") MultipartFile image)
     {
-       return this.categoryService.setCategoryPhoto(image,catId);
+       return this.categoryManager.setCategoryPhoto(image,catId);
     }
 }

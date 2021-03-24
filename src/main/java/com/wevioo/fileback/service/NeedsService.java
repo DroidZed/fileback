@@ -2,6 +2,10 @@ package com.wevioo.fileback.service;
 
 import com.wevioo.fileback.exceptions.NeedNotFoundException;
 import com.wevioo.fileback.geolocationClasses.DisplayLatLng;
+import com.wevioo.fileback.interfaces.GeoCoder;
+import com.wevioo.fileback.interfaces.ImageManager;
+import com.wevioo.fileback.interfaces.LocationManager;
+import com.wevioo.fileback.interfaces.NeedsManager;
 import com.wevioo.fileback.message.ResponseMessage;
 import com.wevioo.fileback.model.Category;
 import com.wevioo.fileback.model.NeedLocation;
@@ -27,7 +31,7 @@ import static java.text.MessageFormat.format;
 
 @Service
 @AllArgsConstructor
-public class NeedsService {
+public class NeedsService implements NeedsManager {
 
     private final NeedsRepository needsRepository;
 
@@ -35,11 +39,11 @@ public class NeedsService {
 
     private final CategoryRepository categoryRepository;
 
-    private final ImageService imageService;
+    private final ImageManager imageManager;
 
-    private final LocationService locationService;
+    private final LocationManager locationManager;
 
-    private final GeoCoderService geoCoderService;
+    private final GeoCoder geoCoder;
 
     public ResponseEntity<?> injectNewNeed(Needs besoin, Long catid, Long userid) {
 
@@ -56,30 +60,6 @@ public class NeedsService {
         besoin.setCategory(optCat.get());
 
         return ResponseEntity.ok(this.needsRepository.save(besoin));
-    }
-
-    private void setNeedLocation(@NotNull Needs besoin)
-    {
-        try
-        {
-            DisplayLatLng latLng = this.geoCoderService.getAddressCoded(besoin.getAddress()).get();
-
-            NeedLocation needLoc = new NeedLocation(latLng.lng, latLng.lat);
-
-            if(besoin.getNeedLocation() != null)
-            {
-                this.locationService.updateNeedLocation(besoin.getNeedLocation().getIdLoc(), needLoc);
-            }
-            else
-            {
-                besoin.setNeedLocation(needLoc);
-            }
-        }
-
-        catch (InterruptedException | ExecutionException | IOException e)
-        {
-            e.printStackTrace();
-        }
     }
 
     public List<Needs> collectNeedsOfUser(Long userid) {
@@ -132,7 +112,7 @@ public class NeedsService {
 
         this.needsRepository.save(besoin);
 
-        this.imageService.uploadToLocalFileSystem(needImageA, "needs\\need" + besoin.getIdNeed(), needImageA.getOriginalFilename());
+        this.imageManager.uploadToLocalFileSystem(needImageA, "needs\\need" + besoin.getIdNeed(), needImageA.getOriginalFilename());
 
         return CompletableFuture.completedFuture(ResponseEntity.ok(new ResponseMessage("Success !!")));
     }
@@ -151,7 +131,7 @@ public class NeedsService {
 
         this.needsRepository.save(besoin);
 
-        this.imageService.uploadToLocalFileSystem(needImageB, "needs\\need" + besoin.getIdNeed(), needImageB.getOriginalFilename());
+        this.imageManager.uploadToLocalFileSystem(needImageB, "needs\\need" + besoin.getIdNeed(), needImageB.getOriginalFilename());
 
         return CompletableFuture.completedFuture(ResponseEntity.ok(new ResponseMessage("Success !!")));
     }
@@ -170,7 +150,7 @@ public class NeedsService {
 
         this.needsRepository.save(besoin);
 
-        this.imageService.uploadToLocalFileSystem(needImageC, "needs\\need" + besoin.getIdNeed(), needImageC.getOriginalFilename());
+        this.imageManager.uploadToLocalFileSystem(needImageC, "needs\\need" + besoin.getIdNeed(), needImageC.getOriginalFilename());
 
         return CompletableFuture.completedFuture(ResponseEntity.ok(new ResponseMessage("Success !!")));
     }
@@ -189,9 +169,33 @@ public class NeedsService {
 
         this.needsRepository.save(besoin);
 
-        this.imageService.uploadToLocalFileSystem(needImageD, "needs\\need" + besoin.getIdNeed(), needImageD.getOriginalFilename());
+        this.imageManager.uploadToLocalFileSystem(needImageD, "needs\\need" + besoin.getIdNeed(), needImageD.getOriginalFilename());
 
         return CompletableFuture.completedFuture(ResponseEntity.ok(new ResponseMessage("Success !!")));
+    }
+
+    private void setNeedLocation(@NotNull Needs besoin)
+    {
+        try
+        {
+            DisplayLatLng latLng = this.geoCoder.getAddressCoded(besoin.getAddress()).get();
+
+            NeedLocation needLoc = new NeedLocation(latLng.lng, latLng.lat);
+
+            if(besoin.getNeedLocation() != null)
+            {
+                this.locationManager.updateNeedLocation(besoin.getNeedLocation().getIdLoc(), needLoc);
+            }
+            else
+            {
+                besoin.setNeedLocation(needLoc);
+            }
+        }
+
+        catch (InterruptedException | ExecutionException | IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
 

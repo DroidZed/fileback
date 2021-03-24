@@ -2,6 +2,11 @@ package com.wevioo.fileback.service;
 
 import com.wevioo.fileback.exceptions.UserNotFoundException;
 import com.wevioo.fileback.geolocationClasses.DisplayLatLng;
+import com.wevioo.fileback.interfaces.EmailManager;
+import com.wevioo.fileback.interfaces.GeoCoder;
+import com.wevioo.fileback.interfaces.ImageManager;
+import com.wevioo.fileback.interfaces.LocationManager;
+import com.wevioo.fileback.interfaces.UserManager;
 import com.wevioo.fileback.message.ResponseMessage;
 import com.wevioo.fileback.model.Locations;
 import com.wevioo.fileback.model.User;
@@ -22,19 +27,18 @@ import java.util.Optional;
 import static java.text.MessageFormat.format;
 
 import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 @AllArgsConstructor
 @Service
-public class UserManagerLayer {
+public class UserManagerLayer implements UserManager {
 
     private final UserRepository userRepository;
-    private final EmailService emailService;
+    private final EmailManager emailManager;
     private final PasswordEncoder encoder;
-    private final GeoCoderService geoCoderService;
-    private final LocationService locationService;
-    private final ImageService imageService;
+    private final GeoCoder geoCoder;
+    private final LocationManager locationManager;
+    private final ImageManager imageManager;
 
     public List<User> getAllUsers()
     {
@@ -96,7 +100,7 @@ public class UserManagerLayer {
         mailMessage.setText(
                 "On vous invite à découvrire notre plateforme de recherche de services à l'adresse : http://localhost:4200");
 
-        emailService.sendEmail(mailMessage);
+        emailManager.sendEmail(mailMessage);
 
         return ResponseEntity.ok(new ResponseMessage("Email envoyé"));
     }
@@ -118,7 +122,7 @@ public class UserManagerLayer {
 
             try
             {
-                DisplayLatLng LatLng = geoCoderService.getAddressCoded(user.getAdresse()).get();
+                DisplayLatLng LatLng = geoCoder.getAddressCoded(user.getAdresse()).get();
 
                 if(LatLng != null) {
                     Locations loc = data.getLocation();
@@ -127,7 +131,7 @@ public class UserManagerLayer {
 
                     loc.setLongitude(LatLng.lng);
 
-                    this.locationService.updateLocation(loc.getIdLoc(), loc);
+                    this.locationManager.updateLocation(loc.getIdLoc(), loc);
                 }
             }
             
@@ -165,7 +169,7 @@ public class UserManagerLayer {
 
         this.userRepository.save(u);
 
-       this.imageService.uploadToLocalFileSystem(imgreq,"user", imageName);
+       this.imageManager.uploadToLocalFileSystem(imgreq,"user", imageName);
 
         return ResponseEntity.ok(new ResponseMessage("Okay !"));
     }
@@ -182,6 +186,6 @@ public class UserManagerLayer {
         if(name == null)
             return ResponseEntity.badRequest().body("Image not found !");
 
-        return ResponseEntity.ok(imageService.getImageWithMediaType(name,"user"));
+        return ResponseEntity.ok(imageManager.getImageWithMediaType(name,"user"));
     }
 }

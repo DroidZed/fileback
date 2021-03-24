@@ -1,7 +1,7 @@
 package com.wevioo.fileback.controller;
 
+import com.wevioo.fileback.interfaces.UserManager;
 import com.wevioo.fileback.model.User;
-import com.wevioo.fileback.service.UserManagerLayer;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UsersController {
 
-    private final UserManagerLayer userManagerLayer;
+    private final UserManager userManagerLayer;
 
     @PostMapping(path = "invite")
     public @ResponseBody

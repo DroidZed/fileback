@@ -1,5 +1,6 @@
 package com.wevioo.fileback.service;
 
+import com.wevioo.fileback.interfaces.Login;
 import com.wevioo.fileback.message.JwtRequest;
 import com.wevioo.fileback.message.JwtResponse;
 import com.wevioo.fileback.config.UserDetail;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 @AllArgsConstructor
-public class LoginService {
+public class LoginService implements Login {
 
     private final AuthenticationManager authenticationManager;
 

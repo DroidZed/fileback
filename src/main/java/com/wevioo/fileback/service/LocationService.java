@@ -1,6 +1,7 @@
 package com.wevioo.fileback.service;
 
 import com.wevioo.fileback.exceptions.LocationNotFoundException;
+import com.wevioo.fileback.interfaces.LocationManager;
 import com.wevioo.fileback.model.Locations;
 import com.wevioo.fileback.model.NeedLocation;
 import com.wevioo.fileback.repository.LocationsRepository;
@@ -12,7 +13,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class LocationService {
+public class LocationService implements LocationManager {
     
     private final LocationsRepository locationRepository;
 

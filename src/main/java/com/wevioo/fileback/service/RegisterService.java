@@ -1,6 +1,9 @@
 package com.wevioo.fileback.service;
 
 import com.wevioo.fileback.geolocationClasses.DisplayLatLng;
+import com.wevioo.fileback.interfaces.EmailManager;
+import com.wevioo.fileback.interfaces.GeoCoder;
+import com.wevioo.fileback.interfaces.Register;
 import com.wevioo.fileback.message.ResponseMessage;
 import com.wevioo.fileback.model.Category;
 import com.wevioo.fileback.model.ConfirmationToken;
@@ -25,7 +28,7 @@ import java.util.concurrent.ExecutionException;
 @Service
 @AllArgsConstructor
 @Transactional
-public class RegisterService {
+public class RegisterService implements Register {
 
     private final UserRepository userRepository;
 
@@ -33,11 +36,11 @@ public class RegisterService {
 
     private final ConfirmationTokenRepository confirmationTokenRepository;
 
-    private final EmailService emailService;
+    private final EmailManager emailManager;
 
     private final PasswordEncoder encoder;
 
-    private final GeoCoderService geoCoderService;
+    private final GeoCoder geoCoder;
 
     public ResponseEntity<?> addUser(User user) {
 
@@ -136,15 +139,14 @@ public class RegisterService {
         mailMessage.setText("To confirm your account, please click here : "
                 +"http://localhost:8080/confirm-account?token="+confirmationToken.getConfirmationToken());
 
-        emailService.sendEmail(mailMessage);
+        emailManager.sendEmail(mailMessage);
     }
-
 
     private void setLocation(User user)
     {
         try
         {
-            DisplayLatLng latlng = geoCoderService.getAddressCoded(user.getAdresse()).get();
+            DisplayLatLng latlng = geoCoder.getAddressCoded(user.getAdresse()).get();
             user.setLocation(new Locations(latlng.lat,latlng.lng));
         }
 

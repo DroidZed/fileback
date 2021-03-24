@@ -1,5 +1,6 @@
 package com.wevioo.fileback.service;
 
+import com.wevioo.fileback.interfaces.JobberManager;
 import com.wevioo.fileback.message.ResponseMessage;
 import com.wevioo.fileback.model.User;
 import com.wevioo.fileback.model.Services;
@@ -13,7 +14,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class JobberService {
+public class JobberService implements JobberManager {
 
     private final UserRepository userRepository;
 

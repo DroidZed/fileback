@@ -1,0 +1,22 @@
+package com.wevioo.fileback.interfaces;
+
+import com.wevioo.fileback.model.Needs;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
+public interface NeedsManager {
+
+    ResponseEntity<?> injectNewNeed(Needs besoin, Long catid, Long userid);
+    List<Needs> collectNeedsOfUser(Long userid);
+    List<Needs> collectNeedsOfCategory(Long catid);
+    ResponseEntity<?> deleteAllTheNeeds();
+    ResponseEntity<?> deleteOne(Long needid);
+    ResponseEntity<?> modifyNeed(Long needid, Needs need);
+    CompletableFuture<ResponseEntity<?>> uploadNeedPicA(MultipartFile needImageA, Long need_id);
+    CompletableFuture<ResponseEntity<?>> uploadNeedPicB(MultipartFile needImageB, Long need_id);
+    CompletableFuture<ResponseEntity<?>> uploadNeedPicC(MultipartFile needImageC, Long need_id);
+    CompletableFuture<ResponseEntity<?>> uploadNeedPicD(MultipartFile needImageD, Long need_id);
+}

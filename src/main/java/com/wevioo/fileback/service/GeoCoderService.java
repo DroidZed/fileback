@@ -11,6 +11,7 @@ import com.wevioo.fileback.geolocationClasses.DisplayLatLng;
 import com.wevioo.fileback.geolocationClasses.GeocodeResult;
 import com.wevioo.fileback.geolocationClasses.Location;
 
+import com.wevioo.fileback.interfaces.GeoCoder;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 
 @Service
 @NoArgsConstructor
-public class GeoCoderService {
+public class GeoCoderService implements GeoCoder {
 
     @Async
     public CompletableFuture<DisplayLatLng> getAddressCoded(String addr)
