@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @AllArgsConstructor
@@ -143,11 +144,11 @@ public class RegisterService {
     {
         try
         {
-            DisplayLatLng latlng = geoCoderService.getAddressCoded(user.getAdresse());
+            DisplayLatLng latlng = geoCoderService.getAddressCoded(user.getAdresse()).get();
             user.setLocation(new Locations(latlng.lat,latlng.lng));
         }
 
-        catch (IOException e)
+        catch (IOException | InterruptedException | ExecutionException e)
         {
             e.printStackTrace();
         }

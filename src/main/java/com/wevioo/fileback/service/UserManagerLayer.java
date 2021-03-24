@@ -22,6 +22,8 @@ import java.util.Optional;
 import static java.text.MessageFormat.format;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @AllArgsConstructor
 @Service
@@ -116,7 +118,7 @@ public class UserManagerLayer {
 
             try
             {
-                DisplayLatLng LatLng = geoCoderService.getAddressCoded(user.getAdresse());
+                DisplayLatLng LatLng = geoCoderService.getAddressCoded(user.getAdresse()).get();
 
                 if(LatLng != null) {
                     Locations loc = data.getLocation();
@@ -129,7 +131,7 @@ public class UserManagerLayer {
                 }
             }
             
-            catch (IOException e)
+            catch (IOException | ExecutionException | InterruptedException e)
             {
                 e.printStackTrace();
             }
@@ -163,7 +165,7 @@ public class UserManagerLayer {
 
         this.userRepository.save(u);
 
-       this.imageService.uploadToLocalFileSystem(imgreq,"users", "user", imageName);
+       this.imageService.uploadToLocalFileSystem(imgreq,"user", imageName);
 
         return ResponseEntity.ok(new ResponseMessage("Okay !"));
     }

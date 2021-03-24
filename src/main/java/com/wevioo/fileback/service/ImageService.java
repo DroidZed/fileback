@@ -2,10 +2,9 @@ package com.wevioo.fileback.service;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,13 +19,13 @@ public class ImageService {
 
     /**
      * Uploads the image to file system
-     * @param file     the file to upload
-     * @param endPoint the api endpoint to return
-     * @param subdir   the subdir to where it needs to save the picture
-    */
-    public void uploadToLocalFileSystem(MultipartFile file, String endPoint, String subdir, String fileName) {
+     *
+     * @param file   the file to upload
+     * @param subdir the subdir to where it needs to save the picture
+     */
+    public void uploadToLocalFileSystem(MultipartFile file, String subdir, String fileName) {
 
-        Path storageDirectory = Paths.get(storageDirectoryPath);
+        Path storageDirectory = Paths.get(storageDirectoryPath + "\\" + subdir);
 
         if (!Files.exists(storageDirectory)) {
             try {
@@ -36,28 +35,25 @@ public class ImageService {
             }
         }
 
-        Path destination = Paths.get(storageDirectory.toString() + "\\" + subdir + "\\" + fileName);
+        Path destination = Paths.get(storageDirectory.toString() + "\\" + fileName);
 
-        try
-        {
+        try {
             Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
-        }
-
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     /**
-    * Returns the pic data as byte array
-     * @param imageName       the image's name
-     * @param subdir          the subdirectory of the image, <br>
-     *                        used to know if we're saving for user or category
-     * @return                byte representation of the image
-     * @throws IOException    if it can't find the picture or open the directory !
-    */
+     * Returns the pic data as byte array
+     *
+     * @param imageName the image's name
+     * @param subdir    the subdirectory of the image, <br>
+     *                  used to know if we're saving for user or category
+     * @return byte representation of the image
+     * @throws IOException if it can't find the picture or open the directory !
+     */
     public byte[] getImageWithMediaType(String imageName, String subdir)
             throws IOException {
         Path destination = Paths.get(storageDirectoryPath + "\\" + subdir + "\\" + imageName);

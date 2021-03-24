@@ -1,22 +1,27 @@
 package com.wevioo.fileback.service;
 
 import com.wevioo.fileback.exceptions.NeedNotFoundException;
+import com.wevioo.fileback.geolocationClasses.DisplayLatLng;
 import com.wevioo.fileback.message.ResponseMessage;
 import com.wevioo.fileback.model.Category;
+import com.wevioo.fileback.model.NeedLocation;
 import com.wevioo.fileback.model.Needs;
 import com.wevioo.fileback.model.User;
 import com.wevioo.fileback.repository.CategoryRepository;
 import com.wevioo.fileback.repository.NeedsRepository;
 import com.wevioo.fileback.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import static java.text.MessageFormat.format;
 
@@ -32,17 +37,49 @@ public class NeedsService {
 
     private final ImageService imageService;
 
+    private final LocationService locationService;
+
+    private final GeoCoderService geoCoderService;
+
     public ResponseEntity<?> injectNewNeed(Needs besoin, Long catid, Long userid) {
 
         Optional<User> optUsr = userRepository.findById(userid);
         Optional<Category> optCat = categoryRepository.findById(catid);
 
-        if (optUsr.isPresent() && optCat.isPresent()) {
-            besoin.setUser(optUsr.get());
-            besoin.setCategory(optCat.get());
+        if (optUsr.isEmpty() || optCat.isEmpty()) {
+            return ResponseEntity.badRequest().body("Error: user or category not found !");
         }
 
+        this.setNeedLocation(besoin);
+
+        besoin.setUser(optUsr.get());
+        besoin.setCategory(optCat.get());
+
         return ResponseEntity.ok(this.needsRepository.save(besoin));
+    }
+
+    private void setNeedLocation(@NotNull Needs besoin)
+    {
+        try
+        {
+            DisplayLatLng latLng = this.geoCoderService.getAddressCoded(besoin.getAddress()).get();
+
+            NeedLocation needLoc = new NeedLocation(latLng.lng, latLng.lat);
+
+            if(besoin.getNeedLocation() != null)
+            {
+                this.locationService.updateNeedLocation(besoin.getNeedLocation().getIdLoc(), needLoc);
+            }
+            else
+            {
+                besoin.setNeedLocation(needLoc);
+            }
+        }
+
+        catch (InterruptedException | ExecutionException | IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public List<Needs> collectNeedsOfUser(Long userid) {
@@ -68,6 +105,9 @@ public class NeedsService {
     public ResponseEntity<?> modifyNeed(Long needid, Needs need) {
         return this.needsRepository.findById(needid)
                 .map(oldNeed -> {
+                    oldNeed.setEtatBesoin(need.getEtatBesoin());
+                    oldNeed.setAddress(need.getAddress());
+                    this.setNeedLocation(need);
                     oldNeed.setNeedTitle(need.getNeedTitle());
                     oldNeed.setNeedDescription(need.getNeedDescription());
                     oldNeed.setBudget(need.getBudget());
@@ -90,13 +130,9 @@ public class NeedsService {
 
         besoin.setImageA(needImageA.getOriginalFilename());
 
-        System.out.println("-------------");
-        System.out.println(besoin.getImageA());
-        System.out.println("-------------");
-
         this.needsRepository.save(besoin);
 
-        this.imageService.uploadToLocalFileSystem(needImageA, "needs", "need", needImageA.getOriginalFilename());
+        this.imageService.uploadToLocalFileSystem(needImageA, "needs\\need" + besoin.getIdNeed(), needImageA.getOriginalFilename());
 
         return CompletableFuture.completedFuture(ResponseEntity.ok(new ResponseMessage("Success !!")));
     }
@@ -113,13 +149,9 @@ public class NeedsService {
 
         besoin.setImageB(needImageB.getOriginalFilename());
 
-        System.out.println("-------------");
-        System.out.println(besoin.getImageB());
-        System.out.println("-------------");
-
         this.needsRepository.save(besoin);
 
-        this.imageService.uploadToLocalFileSystem(needImageB, "needs", "need", needImageB.getOriginalFilename());
+        this.imageService.uploadToLocalFileSystem(needImageB, "needs\\need" + besoin.getIdNeed(), needImageB.getOriginalFilename());
 
         return CompletableFuture.completedFuture(ResponseEntity.ok(new ResponseMessage("Success !!")));
     }
@@ -136,13 +168,9 @@ public class NeedsService {
 
         besoin.setImageC(needImageC.getOriginalFilename());
 
-        System.out.println("-------------");
-        System.out.println(besoin.getImageC());
-        System.out.println("-------------");
-
         this.needsRepository.save(besoin);
 
-        this.imageService.uploadToLocalFileSystem(needImageC, "needs", "need", needImageC.getOriginalFilename());
+        this.imageService.uploadToLocalFileSystem(needImageC, "needs\\need" + besoin.getIdNeed(), needImageC.getOriginalFilename());
 
         return CompletableFuture.completedFuture(ResponseEntity.ok(new ResponseMessage("Success !!")));
     }
@@ -159,14 +187,12 @@ public class NeedsService {
 
         besoin.setImageD(needImageD.getOriginalFilename());
 
-        System.out.println("-------------");
-        System.out.println(besoin.getImageD());
-        System.out.println("-------------");
-
         this.needsRepository.save(besoin);
 
-        this.imageService.uploadToLocalFileSystem(needImageD, "needs", "need", needImageD.getOriginalFilename());
+        this.imageService.uploadToLocalFileSystem(needImageD, "needs\\need" + besoin.getIdNeed(), needImageD.getOriginalFilename());
 
         return CompletableFuture.completedFuture(ResponseEntity.ok(new ResponseMessage("Success !!")));
     }
+
+
 }

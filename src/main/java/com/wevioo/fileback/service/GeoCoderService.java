@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wevioo.fileback.geolocationClasses.DisplayLatLng;
@@ -13,6 +14,7 @@ import com.wevioo.fileback.geolocationClasses.Location;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import lombok.NoArgsConstructor;
@@ -21,7 +23,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GeoCoderService {
 
-    public DisplayLatLng getAddressCoded(String addr)
+    @Async
+    public CompletableFuture<DisplayLatLng> getAddressCoded(String addr)
             throws IOException
     {
         String encodedAddress =  URLEncoder.encode(addr, StandardCharsets.UTF_8);
@@ -64,7 +67,7 @@ public class GeoCoderService {
                 final_loc = loc.displayLatLng;
             }
         }
-        return final_loc;
+        return CompletableFuture.completedFuture(final_loc);
     }
     
 }

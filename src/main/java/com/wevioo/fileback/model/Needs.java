@@ -1,14 +1,12 @@
 package com.wevioo.fileback.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.wevioo.fileback.enums.EtatBesoin;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Proxy;
-
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -42,7 +40,8 @@ public class Needs {
     private String address;
 
     @Column(name = "etat_besoin")
-    private Boolean etatBesoin;
+    @Enumerated(EnumType.STRING)
+    private EtatBesoin etatBesoin;
 
     @Column(name = "image_a")
     private String imageA;

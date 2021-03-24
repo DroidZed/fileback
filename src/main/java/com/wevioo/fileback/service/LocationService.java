@@ -1,11 +1,11 @@
 package com.wevioo.fileback.service;
 
-import java.util.List;
-
 import com.wevioo.fileback.exceptions.LocationNotFoundException;
 import com.wevioo.fileback.model.Locations;
+import com.wevioo.fileback.model.NeedLocation;
 import com.wevioo.fileback.repository.LocationsRepository;
 
+import com.wevioo.fileback.repository.NeedsLocationRepository;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
@@ -16,17 +16,7 @@ public class LocationService {
     
     private final LocationsRepository locationRepository;
 
-    public List<Locations> gatherAllLocations()
-    {
-        return this.locationRepository.findAll();
-    }
-
-    public Locations collectOneLocation(Long locId)
-    {
-        return this.locationRepository
-                        .findById(locId)
-                        .orElseThrow(() -> new LocationNotFoundException(locId));
-    }
+    private final NeedsLocationRepository needsLocationRepository;
 
     public void updateLocation(Long id, Locations loc)
     {
@@ -41,13 +31,17 @@ public class LocationService {
             .orElseThrow(() -> new LocationNotFoundException(id));
     }
 
-    public List<Locations> getLocationsOfUsers()
+    public void updateNeedLocation(Long id, NeedLocation loc)
     {
-        return this.locationRepository.getLocationsOfUsers();
-    }
+        this.needsLocationRepository.findById(id)
+                .map(
+                        old -> {
+                            old.setLat(loc.getLat());
+                            old.setLng(loc.getLng());
 
-    public List<Locations> getLocationsOfJobbers()
-    {
-        return this.locationRepository.getLocationsOfJobbers();
+                            return this.needsLocationRepository.save(old);
+                        }
+                )
+                .orElseThrow(() -> new LocationNotFoundException(id));
     }
 }

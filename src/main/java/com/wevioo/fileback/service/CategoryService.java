@@ -56,7 +56,6 @@ public class CategoryService {
 
            this.imageService
                     .uploadToLocalFileSystem(photo,
-                            "categories",
                             "category",
                            imageName
                     );
