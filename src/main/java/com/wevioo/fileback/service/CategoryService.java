@@ -40,17 +40,11 @@ public class CategoryService {
                 return ResponseEntity.badRequest().body("Photo is null !");
             }
 
-            String imageName =  photo.getOriginalFilename();
+            String imageName =  cat.getNom().replace(' ','_');
 
-            if (cat.getImageName() != null)
-            {
-                imageName = cat.getImageName();
-            }
+            imageName = imageName.concat(".jpg");
 
-            else
-            {
-                cat.setImageName(imageName);
-            }
+            cat.setImageName(imageName);
 
             this.categoryRepository.save(cat);
 
