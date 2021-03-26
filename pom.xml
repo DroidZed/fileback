@@ -89,12 +89,6 @@
             <artifactId>firebase-admin</artifactId>
             <version>7.1.1</version>
         </dependency>
-        <!-- HTTP CLIENT -->
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>4.9.1</version>
-        </dependency>
         <!-- commons io -->
         <dependency>
             <groupId>commons-io</groupId>
@@ -113,6 +107,13 @@
             <artifactId>springfox-swagger-ui</artifactId>
             <version>3.0.0</version>
         </dependency>
+        <!-- Jetbrains -->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>20.1.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
