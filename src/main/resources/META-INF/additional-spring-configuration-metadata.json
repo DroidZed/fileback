@@ -14,6 +14,11 @@
       "name": "images.path",
       "type": "java.lang.String",
       "description": "images path."
+    },
+    {
+      "name": "fcm.server.key",
+      "type": "java.lang.String",
+      "description": "fcm server key."
     }
   ]
 }
