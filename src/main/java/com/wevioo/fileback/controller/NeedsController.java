@@ -18,7 +18,6 @@ public class NeedsController {
     private final NeedsManager needsManager;
 
     @PostMapping(path = "/add-new-need/user/{userid}/category/{catid}")
-    @ResponseBody
     public ResponseEntity<?> addNewNeed(@RequestBody Needs needs,
                                         @PathVariable Long catid,
                                         @PathVariable Long userid){
@@ -26,21 +25,18 @@ public class NeedsController {
     }
 
     @GetMapping(path = "/get/user/{userid}")
-    @ResponseBody
     public List<Needs> getNeedsOfUser(@PathVariable Long userid)
     {
         return this.needsManager.collectNeedsOfUser(userid);
     }
 
     @GetMapping(path = "/get/category/{catid}")
-    @ResponseBody
     public List<Needs> getNeedsOfCategory(@PathVariable Long catid)
     {
         return this.needsManager.collectNeedsOfCategory(catid);
     }
 
     @PutMapping(path = "/update/{needid}")
-    @ResponseBody
     public ResponseEntity<?> updateNeed(@PathVariable Long needid, @RequestBody Needs need)
     {
         return this.needsManager.modifyNeed(needid, need);
