@@ -6,8 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -39,20 +38,5 @@ public class ConfirmationToken {
         this.createdAt = LocalDateTime.now();
         confirmationToken = UUID.randomUUID().toString();
         this.expiresAt =  LocalDateTime.now().plusMinutes(15);
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ConfirmationToken that = (ConfirmationToken) o;
-
-        return idToken != null && idToken.equals(that.idToken);
-    }
-
-    @Override
-    public int hashCode() {
-        return 753876866;
     }
 }

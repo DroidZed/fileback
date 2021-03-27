@@ -1,53 +1,59 @@
 package com.wevioo.fileback.service;
 
+import com.wevioo.fileback.exceptions.NotifNotFoundException;
+import lombok.AllArgsConstructor;
 import com.wevioo.fileback.interfaces.NotificationManager;
-import com.wevioo.fileback.message.NotificationPayload;
-import com.wevioo.fileback.message.ResponseMessage;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.*;
+import com.wevioo.fileback.model.SubNotification;
+import com.wevioo.fileback.repository.SubNotificationsRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+
 @Service
+@AllArgsConstructor
 public class NotificationService implements NotificationManager {
 
-    private static final String fcm = "https://fcm.googleapis.com/fcm/send";
+    private final SubNotificationsRepository subNotificationsRepository;
 
-    @Value("${fcm.server.key}")
-    private String fcm_key;
-
-    private final RestTemplate restTemplate;
-
-    public NotificationService(RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder.build();
+    @Override
+    public SubNotification saveNotification(SubNotification notif) {
+        return this.subNotificationsRepository.save(notif);
     }
 
+    @Override
+    public List<SubNotification> getNotifsOfJobber(Long id) {
+        return this.subNotificationsRepository.findAllByIdJobber(id);
+    }
+
+    @Override
+    public List<SubNotification> getUnReadNotifsOfJobber(Long id) {
+        return this.subNotificationsRepository.getSubNotificationsByIdJobberAndReadFalse(id);
+    }
+
+    @Override
+    public void clearNotifsOfJobber(Long id) {
+        this.subNotificationsRepository.deleteSubNotificationsByIdJobber(id);
+    }
+
+    @Override
+    public void clearOneNotif(Long id_jobber, Long id_notif) {
+        this.subNotificationsRepository.deleteSubNotificationByIdJobberAndNotifId(id_jobber,id_notif);
+    }
+
+    @Override
     @Async
-    public CompletableFuture<ResponseMessage> sendNotification(NotificationPayload payload) {
-
-        // create headers
-        HttpHeaders headers = new HttpHeaders();
-        // set `content-type` header
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        // set `Authorization` header
-        headers.set("Authorization","key="+this.fcm_key);
-        // set `accept` header
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-
-        HttpEntity<NotificationPayload> entity = new HttpEntity<>(payload, headers);
-
-        ResponseEntity<ResponseMessage> response = this.restTemplate.postForEntity(fcm, entity, ResponseMessage.class);
-
-        // check response status code
-        if (response.getStatusCode() == HttpStatus.OK) {
-            return CompletableFuture.completedFuture(response.getBody());
-        } else {
-            return CompletableFuture.completedFuture(new ResponseMessage("Failed to notify !"));
-        }
+    public CompletableFuture<SubNotification> setNotifRead(Long id_notif) {
+       return CompletableFuture.completedFuture(this.subNotificationsRepository.findById(id_notif)
+               .map(
+                       notif -> {
+                           notif.setRead(true);
+                           return this.subNotificationsRepository.save(notif);
+                       }
+               ).orElseThrow(() -> new NotifNotFoundException(id_notif)));
     }
+
+
 }

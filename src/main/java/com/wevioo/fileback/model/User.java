@@ -10,10 +10,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
+@Data
 @Table(name = "users")
 @Proxy(lazy = false)
 public class User {

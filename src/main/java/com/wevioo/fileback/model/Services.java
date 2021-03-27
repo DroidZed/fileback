@@ -44,6 +44,6 @@ public class Services {
     private Float prixJour;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy ="services" )
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "services" )
     private User user;
 }
