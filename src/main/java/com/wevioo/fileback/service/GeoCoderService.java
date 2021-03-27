@@ -1,61 +1,58 @@
 package com.wevioo.fileback.service;
 
-import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wevioo.fileback.geolocationClasses.DisplayLatLng;
 import com.wevioo.fileback.geolocationClasses.GeocodeResult;
 import com.wevioo.fileback.geolocationClasses.Location;
 
 import com.wevioo.fileback.interfaces.GeoCoder;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.ResponseBody;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import lombok.NoArgsConstructor;
+import org.springframework.web.client.RestTemplate;
 
 @Service
-@NoArgsConstructor
 public class GeoCoderService implements GeoCoder {
+
+    private final RestTemplate restTemplate;
+
+    public GeoCoderService(RestTemplateBuilder restTemplateBuilder) {
+        this.restTemplate = restTemplateBuilder.build();
+    }
 
     @Async
     public CompletableFuture<DisplayLatLng> getAddressCoded(String addr)
-            throws IOException
     {
         String encodedAddress =  URLEncoder.encode(addr, StandardCharsets.UTF_8);
-        OkHttpClient client = new OkHttpClient();
+
         String key = "lAW53bjzi0nqhmmyOP9BZ0SJNdbyZfNi";
-        Request request = new Request.Builder()
-                .url("http://www.mapquestapi.com/geocoding/v1/address?key="
-                        + key
-                        + "&location="
-                        + encodedAddress
-                        + "thumbMaps=false"
-                )
-                .get()
-                .build();
 
-        ResponseBody responseBody =
-                client
-                        .newCall(request)
-                        .execute()
-                        .body();
+        String api = "http://www.mapquestapi.com/geocoding/v1/address?key="
+                + key
+                + "&location="
+                + encodedAddress
+                + "thumbMaps=false";
 
-        ObjectMapper objectMapper = new ObjectMapper();
 
-        assert responseBody != null;
+        ResponseEntity<GeocodeResult> response = this.restTemplate.getForEntity(api, GeocodeResult.class);
 
-        GeocodeResult result = objectMapper.readValue(responseBody.string(), GeocodeResult.class);
+        GeocodeResult responseBody = null;
+
+        if(response.getStatusCode() == HttpStatus.OK)
+        {
+           responseBody = response.getBody();
+        }
 
         DisplayLatLng final_loc = new DisplayLatLng();
 
-        List<Location> locationArray = result.results.get(0).locations;
+        assert responseBody != null;
+        List<Location> locationArray = responseBody.results.get(0).locations;
 
         String cityFromAddress = addr.split(",")[1];
         String StateFromAddress = addr.split(",")[2];

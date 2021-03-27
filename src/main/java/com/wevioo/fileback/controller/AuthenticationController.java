@@ -13,7 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 @RestController
 @RequestMapping(path = "/")
 @AllArgsConstructor
-@ResponseBody
 public class AuthenticationController {
 
     private final Login login;

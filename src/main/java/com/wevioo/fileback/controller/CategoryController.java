@@ -13,26 +13,25 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/categories")
-@ResponseBody
 @AllArgsConstructor
 public class CategoryController {
 
     private final CategoryManager categoryManager;
 
     @GetMapping(path = "/all")
-    public @ResponseBody
+    public
     List<Category> getCategories() {
         return this.categoryManager.getAllCategories();
     }
 
     @GetMapping(path = "/one/{id}")
-    public @ResponseBody
+    public
     Category getOneCategory(@PathVariable Long id) {
         return this.categoryManager.getOneCategory(id);
     }
 
     @GetMapping(path = "/image/get/{id}", produces = {MediaType.IMAGE_JPEG_VALUE})
-    public @ResponseBody
+    public
     ResponseEntity<?> getCategoryImage(@PathVariable Long id) throws IOException {
         return this.categoryManager.getCategoryImage(id);
     }

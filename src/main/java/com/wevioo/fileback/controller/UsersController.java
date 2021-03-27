@@ -14,39 +14,33 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/users")
-@ResponseBody
 @AllArgsConstructor
 public class UsersController {
 
     private final UserManager userManagerLayer;
 
     @PostMapping(path = "invite")
-    public @ResponseBody
-    ResponseEntity<?> inviteUser(@RequestBody String email) {
+    public ResponseEntity<?> inviteUser(@RequestBody String email) {
         return this.userManagerLayer.inviteUserByMail(email);
     }
 
     @GetMapping(path = "/list")
-    public @ResponseBody
-    Page<User> getUsersPaged(@RequestParam(defaultValue = "0") Integer page) {
+    public Page<User> getUsersPaged(@RequestParam(defaultValue = "0") Integer page) {
         return this.userManagerLayer.paginateUsers(page);
     }
 
     @GetMapping(path = "count/all")
-    public @ResponseBody
-    Long getCountOfAllUsers() {
+    public Long getCountOfAllUsers() {
         return this.userManagerLayer.countAll();
     }
 
     @GetMapping(path = "count/jobbers")
-    public @ResponseBody
-    Long getCountOfJobbers() {
+    public Long getCountOfJobbers() {
         return this.userManagerLayer.countJobbers();
     }
 
     @GetMapping(path = "count/normal")
-    public @ResponseBody
-    Long getCountOfNormalUsers() {
+    public Long getCountOfNormalUsers() {
         return this.userManagerLayer.countUsers();
     }
 
@@ -56,32 +50,27 @@ public class UsersController {
     }
 
     @GetMapping(path = "one/{id}")
-    public @ResponseBody
-    User getOneUser(@PathVariable Long id) {
+    public User getOneUser(@PathVariable Long id) {
         return this.userManagerLayer.getAUserById(id);
     }
 
     @GetMapping(path = "/image/get/{id}", produces = {MediaType.IMAGE_JPEG_VALUE})
-    public @ResponseBody
-    ResponseEntity<?> getProfileImage(@PathVariable Long id) throws IOException {
+    public ResponseEntity<?> getProfileImage(@PathVariable Long id) throws IOException {
         return this.userManagerLayer.getProfileImage(id);
     }
 
     @PostMapping(value = "profile/{id}/img")
-    public ResponseEntity<?> updateProfilePicture(@PathVariable Long id, @RequestBody MultipartFile file)
-    {
+    public ResponseEntity<?> updateProfilePicture(@PathVariable Long id, @RequestBody MultipartFile file) {
         return this.userManagerLayer.updateProfilePicture(file, id);
     }
 
     @PutMapping(path = "/disable/{id}")
-    public @ResponseBody
-    ResponseEntity<?> disableAccount(@PathVariable Long id) {
+    public ResponseEntity<?> disableAccount(@PathVariable Long id) {
         return this.userManagerLayer.disableUser(id);
     }
 
-    @PutMapping(path="update/{id}")
-    public @ResponseBody
-    ResponseEntity<?> updateProfile(@PathVariable Long id, @RequestBody User user) {
+    @PutMapping(path = "update/{id}")
+    public ResponseEntity<?> updateProfile(@PathVariable Long id, @RequestBody User user) {
         return this.userManagerLayer.modifyProfile(id, user);
     }
 }

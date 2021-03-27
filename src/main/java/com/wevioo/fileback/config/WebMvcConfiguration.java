@@ -27,17 +27,20 @@ public class WebMvcConfiguration {
                 registry.addMapping("/users/*/**")
                         .allowedMethods("GET","POST","PUT")
                         .allowedHeaders("*")
-                        .allowedOrigins("*");
+                        .allowedOrigins("*")
+                        .maxAge(3600);
 
                 registry.addMapping("/categories/*/**")
                         .allowedMethods("GET","POST","PUT","DELETE")
                         .allowedHeaders("*")
-                        .allowedOrigins("*");
+                        .allowedOrigins("*")
+                        .maxAge(3600);
 
                 registry.addMapping("/jobbers/*/**")
                         .allowedMethods("GET","POST","PUT")
                         .allowedHeaders("*")
-                        .allowedOrigins("*");
+                        .allowedOrigins("*")
+                        .maxAge(3600);
 
                 registry.addMapping("/locations/*/**")
                         .allowedMethods("GET")
@@ -47,6 +50,12 @@ public class WebMvcConfiguration {
 
                 registry.addMapping("/need/*/*/**")
                         .allowedMethods("GET","POST","PUT","DELETE")
+                        .allowedHeaders("*")
+                        .allowedOrigins("*")
+                        .maxAge(3600);
+
+                registry.addMapping("/notifications/*/**")
+                        .allowedMethods("POST","GET","DELETE", "PUT")
                         .allowedHeaders("*")
                         .allowedOrigins("*")
                         .maxAge(3600);
