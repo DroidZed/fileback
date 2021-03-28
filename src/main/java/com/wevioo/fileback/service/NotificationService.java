@@ -7,6 +7,7 @@ import com.wevioo.fileback.model.SubNotification;
 import com.wevioo.fileback.repository.SubNotificationsRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -34,11 +35,14 @@ public class NotificationService implements NotificationManager {
     }
 
     @Override
+    @Transactional
     public void clearNotifsOfJobber(Long id) {
         this.subNotificationsRepository.deleteSubNotificationsByIdJobber(id);
     }
 
     @Override
+    @Transactional
+    @Async
     public void clearOneNotif(Long id_jobber, Long id_notif) {
         this.subNotificationsRepository.deleteSubNotificationByIdJobberAndNotifId(id_jobber,id_notif);
     }

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -34,6 +35,26 @@ public class NeedsController {
     public List<Needs> getNeedsOfCategory(@PathVariable Long catid)
     {
         return this.needsManager.collectNeedsOfCategory(catid);
+    }
+
+    @GetMapping(path="/get/imgA/{needId}")
+    public CompletableFuture<ResponseEntity<?>> getNeedImageA(@PathVariable Long needId) throws IOException {
+        return this.needsManager.getImageA(needId);
+    }
+
+    @GetMapping(path="/get/imgB/{needId}")
+    public CompletableFuture<ResponseEntity<?>> getNeedImageB(@PathVariable Long needId) throws IOException {
+        return this.needsManager.getImageB(needId);
+    }
+
+    @GetMapping(path="/get/imgC/{needId}")
+    public CompletableFuture<ResponseEntity<?>> getNeedImageC(@PathVariable Long needId) throws IOException {
+        return this.needsManager.getImageC(needId);
+    }
+
+    @GetMapping(path="/get/imgD/{needId}")
+    public CompletableFuture<ResponseEntity<?>> getNeedImageD(@PathVariable Long needId) throws IOException {
+        return this.needsManager.getImageD(needId);
     }
 
     @PutMapping(path = "/update/{needid}")

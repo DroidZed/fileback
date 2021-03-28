@@ -98,6 +98,66 @@ public class NeedsService implements NeedsManager {
                 .orElseThrow(() -> new NeedNotFoundException(needid));
     }
 
+    @Override
+    @Async
+    public CompletableFuture<ResponseEntity<?>> getImageA(Long needId) throws IOException
+    {
+
+        Optional<Needs> opt = this.needsRepository.findById(needId);
+
+        if (opt.isEmpty())
+            return CompletableFuture.completedFuture(ResponseEntity.badRequest().body("Besoin introuvable !"));
+
+        Needs besoin = opt.get();
+
+        return CompletableFuture.completedFuture(ResponseEntity.ok(this.imageManager.getImageWithMediaType(besoin.getImageA(), "needs\\need" + needId)));
+
+    }
+
+    @Override
+    @Async
+    public CompletableFuture<ResponseEntity<?>> getImageB(Long needId) throws IOException {
+        Optional<Needs> opt = this.needsRepository.findById(needId);
+
+        if (opt.isEmpty())
+            return CompletableFuture.completedFuture(ResponseEntity.badRequest().body("Besoin introuvable !"));
+
+        Needs besoin = opt.get();
+
+        return CompletableFuture.completedFuture(ResponseEntity.ok(this.imageManager.getImageWithMediaType(besoin.getImageB(), "needs\\need" + needId)));
+
+    }
+
+    @Override
+    @Async
+    public CompletableFuture<ResponseEntity<?>> getImageC(Long needId) throws IOException
+    {
+        Optional<Needs> opt = this.needsRepository.findById(needId);
+
+        if (opt.isEmpty())
+            return CompletableFuture.completedFuture(ResponseEntity.badRequest().body("Besoin introuvable !"));
+
+        Needs besoin = opt.get();
+
+        return CompletableFuture.completedFuture(ResponseEntity.ok(this.imageManager.getImageWithMediaType(besoin.getImageC(), "needs\\need" + needId)));
+
+    }
+
+    @Override
+    @Async
+    public CompletableFuture<ResponseEntity<?>> getImageD(Long needId) throws IOException
+    {
+        Optional<Needs> opt = this.needsRepository.findById(needId);
+
+        if (opt.isEmpty())
+            return CompletableFuture.completedFuture(ResponseEntity.badRequest().body("Besoin introuvable !"));
+
+        Needs besoin = opt.get();
+
+        return CompletableFuture.completedFuture(ResponseEntity.ok(this.imageManager.getImageWithMediaType(besoin.getImageD(), "needs\\need" + needId)));
+
+    }
+
     @Async
     public CompletableFuture<ResponseEntity<?>> uploadNeedPicA(MultipartFile needImageA, Long need_id) {
 
