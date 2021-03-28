@@ -85,11 +85,8 @@ public class NeedsService implements NeedsManager {
     public ResponseEntity<?> modifyNeed(Long needid, Needs need) {
         return this.needsRepository.findById(needid)
                 .map(oldNeed -> {
-                    oldNeed.setEtatBesoin(need.getEtatBesoin());
                     oldNeed.setAddress(need.getAddress());
                     this.setNeedLocation(need);
-                    oldNeed.setNeedTitle(need.getNeedTitle());
-                    oldNeed.setNeedDescription(need.getNeedDescription());
                     oldNeed.setBudget(need.getBudget());
                     oldNeed.setNbJobber(need.getNbJobber());
                     oldNeed.setVehicleInfos(need.getVehicleInfos());
