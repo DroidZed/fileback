@@ -3,6 +3,7 @@ package com.wevioo.fileback.controller;
 import com.wevioo.fileback.interfaces.NeedsManager;
 import com.wevioo.fileback.model.Needs;
 import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,22 +38,22 @@ public class NeedsController {
         return this.needsManager.collectNeedsOfCategory(catid);
     }
 
-    @GetMapping(path="/get/imgA/{needId}")
+    @GetMapping(path="/get/imgA/{needId}", produces = {MediaType.IMAGE_JPEG_VALUE})
     public CompletableFuture<ResponseEntity<?>> getNeedImageA(@PathVariable Long needId) throws IOException {
         return this.needsManager.getImageA(needId);
     }
 
-    @GetMapping(path="/get/imgB/{needId}")
+    @GetMapping(path="/get/imgB/{needId}", produces = {MediaType.IMAGE_JPEG_VALUE})
     public CompletableFuture<ResponseEntity<?>> getNeedImageB(@PathVariable Long needId) throws IOException {
         return this.needsManager.getImageB(needId);
     }
 
-    @GetMapping(path="/get/imgC/{needId}")
+    @GetMapping(path="/get/imgC/{needId}", produces = {MediaType.IMAGE_JPEG_VALUE})
     public CompletableFuture<ResponseEntity<?>> getNeedImageC(@PathVariable Long needId) throws IOException {
         return this.needsManager.getImageC(needId);
     }
 
-    @GetMapping(path="/get/imgD/{needId}")
+    @GetMapping(path="/get/imgD/{needId}", produces = {MediaType.IMAGE_JPEG_VALUE})
     public CompletableFuture<ResponseEntity<?>> getNeedImageD(@PathVariable Long needId) throws IOException {
         return this.needsManager.getImageD(needId);
     }
