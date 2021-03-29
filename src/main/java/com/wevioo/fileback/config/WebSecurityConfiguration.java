@@ -55,8 +55,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/categories/all",
                         "/jobbers/add/",
                         "/swagger*/**",
-                        "/v2/api-docs",
-                        "/chat"
+                        "/v2/api-docs"
                 )
                 .permitAll()
                 .anyRequest()
