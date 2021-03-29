@@ -53,7 +53,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/signUp",
                         "/confirm-account",
                         "/categories/all",
-                        "/jobbers/add/"
+                        "/jobbers/add/",
+                        "/swagger*/**",
+                        "/v2/api-docs"
                 )
                 .permitAll()
                 .anyRequest()
