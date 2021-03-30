@@ -1,6 +1,5 @@
 package com.wevioo.fileback.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wevioo.fileback.enums.EtatBesoin;
 import lombok.AllArgsConstructor;
 import lombok.Data;
