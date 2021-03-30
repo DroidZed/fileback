@@ -59,6 +59,12 @@ public class WebMvcConfiguration {
                         .allowedHeaders("*")
                         .allowedOrigins("*")
                         .maxAge(3600);
+
+                registry.addMapping("/messages/*/**")
+                        .allowedMethods("*")
+                        .allowedHeaders("*")
+                        .allowedOrigins("*")
+                        .maxAge(3600);
             }
         };
     }
