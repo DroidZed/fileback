@@ -32,6 +32,12 @@ public class NeedsController {
         return this.needsManager.collectNeedsOfUser(userid);
     }
 
+    @GetMapping(path = "/get/{id}")
+    public Needs getByID(@PathVariable Long id)
+    {
+        return this.needsManager.getNeedByID(id);
+    }
+
     @GetMapping(path = "/get/category/{catid}")
     public List<Needs> getNeedsOfCategory(@PathVariable Long catid)
     {

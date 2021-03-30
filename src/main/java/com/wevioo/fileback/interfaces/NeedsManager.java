@@ -10,6 +10,7 @@ import java.util.concurrent.CompletableFuture;
 
 public interface NeedsManager {
 
+    Needs getNeedByID(Long id);
     ResponseEntity<?> injectNewNeed(Needs besoin, Long catid, Long userid);
     List<Needs> collectNeedsOfUser(Long userid);
     List<Needs> collectNeedsOfCategory(Long catid);

@@ -45,6 +45,12 @@ public class NeedsService implements NeedsManager {
 
     private final GeoCoder geoCoder;
 
+    @Override
+    public Needs getNeedByID(Long id) {
+        return this.needsRepository.findById(id)
+                .orElseThrow(() -> new NeedNotFoundException(id));
+    }
+
     public ResponseEntity<?> injectNewNeed(Needs besoin, Long catid, Long userid) {
 
         Optional<User> optUsr = userRepository.findById(userid);
