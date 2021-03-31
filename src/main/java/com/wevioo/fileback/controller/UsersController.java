@@ -73,4 +73,10 @@ public class UsersController {
     public ResponseEntity<?> updateProfile(@PathVariable Long id, @RequestBody User user) {
         return this.userManagerLayer.modifyProfile(id, user);
     }
+
+    @PutMapping(path = "/become-jobber")
+    public void becomeJobber(@RequestParam("idUser") Long idUser)
+    {
+        this.userManagerLayer.becomeJobber(idUser);
+    }
 }

@@ -16,6 +16,7 @@ public interface UserManager {
     Long countAll();
     Long countUsers();
     Long countJobbers();
+    void becomeJobber(Long id);
     ResponseEntity<?> disableUser(Long id);
     ResponseEntity<?> inviteUserByMail(String email);
     ResponseEntity<?> modifyProfile(Long id, User user);

@@ -71,6 +71,16 @@ public class UserManagerLayer implements UserManager {
         return this.userRepository.countTravailleurs();
     }
 
+    @Override
+    public void becomeJobber(Long id) {
+        this.userRepository.findById(id)
+                .map(u -> {
+                            u.setTravailleur(Boolean.TRUE);
+                            return this.userRepository.save(u);
+                })
+                .orElseThrow(() -> new UserNotFoundException(id));
+    }
+
     @Transactional
     public ResponseEntity<?> disableUser(Long id)
     {
