@@ -5,9 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
-@ToString
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -32,17 +30,4 @@ public class Activity {
     @JoinColumn(name = "id_cat")
     private Category category;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Activity activity = (Activity) o;
-
-        return id_act != null && id_act.equals(activity.id_act);
-    }
-
-    @Override
-    public int hashCode() {
-        return 391457126;
-    }
 }

@@ -28,13 +28,13 @@ public class Needs {
     private String needDescription;
 
     @Column(name="nb_jobber")
-    private int nbJobber;
+    private Integer nbJobber;
 
     @Column(name = "vehicle_infos")
     private String vehicleInfos;
 
     @Column(name = "budget")
-    private int budget;
+    private Integer budget;
 
     @Column(name = "address")
     private String address;
