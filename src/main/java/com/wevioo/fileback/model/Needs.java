@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Proxy;
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -37,6 +38,9 @@ public class Needs {
 
     @Column(name = "address")
     private String address;
+
+    @Column(name = "date_limite")
+    private LocalDate dateLimite;
 
     @Column(name = "etat_besoin")
     @Enumerated(EnumType.STRING)

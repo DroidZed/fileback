@@ -91,11 +91,12 @@ public class NeedsService implements NeedsManager {
     public ResponseEntity<?> modifyNeed(Long needid, Needs need) {
         return this.needsRepository.findById(needid)
                 .map(oldNeed -> {
-                    oldNeed.setAddress(need.getAddress());
-                    this.setNeedLocation(need);
+                    oldNeed.setDateLimite(need.getDateLimite());
                     oldNeed.setBudget(need.getBudget());
                     oldNeed.setNbJobber(need.getNbJobber());
                     oldNeed.setVehicleInfos(need.getVehicleInfos());
+                    oldNeed.setAddress(need.getAddress());
+                    this.setNeedLocation(need);
                     return ResponseEntity.ok(this.needsRepository.save(oldNeed));
                 })
                 .orElseThrow(() -> new NeedNotFoundException(needid));
@@ -113,19 +114,26 @@ public class NeedsService implements NeedsManager {
 
         Needs besoin = opt.get();
 
+        if (besoin.getImageA() == null)
+            return CompletableFuture.completedFuture(ResponseEntity.badRequest().body("Image introuvable !"));
+
         return CompletableFuture.completedFuture(ResponseEntity.ok(this.imageManager.getImageWithMediaType(besoin.getImageA(), "needs\\need" + needId)));
 
     }
 
     @Override
     @Async
-    public CompletableFuture<ResponseEntity<?>> getImageB(Long needId) throws IOException {
+    public CompletableFuture<ResponseEntity<?>> getImageB(Long needId) throws IOException
+    {
         Optional<Needs> opt = this.needsRepository.findById(needId);
 
         if (opt.isEmpty())
             return CompletableFuture.completedFuture(ResponseEntity.badRequest().body("Besoin introuvable !"));
 
         Needs besoin = opt.get();
+
+        if (besoin.getImageB() == null)
+            return CompletableFuture.completedFuture(ResponseEntity.badRequest().body("Image introuvable !"));
 
         return CompletableFuture.completedFuture(ResponseEntity.ok(this.imageManager.getImageWithMediaType(besoin.getImageB(), "needs\\need" + needId)));
 
@@ -142,6 +150,9 @@ public class NeedsService implements NeedsManager {
 
         Needs besoin = opt.get();
 
+        if (besoin.getImageC() == null)
+            return CompletableFuture.completedFuture(ResponseEntity.badRequest().body("Image introuvable !"));
+
         return CompletableFuture.completedFuture(ResponseEntity.ok(this.imageManager.getImageWithMediaType(besoin.getImageC(), "needs\\need" + needId)));
 
     }
@@ -156,6 +167,9 @@ public class NeedsService implements NeedsManager {
             return CompletableFuture.completedFuture(ResponseEntity.badRequest().body("Besoin introuvable !"));
 
         Needs besoin = opt.get();
+
+        if (besoin.getImageD() == null)
+            return CompletableFuture.completedFuture(ResponseEntity.badRequest().body("Image introuvable !"));
 
         return CompletableFuture.completedFuture(ResponseEntity.ok(this.imageManager.getImageWithMediaType(besoin.getImageD(), "needs\\need" + needId)));
 
