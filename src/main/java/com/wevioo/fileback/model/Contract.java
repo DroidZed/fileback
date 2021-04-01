@@ -21,7 +21,7 @@ public class Contract {
 
     private Devis devis;
 
-    private User userdetails;
+    private User userDetails;
 
     private User jobberDetails;
 }

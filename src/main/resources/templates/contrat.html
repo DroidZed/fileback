@@ -4,12 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
-    <title>Spring Boot - Contrat de devis</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
-          crossorigin="anonymous">
-    <link th:href="@{main.css}" rel="stylesheet"/>
+    <title>Contrat de devis</title>
 </head>
 <body>
 <div class="container">
@@ -23,7 +18,7 @@
     </div>
     <div class = "row">
         <div>
-            <p>Nom Particulier <span th:text="${contract.userdetails.fullName}"></span></p>
+            <p>Nom Particulier <span th:text="${contract.getUserDetails.fullName}"></span></p>
         </div>
         <div>
             <p>Nom Professionnel <span th:text="${contract.jobberDetails.fullName}"></span></p>

@@ -2,8 +2,9 @@ package com.wevioo.fileback.service;
 
 import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
+import com.wevioo.fileback.interfaces.EmailManager;
 import com.wevioo.fileback.interfaces.PDFGenerator;
-import com.wevioo.fileback.message.ContractIDs;
+import com.wevioo.fileback.message.ResponseMessage;
 import com.wevioo.fileback.model.Contract;
 import com.wevioo.fileback.model.Devis;
 import com.wevioo.fileback.model.Needs;
@@ -11,49 +12,163 @@ import com.wevioo.fileback.model.User;
 import com.wevioo.fileback.repository.DevisRepository;
 import com.wevioo.fileback.repository.NeedsRepository;
 import com.wevioo.fileback.repository.UserRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import javax.mail.MessagingException;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 public class PDFService implements PDFGenerator {
 
-    private final TemplateEngine templateEngine;
-    private final UserRepository userRepository;
-    private final NeedsRepository needsRepository;
-    private final DevisRepository devisRepository;
+    @Value(value = "${contracts.path}")
+    private String pathToPDF;
+
+    @Autowired
+    private TemplateEngine templateEngine;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private NeedsRepository needsRepository;
+    @Autowired
+    private DevisRepository devisRepository;
+    @Autowired
+    private EmailManager emailManager;
 
     @Override
-    public ResponseEntity<?> generatePDF(ContractIDs ids){
+    public ModelAndView generateHTML(ModelAndView modelAndView, Long devisId) {
+        Contract contract = this.setContractDetails(devisId);
+
+        if (contract == null)
+            return null;
+
+        modelAndView.addObject("contract", contract);
+        modelAndView.setViewName("contrat");
+        return modelAndView;
+    }
+
+    @Override
+    public ResponseEntity<?> generatePDF(Long devisId) throws IOException, MessagingException {
+
+        Contract contract = this.setContractDetails(devisId);
+
+        if (contract == null)
+            return ResponseEntity
+                    .badRequest()
+                    .body("Requested data not found !");
+
+        /* Create HTML using Thymeleaf template Engine */
+
+        Context context = new Context();
+        context.setVariable("contract", contract);
+        String contractHTML = templateEngine.process("contrat", context);
+
+        /* Setup Source and target I/O streams */
+
+        ByteArrayOutputStream target = new ByteArrayOutputStream();
+
+        ConverterProperties props = new ConverterProperties();
+        props.setBaseUri("http://localhost:8080");
+
+        /* Call convert method */
+
+        HtmlConverter.convertToPdf(contractHTML, target, props);
+
+        /* extract output as bytes */
+
+        byte[] bytes = target.toByteArray();
+
+        Path storageDirectory = Paths.get(pathToPDF);
+
+        if (!Files.exists(storageDirectory)) {
+
+            Files.createDirectories(storageDirectory);
+
+        }
+
+        /* Convert the bytes to physical file */
+        this.savePDF(contract.getContractId(), bytes);
+
+        this.sendPDF(devisId, contract.getUserDetails().getEmail());
+        this.sendPDF(devisId, contract.getJobberDetails().getEmail());
+
+        return ResponseEntity.ok(new ResponseMessage("Contract created, saved and sent to destination !"));
+    }
+
+    public ResponseEntity<?> sendPDF(Long devisId, String email) throws MessagingException {
+
+        Contract contract = this.setContractDetails(devisId);
+
+        if (contract == null) {
+            return ResponseEntity.badRequest().body("No contract available !");
+        }
+
+        String fname = pathToPDF + "\\" + "contrat_" + contract.getContractId() + ".pdf";
+
+        String subject = "Contrat de devis";
+
+        String body = "Veuillez consulter le contrat en accroche ! Tout les details concernant le travail sonts mentionnées dedans.";
+
+        emailManager.sendEMailWithAttach(email, subject, body, fname);
+
+        return ResponseEntity.ok(new ResponseMessage("Email sent !"));
+    }
+
+    private void savePDF(String contractId, byte[] bytes) throws IOException {
+
+        String fname = pathToPDF + "\\" + "contrat_" + contractId + ".pdf";
+
+        File outputFile = new File(fname);
+
+        FileOutputStream outputStream = new FileOutputStream(outputFile);
+
+        outputStream.write(bytes);
+
+        outputStream.flush();
+
+        outputStream.close();
+    }
+
+    private Contract setContractDetails(Long devisId) {
 
         /* Do Business Logic*/
 
         Contract contract = new Contract();
 
-        Optional<User> optUser = userRepository.findById(ids.getUserId());
-        Optional<User> optJobber = userRepository.findById(ids.getJobberId());
-        Optional<Needs> optNeed = needsRepository.findById(ids.getNeedId());
-        Optional<Devis> optDevis = devisRepository.findById(ids.getDevisId());
+        Optional<Devis> optDevis = devisRepository.findById(devisId);
 
-        if (optUser.isEmpty() || optJobber.isEmpty() || optNeed.isEmpty() || optDevis.isEmpty()) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Requested data not found !");
+        if (optDevis.isEmpty()) {
+            return null;
+        }
+
+        Devis devis = optDevis.get();
+
+        Optional<User> optUser = userRepository.findById(devis.getUserId());
+        Optional<User> optJobber = userRepository.findById(devis.getJobberId());
+        Optional<Needs> optNeed = needsRepository.findById(devis.getNeedId());
+
+        if (optUser.isEmpty() || optJobber.isEmpty() || optNeed.isEmpty()) {
+            return null;
         }
 
         User jobber = optJobber.get();
         User user = optUser.get();
         Needs need = optNeed.get();
 
-        contract.setUserdetails(user);
+        contract.setUserDetails(user);
 
         contract.setJobberDetails(jobber);
 
@@ -61,33 +176,12 @@ public class PDFService implements PDFGenerator {
 
         contract.setCategory(jobber.getActivity().getCategory());
 
-        contract.setContractId("CTR_USR_"+user.getIdUser()+"_JBR_"+jobber.getIdUser());
+        contract.setContractId("CTR_USR_" + user.getIdUser() + "_JBR_" + jobber.getIdUser());
 
-        contract.setDevis(optDevis.get());
+        contract.setDevis(devis);
 
         contract.setCreatedAd(LocalDateTime.now());
 
-        /* Create HTML using Thymeleaf template Engine */
-
-        Context context = new Context();
-        context.setVariable("contract", contract);
-        String orderHtml = templateEngine.process("contrat", context);
-
-        /* Setup Source and target I/O streams */
-
-        ByteArrayOutputStream target = new ByteArrayOutputStream();
-
-
-        /* Call convert method */
-        HtmlConverter.convertToPdf(orderHtml, target, new ConverterProperties());
-
-        /* extract output as bytes */
-        byte[] bytes = target.toByteArray();
-
-        /* Send the response as downloadable PDF */
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_PDF)
-                .body(bytes);
+        return contract;
     }
 }
