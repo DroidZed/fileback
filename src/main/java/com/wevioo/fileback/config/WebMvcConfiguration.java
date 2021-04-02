@@ -65,6 +65,12 @@ public class WebMvcConfiguration {
                         .allowedHeaders("*")
                         .allowedOrigins("*")
                         .maxAge(3600);
+
+                registry.addMapping("/devis/*/**")
+                        .allowedMethods("*")
+                        .allowedHeaders("*")
+                        .allowedOrigins("*")
+                        .maxAge(3600);
             }
         };
     }

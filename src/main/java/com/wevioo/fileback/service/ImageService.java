@@ -32,10 +32,12 @@ public class ImageService implements ImageManager {
 
         Path destination = Paths.get(storageDirectory.toString() + "\\" + fileName);
 
-        try {
+        try
+        {
             Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
