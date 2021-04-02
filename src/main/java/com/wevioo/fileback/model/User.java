@@ -67,6 +67,6 @@ public class User {
     private Services services;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "jobber")
-    private Devis devis;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "jobber")
+    private List<Devis> devis;
 }

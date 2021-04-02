@@ -29,7 +29,7 @@ public class Devis {
     @JoinColumn(name = "id_need")
     private Needs need;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE,CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "id_user")
     private User jobber;
 }
