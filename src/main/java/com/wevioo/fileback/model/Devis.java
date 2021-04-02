@@ -24,5 +24,9 @@ public class Devis {
 
     private Long needId;
 
+    private String commentaire;
+
     private LocalDate dateTravail;
+
+    private Boolean etat = Boolean.FALSE;
 }

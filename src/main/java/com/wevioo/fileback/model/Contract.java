@@ -13,7 +13,7 @@ public class Contract {
 
     private String contractId;
 
-    private LocalDateTime createdAd;
+    private LocalDateTime createdAt;
 
     private Needs need;
 

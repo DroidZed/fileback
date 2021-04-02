@@ -80,12 +80,9 @@ public class PDFService implements PDFGenerator {
 
         ByteArrayOutputStream target = new ByteArrayOutputStream();
 
-        ConverterProperties props = new ConverterProperties();
-        props.setBaseUri("http://localhost:8080");
-
         /* Call convert method */
 
-        HtmlConverter.convertToPdf(contractHTML, target, props);
+        HtmlConverter.convertToPdf(contractHTML, target, new ConverterProperties());
 
         /* extract output as bytes */
 
@@ -180,7 +177,7 @@ public class PDFService implements PDFGenerator {
 
         contract.setDevis(devis);
 
-        contract.setCreatedAd(LocalDateTime.now());
+        contract.setCreatedAt(LocalDateTime.now());
 
         return contract;
     }
