@@ -67,7 +67,7 @@ public class WebMvcConfiguration {
                         .maxAge(3600);
 
                 registry.addMapping("/devis/*/**")
-                        .allowedMethods("*")
+                        .allowedMethods("GET","POST","PUT")
                         .allowedHeaders("*")
                         .allowedOrigins("*")
                         .maxAge(3600);

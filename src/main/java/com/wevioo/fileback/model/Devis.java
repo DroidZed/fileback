@@ -1,15 +1,17 @@
 package com.wevioo.fileback.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "devis")
+@Proxy(lazy = false)
 public class Devis {
 
     @Id
@@ -18,15 +20,16 @@ public class Devis {
 
     private Integer prestation;
 
-    private Long userId;
-
-    private Long jobberId;
-
-    private Long needId;
-
     private String commentaire;
 
-    private LocalDate dateTravail;
-
     private Boolean etat = Boolean.FALSE;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.REFRESH})
+    @JoinColumn(name = "id_need")
+    private Needs need;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE,CascadeType.REFRESH})
+    @JoinColumn(name = "id_user")
+    private User jobber;
 }

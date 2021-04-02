@@ -10,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/devis")
@@ -27,16 +26,10 @@ public class DevisController {
         return this.pdfGenerator.generateHTML(modelAndView, devisId);
     }
 
-    @GetMapping(path = "/get")
-    public List<Devis> getAllByIdNeed(@RequestParam("needId") Long needId)
-    {
-        return this.devisManager.getAllDevisOfNeed(needId);
-    }
-
     @PostMapping("/save")
-    public void saveDevis(@RequestBody Devis d)
+    public ResponseEntity<?> saveDevis(@RequestBody Devis d, @RequestParam("jobberId") Long jobberId, @RequestParam("needId") Long needId)
     {
-        this.devisManager.saveDevis(d);
+        return this.devisManager.saveDevis(d, jobberId, needId);
     }
 
     @PostMapping(path = "/contract")

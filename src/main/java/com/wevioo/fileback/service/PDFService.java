@@ -153,9 +153,9 @@ public class PDFService implements PDFGenerator {
 
         Devis devis = optDevis.get();
 
-        Optional<User> optUser = userRepository.findById(devis.getUserId());
-        Optional<User> optJobber = userRepository.findById(devis.getJobberId());
-        Optional<Needs> optNeed = needsRepository.findById(devis.getNeedId());
+        Optional<User> optUser = userRepository.findById(devis.getNeed().getUser().getIdUser());
+        Optional<User> optJobber = userRepository.findById(devis.getJobber().getIdUser());
+        Optional<Needs> optNeed = needsRepository.findById(devis.getNeed().getIdNeed());
 
         if (optUser.isEmpty() || optJobber.isEmpty() || optNeed.isEmpty()) {
             return null;
