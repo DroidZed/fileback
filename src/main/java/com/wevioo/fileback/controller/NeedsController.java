@@ -33,7 +33,7 @@ public class NeedsController {
     }
 
     @GetMapping(path = "/get/{id}")
-    public Needs getByID(@PathVariable Long id)
+    public ResponseEntity<?> getByID(@PathVariable Long id)
     {
         return this.needsManager.getNeedByID(id);
     }

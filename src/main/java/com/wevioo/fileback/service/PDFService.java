@@ -10,8 +10,6 @@ import com.wevioo.fileback.model.Devis;
 import com.wevioo.fileback.model.Needs;
 import com.wevioo.fileback.model.User;
 import com.wevioo.fileback.repository.DevisRepository;
-import com.wevioo.fileback.repository.NeedsRepository;
-import com.wevioo.fileback.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -37,16 +35,18 @@ public class PDFService implements PDFGenerator {
     @Value(value = "${contracts.path}")
     private String pathToPDF;
 
+    private final TemplateEngine templateEngine;
+
+    private final DevisRepository devisRepository;
+
+    private final EmailManager emailManager;
+
     @Autowired
-    private TemplateEngine templateEngine;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private NeedsRepository needsRepository;
-    @Autowired
-    private DevisRepository devisRepository;
-    @Autowired
-    private EmailManager emailManager;
+    public PDFService(TemplateEngine templateEngine, DevisRepository devisRepository, EmailManager emailManager) {
+        this.templateEngine = templateEngine;
+        this.devisRepository = devisRepository;
+        this.emailManager = emailManager;
+    }
 
     @Override
     public ModelAndView generateHTML(ModelAndView modelAndView, Long devisId) {
@@ -153,17 +153,9 @@ public class PDFService implements PDFGenerator {
 
         Devis devis = optDevis.get();
 
-        Optional<User> optUser = userRepository.findById(devis.getNeed().getUser().getIdUser());
-        Optional<User> optJobber = userRepository.findById(devis.getJobber().getIdUser());
-        Optional<Needs> optNeed = needsRepository.findById(devis.getNeed().getIdNeed());
+        User jobber = devis.getJobber(), user = devis.getNeed().getUser();
 
-        if (optUser.isEmpty() || optJobber.isEmpty() || optNeed.isEmpty()) {
-            return null;
-        }
-
-        User jobber = optJobber.get();
-        User user = optUser.get();
-        Needs need = optNeed.get();
+        Needs need = devis.getNeed();
 
         contract.setUserDetails(user);
 

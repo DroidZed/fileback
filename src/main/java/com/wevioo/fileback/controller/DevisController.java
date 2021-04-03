@@ -1,5 +1,6 @@
 package com.wevioo.fileback.controller;
 
+import com.wevioo.fileback.enums.EtatDevis;
 import com.wevioo.fileback.interfaces.DevisManager;
 import com.wevioo.fileback.interfaces.PDFGenerator;
 import com.wevioo.fileback.model.Devis;
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping(path = "/devis")
@@ -46,10 +48,16 @@ public class DevisController {
     {
         return this.pdfGenerator.sendPDF(devisId,dest);
     }
-
-    @PutMapping(path = "confirm/{id}")
-    public ResponseEntity<?> confirmDevis(@PathVariable Long id)
+    
+    @PutMapping(path = "/ignore/{id}")
+    public CompletableFuture<ResponseEntity<?>> ignorerDevis(@PathVariable Long id)
     {
-        return this.devisManager.confirmerDevis(id);
+        return this.devisManager.changeEtatDevis(id, EtatDevis.IGNORED);
+    }
+
+    @PutMapping(path = "/confirm/{id}")
+    public CompletableFuture<ResponseEntity<?>> confirmDevis(@PathVariable Long id)
+    {
+        return this.devisManager.changeEtatDevis(id, EtatDevis.ACCEPTED);
     }
 }

@@ -1,6 +1,6 @@
 package com.wevioo.fileback.service;
 
-import com.wevioo.fileback.exceptions.DevisNotFoundException;
+import com.wevioo.fileback.enums.EtatDevis;
 import com.wevioo.fileback.interfaces.DevisManager;
 import com.wevioo.fileback.message.ResponseMessage;
 import com.wevioo.fileback.model.Devis;
@@ -11,9 +11,11 @@ import com.wevioo.fileback.repository.NeedsRepository;
 import com.wevioo.fileback.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @AllArgsConstructor
@@ -45,13 +47,22 @@ public class DevisService implements DevisManager {
     }
 
     @Override
-    public ResponseEntity<?> confirmerDevis(Long devisId) {
-        return this.devisRepository.findById(devisId)
-                .map(d -> {
-                    d.setEtat(true);
-                    devisRepository.save(d);
-                    return ResponseEntity.ok(new ResponseMessage("Devis confirmé !"));
-                })
-                .orElseThrow(() -> new DevisNotFoundException(devisId));
+    @Async
+    public CompletableFuture<ResponseEntity<?>> changeEtatDevis(Long devisId, EtatDevis etat)
+    {
+        Optional<Devis> opt = this.devisRepository.findById(devisId);
+
+        if (opt.isEmpty())
+            return CompletableFuture.completedFuture(ResponseEntity.status(404).body(new ResponseMessage("Could not be found !")));
+
+        Devis d = opt.get();
+
+        d.setEtat(etat);
+
+        this.devisRepository.save(d);
+
+        return CompletableFuture.completedFuture(ResponseEntity.ok(new ResponseMessage("Etat changé !")));
     }
+
+
 }

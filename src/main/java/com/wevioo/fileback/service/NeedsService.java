@@ -1,5 +1,6 @@
 package com.wevioo.fileback.service;
 
+import com.wevioo.fileback.enums.EtatDevis;
 import com.wevioo.fileback.exceptions.NeedNotFoundException;
 import com.wevioo.fileback.geolocationClasses.DisplayLatLng;
 import com.wevioo.fileback.interfaces.GeoCoder;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -43,9 +45,29 @@ public class NeedsService implements NeedsManager {
     private final GeoCoder geoCoder;
 
     @Override
-    public Needs getNeedByID(Long id) {
-        return this.needsRepository.findById(id)
-                .orElseThrow(() -> new NeedNotFoundException(id));
+    public ResponseEntity<?> getNeedByID(Long id) {
+        Optional<Needs> opt = this.needsRepository.findById(id);
+
+        if (opt.isEmpty())
+            return ResponseEntity.status(404).body("Not Found !");
+
+        Needs n = opt.get();
+
+        var offres = n.getOffres();
+
+        if (!offres.isEmpty()) {
+            List<Devis> temp = new ArrayList<>();
+
+            for (Devis d : offres) {
+                var etat = d.getEtat();
+                if (etat == EtatDevis.PUBLISHED) {
+                    temp.add(d);
+                }
+            }
+            n.setOffres(temp);
+        }
+
+        return ResponseEntity.ok(n);
     }
 
     public ResponseEntity<?> injectNewNeed(Needs besoin, Long catid, Long userid) {
@@ -101,8 +123,7 @@ public class NeedsService implements NeedsManager {
 
     @Override
     @Async
-    public CompletableFuture<ResponseEntity<?>> getImageA(Long needId) throws IOException
-    {
+    public CompletableFuture<ResponseEntity<?>> getImageA(Long needId) throws IOException {
 
         Optional<Needs> opt = this.needsRepository.findById(needId);
 
@@ -120,8 +141,7 @@ public class NeedsService implements NeedsManager {
 
     @Override
     @Async
-    public CompletableFuture<ResponseEntity<?>> getImageB(Long needId) throws IOException
-    {
+    public CompletableFuture<ResponseEntity<?>> getImageB(Long needId) throws IOException {
         Optional<Needs> opt = this.needsRepository.findById(needId);
 
         if (opt.isEmpty())
@@ -138,8 +158,7 @@ public class NeedsService implements NeedsManager {
 
     @Override
     @Async
-    public CompletableFuture<ResponseEntity<?>> getImageC(Long needId) throws IOException
-    {
+    public CompletableFuture<ResponseEntity<?>> getImageC(Long needId) throws IOException {
         Optional<Needs> opt = this.needsRepository.findById(needId);
 
         if (opt.isEmpty())
@@ -156,8 +175,7 @@ public class NeedsService implements NeedsManager {
 
     @Override
     @Async
-    public CompletableFuture<ResponseEntity<?>> getImageD(Long needId) throws IOException
-    {
+    public CompletableFuture<ResponseEntity<?>> getImageD(Long needId) throws IOException {
         Optional<Needs> opt = this.needsRepository.findById(needId);
 
         if (opt.isEmpty())
@@ -248,26 +266,18 @@ public class NeedsService implements NeedsManager {
         return CompletableFuture.completedFuture(ResponseEntity.ok(new ResponseMessage("Success !!")));
     }
 
-    private void setNeedLocation(@NotNull Needs besoin)
-    {
-        try
-        {
+    private void setNeedLocation(@NotNull Needs besoin) {
+        try {
             DisplayLatLng latLng = this.geoCoder.getAddressCoded(besoin.getAddress()).get();
 
             NeedLocation needLoc = new NeedLocation(latLng.lng, latLng.lat);
 
-            if(besoin.getNeedLocation() != null)
-            {
+            if (besoin.getNeedLocation() != null) {
                 this.locationManager.updateNeedLocation(besoin.getNeedLocation().getIdLoc(), needLoc);
-            }
-            else
-            {
+            } else {
                 besoin.setNeedLocation(needLoc);
             }
-        }
-
-        catch (InterruptedException | ExecutionException | IOException e)
-        {
+        } catch (InterruptedException | ExecutionException | IOException e) {
             e.printStackTrace();
         }
     }

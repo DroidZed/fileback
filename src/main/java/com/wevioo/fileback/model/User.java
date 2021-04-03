@@ -67,6 +67,6 @@ public class User {
     private Services services;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "jobber")
+    @OneToMany(mappedBy = "jobber")
     private List<Devis> devis;
 }

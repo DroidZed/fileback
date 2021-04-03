@@ -1,12 +1,15 @@
 package com.wevioo.fileback.interfaces;
 
+import com.wevioo.fileback.enums.EtatDevis;
 import com.wevioo.fileback.model.Devis;
 import org.springframework.http.ResponseEntity;
+
+import java.util.concurrent.CompletableFuture;
 
 public interface DevisManager {
 
     ResponseEntity<?> saveDevis(Devis d, Long jobberId, Long needId);
 
-    ResponseEntity<?> confirmerDevis(Long devisId);
+    CompletableFuture<ResponseEntity<?>> changeEtatDevis(Long devisId, EtatDevis etat);
 
 }
