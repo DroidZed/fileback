@@ -11,7 +11,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 @AllArgsConstructor
@@ -23,7 +22,7 @@ public class LoginService implements Login {
 
     private final JwtUtil jwtUtil;
 
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest jwtRequest) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(JwtRequest jwtRequest) throws Exception {
         try
         {
             authenticationManager.authenticate(
