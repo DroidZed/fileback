@@ -21,12 +21,6 @@ public class DevisController {
     private final PDFGenerator pdfGenerator;
     private final DevisManager devisManager;
 
-    @GetMapping(path = "/html")
-    public ModelAndView generateHTML(ModelAndView modelAndView,
-                                     @RequestParam("devisId") Long devisId)
-    {
-        return this.pdfGenerator.generateHTML(modelAndView, devisId);
-    }
 
     @PostMapping("/save")
     public ResponseEntity<?> saveDevis(@RequestBody Devis d, @RequestParam("jobberId") Long jobberId, @RequestParam("needId") Long needId)
@@ -47,6 +41,19 @@ public class DevisController {
             throws MessagingException
     {
         return this.pdfGenerator.sendPDF(devisId,dest);
+    }
+
+    @GetMapping(path = "/html")
+    public ModelAndView generateHTML(ModelAndView modelAndView,
+                                     @RequestParam("devisId") Long devisId)
+    {
+        return this.pdfGenerator.generateHTML(modelAndView, devisId);
+    }
+
+    @GetMapping(path = "/get/one/{id}")
+    public Devis getOne(@PathVariable Long id)
+    {
+        return this.devisManager.getDevisById(id);
     }
     
     @PutMapping(path = "/ignore/{id}")

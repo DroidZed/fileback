@@ -69,4 +69,8 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "jobber")
     private List<Devis> devis;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "evaluated")
+    private List<Evaluation> evaluations;
 }

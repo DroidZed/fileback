@@ -12,4 +12,6 @@ public interface DevisManager {
 
     CompletableFuture<ResponseEntity<?>> changeEtatDevis(Long devisId, EtatDevis etat);
 
+    Devis getDevisById(Long devisId);
+
 }

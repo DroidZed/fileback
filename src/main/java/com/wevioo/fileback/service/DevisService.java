@@ -1,6 +1,7 @@
 package com.wevioo.fileback.service;
 
 import com.wevioo.fileback.enums.EtatDevis;
+import com.wevioo.fileback.exceptions.DevisNotFoundException;
 import com.wevioo.fileback.interfaces.DevisManager;
 import com.wevioo.fileback.message.ResponseMessage;
 import com.wevioo.fileback.model.Devis;
@@ -62,6 +63,13 @@ public class DevisService implements DevisManager {
         this.devisRepository.save(d);
 
         return CompletableFuture.completedFuture(ResponseEntity.ok(new ResponseMessage("Etat changé !")));
+    }
+
+    @Override
+    public Devis getDevisById(Long devisId) {
+        return this.devisRepository.findById(devisId)
+                .orElseThrow(() -> new DevisNotFoundException(devisId));
+
     }
 
 
