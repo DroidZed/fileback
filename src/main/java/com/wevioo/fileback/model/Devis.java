@@ -21,6 +21,8 @@ public class Devis {
 
     private Integer prestation;
 
+    private String nomParticulier;
+
     private String commentaire;
 
     @Enumerated(EnumType.STRING)

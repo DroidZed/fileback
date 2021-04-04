@@ -4,6 +4,7 @@ import com.wevioo.fileback.enums.EtatDevis;
 import com.wevioo.fileback.model.Devis;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public interface DevisManager {
@@ -13,5 +14,7 @@ public interface DevisManager {
     CompletableFuture<ResponseEntity<?>> changeEtatDevis(Long devisId, EtatDevis etat);
 
     Devis getDevisById(Long devisId);
+
+    List<Devis> getAll();
 
 }

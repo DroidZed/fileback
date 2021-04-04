@@ -16,8 +16,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
 @Service
 @AllArgsConstructor
 public class DevisService implements DevisManager {
@@ -25,6 +25,12 @@ public class DevisService implements DevisManager {
     private final DevisRepository devisRepository;
     private final UserRepository userRepository;
     private final NeedsRepository needsRepository;
+
+    @Override
+    public List<Devis> getAll()
+    {
+        return this.devisRepository.findAll();
+    }
 
     @Override
     public ResponseEntity<?> saveDevis(Devis d, Long jobberId, Long needId) {

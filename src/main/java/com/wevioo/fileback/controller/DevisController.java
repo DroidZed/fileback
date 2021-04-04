@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
@@ -54,6 +55,12 @@ public class DevisController {
     public Devis getOne(@PathVariable Long id)
     {
         return this.devisManager.getDevisById(id);
+    }
+
+    @GetMapping(path = "/get/all")
+    public List<Devis> getAll()
+    {
+        return this.devisManager.getAll();
     }
     
     @PutMapping(path = "/ignore/{id}")
