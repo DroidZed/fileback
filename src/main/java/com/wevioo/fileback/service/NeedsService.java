@@ -1,5 +1,6 @@
 package com.wevioo.fileback.service;
 
+import com.wevioo.fileback.enums.EtatBesoin;
 import com.wevioo.fileback.enums.EtatDevis;
 import com.wevioo.fileback.exceptions.NeedNotFoundException;
 import com.wevioo.fileback.geolocationClasses.DisplayLatLng;
@@ -43,6 +44,15 @@ public class NeedsService implements NeedsManager {
     private final LocationManager locationManager;
 
     private final GeoCoder geoCoder;
+
+    @Override
+    public void cloturerBesoin(Long needId) {
+        this.needsRepository.findById(needId)
+                .map(d -> {
+                    d.setEtatBesoin(EtatBesoin.CLOTURE);
+                    return this.needsRepository.save(d);
+                }).orElseThrow(() -> new NeedNotFoundException(needId));
+    }
 
     @Override
     public ResponseEntity<?> getNeedByID(Long id) {

@@ -69,6 +69,12 @@ public class NeedsController {
     {
         return this.needsManager.modifyNeed(needid, need);
     }
+    
+    @PutMapping(path = "/close/{needId}")
+    public void closeNeed(@PathVariable Long needId)
+    {
+        this.needsManager.cloturerBesoin(needId);
+    }
 
     @PostMapping(path = "/update/{id}/picA")
     public CompletableFuture<ResponseEntity<?>> setNeedPictureA(@RequestParam("file") MultipartFile imageA, @PathVariable Long id)

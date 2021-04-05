@@ -13,6 +13,7 @@ import com.wevioo.fileback.repository.DevisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.TemplateEngine;
@@ -105,6 +106,7 @@ public class PDFService implements PDFGenerator {
         return ResponseEntity.ok(new ResponseMessage("Contract created, saved and sent to destination !"));
     }
 
+    @Override
     public ResponseEntity<?> sendPDF(Long devisId, String email) throws MessagingException {
 
         Contract contract = this.setContractDetails(devisId);
@@ -124,7 +126,9 @@ public class PDFService implements PDFGenerator {
         return ResponseEntity.ok(new ResponseMessage("Email sent !"));
     }
 
-    private void savePDF(String contractId, byte[] bytes) throws IOException {
+    @Async
+    @Override
+    public void savePDF(String contractId, byte[] bytes) throws IOException {
 
         String fname = pathToPDF + "\\" + "contrat_" + contractId + ".pdf";
 
@@ -139,7 +143,8 @@ public class PDFService implements PDFGenerator {
         outputStream.close();
     }
 
-    private Contract setContractDetails(Long devisId) {
+    @Override
+    public Contract setContractDetails(Long devisId) {
 
         /* Do Business Logic*/
 

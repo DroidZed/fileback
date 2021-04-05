@@ -15,8 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -26,11 +27,34 @@ public class DevisService implements DevisManager {
     private final DevisRepository devisRepository;
     private final UserRepository userRepository;
     private final NeedsRepository needsRepository;
+    private final ImageService imageService;
 
     @Override
-    public List<Devis> getAll()
-    {
-        return this.devisRepository.findAll();
+    public List<Devis> getAll() {
+        List<Devis> temp = this.devisRepository.findAll();
+
+        if (!temp.isEmpty())
+            for (Devis d : temp)
+                d.setNeedOwner(d.getNeed().getUser());
+
+
+        return temp;
+    }
+
+    @Override
+    @Async
+    public CompletableFuture<ResponseEntity<?>> getParticulierImage(Long devisID) throws IOException {
+
+        Optional<Devis> opt = this.devisRepository.findById(devisID);
+
+        if (opt.isEmpty())
+            return CompletableFuture.completedFuture(ResponseEntity.status(404).body("DEVIS NOT FOUND !"));
+
+        Devis d = opt.get();
+
+        User u = d.getNeed().getUser();
+
+        return CompletableFuture.completedFuture(ResponseEntity.ok(this.imageService.getImageWithMediaType(u.getImageName(), "user")));
     }
 
     @Override
@@ -56,8 +80,7 @@ public class DevisService implements DevisManager {
 
     @Override
     @Async
-    public CompletableFuture<ResponseEntity<?>> changeEtatDevis(Long devisId, EtatDevis etat)
-    {
+    public CompletableFuture<ResponseEntity<?>> changeEtatDevis(Long devisId, EtatDevis etat) {
         Optional<Devis> opt = this.devisRepository.findById(devisId);
 
         if (opt.isEmpty())
@@ -75,11 +98,13 @@ public class DevisService implements DevisManager {
     @Override
     public Devis getDevisById(Long devisId) {
         return this.devisRepository.findById(devisId)
+                .map(d -> {
+                    d.setNeedOwner(d.getNeed().getUser());
+                    return d;
+                })
                 .orElseThrow(() -> new DevisNotFoundException(devisId));
 
     }
-
-
 
 
 }

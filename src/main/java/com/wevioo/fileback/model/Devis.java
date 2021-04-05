@@ -21,7 +21,8 @@ public class Devis {
 
     private Integer prestation;
 
-    private String nomParticulier;
+    @Transient
+    private User needOwner;
 
     private String commentaire;
 
