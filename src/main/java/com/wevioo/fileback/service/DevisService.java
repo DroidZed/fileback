@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+
 @Service
 @AllArgsConstructor
 public class DevisService implements DevisManager {
@@ -77,6 +78,8 @@ public class DevisService implements DevisManager {
                 .orElseThrow(() -> new DevisNotFoundException(devisId));
 
     }
+
+
 
 
 }
