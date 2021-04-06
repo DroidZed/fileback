@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -30,6 +31,25 @@ public class NeedsController {
     public List<Needs> getNeedsOfUser(@PathVariable Long userid)
     {
         return this.needsManager.collectNeedsOfUser(userid);
+    }
+
+    @GetMapping(path = "/get/all")
+    public List<Needs> getAllNeeds()
+    {
+        return this.needsManager.getAll();
+    }
+
+
+    @GetMapping(path = "/get/dates")
+    public List<LocalDate> getLimitDates()
+    {
+        return this.needsManager.getLimitDates();
+    }
+
+    @GetMapping(path = "/get/count-by-cat")
+    public List<?> getCountOfNeedsByCategory()
+    {
+        return this.needsManager.countByCategory();
     }
 
     @GetMapping(path = "/get/{id}")

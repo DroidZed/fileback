@@ -36,6 +36,12 @@ public class CategoryController {
         return this.categoryManager.getCategoryImage(id);
     }
 
+    @GetMapping(path = "/get/names")
+    public List<String> getAllNames()
+    {
+        return this.categoryManager.getCategoriesNames();
+    }
+
     @PostMapping(path = "/add")
     public void addCategory(@RequestBody Category cat) {
         this.categoryManager.createCategory(cat);

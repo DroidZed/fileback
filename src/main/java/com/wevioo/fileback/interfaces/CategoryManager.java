@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface CategoryManager {
 
+    List<String> getCategoriesNames();
     List<Category> getAllCategories();
     Category getOneCategory(Long id);
     void createCategory(Category cat);

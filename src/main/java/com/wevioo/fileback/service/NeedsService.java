@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,6 +45,22 @@ public class NeedsService implements NeedsManager {
     private final LocationManager locationManager;
 
     private final GeoCoder geoCoder;
+
+    @Override
+    public List<?> countByCategory() {
+        return this.needsRepository.getCountByCategoryName();
+    }
+
+    @Override
+    public List<LocalDate> getLimitDates()
+    {
+        return this.needsRepository.getLimitDates();
+    }
+
+    @Override
+    public List<Needs> getAll() {
+        return this.needsRepository.findAll();
+    }
 
     @Override
     public void cloturerBesoin(Long needId) {
@@ -70,7 +87,7 @@ public class NeedsService implements NeedsManager {
 
             for (Devis d : offres) {
                 var etat = d.getEtat();
-                if (etat == EtatDevis.PUBLISHED) {
+                if (etat == EtatDevis.PUBLISHED || etat == EtatDevis.ACCEPTED) {
                     temp.add(d);
                 }
             }

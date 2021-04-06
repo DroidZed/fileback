@@ -64,6 +64,11 @@ public class CategoryService implements CategoryManager {
         this.categoryRepository.save(cat);
     }
 
+    @Override
+    public List<String> getCategoriesNames() {
+        return this.categoryRepository.getCategoriesNames();
+    }
+
     public Category getOneCategory(Long id) {
         return this.categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id));
     }

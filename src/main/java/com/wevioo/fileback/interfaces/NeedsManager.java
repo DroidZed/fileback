@@ -5,11 +5,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public interface NeedsManager {
 
+    List<?> countByCategory();
+    List<LocalDate> getLimitDates();
+    List<Needs> getAll();
     void cloturerBesoin(Long needId);
     ResponseEntity<?> getNeedByID(Long id);
     ResponseEntity<?> injectNewNeed(Needs besoin, Long catid, Long userid);
