@@ -28,6 +28,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Service
@@ -174,7 +175,7 @@ public class PDFService implements PDFGenerator {
 
         contract.setDevis(devis);
 
-        contract.setCreatedAt(LocalDateTime.now());
+        contract.setCreatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy HH:mm:ss")));
 
         return contract;
     }

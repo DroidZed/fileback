@@ -5,31 +5,31 @@
     <script src="http://localhost:35729/livereload.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
     <title>Contrat de devis</title>
+    <style>
+        body {
+            font-family: Arial,sans-serif;
+        }
+        .boldy {
+            font-weight: bold;
+        }
+        .center-text {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <div class="row d-flex justify-content-between">
-        <div class="col">
-            <p>Contrat #<span style="font-weight: bold" th:text="${contract.contractId}"></span></p>
-        </div>
-        <div class="col text-end">
-            <p><u>Créé le :
-                <span th:text="${contract.createdAt.toLocalDate()}"></span> à
-                <span th:text="${contract.createdAt.toLocalTime().toString()}"></span></u>
-            </p>
-        </div>
-    </div>
-    <div class="row text-center">
+<div>
+    <p>
+        Contrat #<span class="boldy" th:text="${contract.contractId}"></span>
+    </p>
+    <div class="center-text">
         <h2>Contrat de prestation</h2>
     </div>
-    <div class="row pt-3">
-        <p><b>Entre les soussignés :</b></p>
+    <div>
+        <p class="boldy">Entre les soussignés :</p>
     </div>
-    <div class="row">
+    <div>
         <p>
             Nom & Prénom : <span th:text="${contract.userDetails.fullName}"></span> <br>
             Adresse : <span th:text="${contract.userDetails.adresse}"></span> <br>
@@ -37,54 +37,59 @@
             d'une part,
         </p>
     </div>
-    <div class="row">
+    <div>
         <p>et</p>
     </div>
-    <div class="row">
+    <div>
         <p>
             Nom & Prénom : <span th:text="${contract.jobberDetails.fullName}"></span> <br>
             Adresse : <span th:text="${contract.jobberDetails.adresse}"></span> <br>
             ci-après dénommée « le Prestataire de services » ou « le Prestataire », <br>
             d'autre part,
         </p>
-        <p><b>il a été convenu ce qui suit :</b></p>
+        <p>il a été convenu ce qui suit :</p>
     </div>
-    <div class="row">
-        <p>
-            <b>Article premier - Objet</b>
+    <div>
+        <p class="boldy">
+           Article premier - Objet
         </p>
 
-        <p>Le présent contrat est un contrat de prestation ayant pour objet: <span th:text="${contract.need.needTitle}"></span> .
+        <p>Le présent contrat est un contrat de prestation ayant pour objet: <span class="boldy" th:text="${contract.need.needTitle}"></span> .
 
             <br>
 
             En contrepartie de la réalisation des prestations définies à l'Article premier ci-dessus, le client versera
-            au prestataire la somme de <b><span th:text="${contract.devis.prestation}"></span></b> DT.
+            au prestataire la somme de <span class="boldy" th:text="${contract.devis.prestation}"></span> DT.
         </p>
 
-        <p>
-            <b>Article 2 – Date limite du travail</b>
+        <p class="boldy">
+           Article 2 – Date limite du travail
         </p>
         <p>
             Ce contrat est passé pour une durée définie par le client. Il  prendra effet à la date convenue entre les deux partie et arrivera à son terme le
            <span th:text="${contract.need.dateLimite.toString()}"></span> .
         </p>
 
-        <p>
-            <b>Article 3 – Infos sur les véhicules de transport</b>
+        <p class="boldy">
+            Article 3 – Infos sur les véhicules de transport
         </p>
         <p>
             Le client requière du prestatire
             <span th:text="${contract.need.vehicleInfos}"></span> pour l'aider dans la tâche mentionné dans l'Article premier .
         </p>
 
-        <p>
-            <b>Article 4 - Exécution de la prestation</b>
+        <p class="boldy">
+            Article 4 - Exécution de la prestation
         </p>
 
         <p>Le prestataire s'engage à mener à bien la tâche précisée à l'Article premier, conformément aux règles de
             l'art et de la meilleure manière.
         </p>
+    </div>
+    <div>
+        <p>Fait le
+            <span th:text="${contract.createdAt}"></span>
+         </p>
     </div>
 </div>
 </body>
