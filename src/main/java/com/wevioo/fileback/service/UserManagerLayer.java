@@ -8,6 +8,7 @@ import com.wevioo.fileback.interfaces.ImageManager;
 import com.wevioo.fileback.interfaces.LocationManager;
 import com.wevioo.fileback.interfaces.UserManager;
 import com.wevioo.fileback.message.ResponseMessage;
+import com.wevioo.fileback.model.Activity;
 import com.wevioo.fileback.model.Locations;
 import com.wevioo.fileback.model.User;
 import com.wevioo.fileback.repository.UserRepository;
@@ -72,9 +73,10 @@ public class UserManagerLayer implements UserManager {
     }
 
     @Override
-    public void becomeJobber(Long id) {
+    public void becomeJobber(Long id, Activity act) {
         this.userRepository.findById(id)
                 .map(u -> {
+                            u.setActivity(act);
                             u.setTravailleur(Boolean.TRUE);
                             return this.userRepository.save(u);
                 })

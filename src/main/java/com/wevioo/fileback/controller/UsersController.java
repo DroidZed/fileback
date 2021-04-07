@@ -1,6 +1,7 @@
 package com.wevioo.fileback.controller;
 
 import com.wevioo.fileback.interfaces.UserManager;
+import com.wevioo.fileback.model.Activity;
 import com.wevioo.fileback.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -75,8 +76,8 @@ public class UsersController {
     }
 
     @PutMapping(path = "/become-jobber")
-    public void becomeJobber(@RequestParam("idUser") Long idUser)
+    public void becomeJobber(@RequestParam("idUser") Long idUser, @RequestBody Activity act)
     {
-        this.userManagerLayer.becomeJobber(idUser);
+        this.userManagerLayer.becomeJobber(idUser, act);
     }
 }

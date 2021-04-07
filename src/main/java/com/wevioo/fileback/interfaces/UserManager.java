@@ -1,5 +1,6 @@
 package com.wevioo.fileback.interfaces;
 
+import com.wevioo.fileback.model.Activity;
 import com.wevioo.fileback.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ public interface UserManager {
     Long countAll();
     Long countUsers();
     Long countJobbers();
-    void becomeJobber(Long id); // TODO : finish the method
+    void becomeJobber(Long id, Activity act); // TODO : finish the method
     ResponseEntity<?> disableUser(Long id);
     ResponseEntity<?> inviteUserByMail(String email);
     ResponseEntity<?> modifyProfile(Long id, User user);
