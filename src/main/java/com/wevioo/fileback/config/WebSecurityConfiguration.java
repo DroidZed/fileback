@@ -56,7 +56,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/jobbers/add/",
                         "/swagger*/**",
                         "/v2/api-docs",
-                        "/devis/html"
+                        "/devis/html",
+                        "/logo.png"
                 )
                 .permitAll()
                 .anyRequest()

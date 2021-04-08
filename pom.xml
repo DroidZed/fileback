@@ -134,22 +134,6 @@
             <artifactId>html2pdf</artifactId>
             <version>3.0.3</version>
         </dependency>
-        <!-- Webjars -->
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>bootstrap</artifactId>
-            <version>5.0.0-beta3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>font-awesome</artifactId>
-            <version>5.15.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>webjars-locator</artifactId>
-            <version>0.40</version>
-        </dependency>
     </dependencies>
 
     <build>

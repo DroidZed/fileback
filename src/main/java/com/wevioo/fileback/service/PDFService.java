@@ -84,7 +84,11 @@ public class PDFService implements PDFGenerator {
 
         /* Call convert method */
 
-        HtmlConverter.convertToPdf(contractHTML, target, new ConverterProperties());
+        var props = new ConverterProperties();
+
+        props.setBaseUri("http://localhost:8080");
+
+        HtmlConverter.convertToPdf(contractHTML, target, props);
 
         /* extract output as bytes */
 

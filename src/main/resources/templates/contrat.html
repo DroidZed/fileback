@@ -16,15 +16,25 @@
         .center-text {
             text-align: center;
         }
+        .logo {
+            top: 0;
+            right: 0;
+            position: absolute;
+            width: 200px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
 <div>
+    <div>
     <p>
         Contrat #<span class="boldy" th:text="${contract.contractId}"></span>
     </p>
-    <div class="center-text">
-        <h1>Contrat de prestation</h1>
+        <img class="logo" alt="logo" src="http://localhost:8080/logo.png"/>
+    </div>
+    <div>
+        <h1 class="center-text">Contrat de prestation</h1>
     </div>
     <div>
         <p class="boldy">Entre les soussignés :</p>
