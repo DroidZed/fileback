@@ -5,7 +5,6 @@ import com.wevioo.fileback.interfaces.CategoryManager;
 import com.wevioo.fileback.interfaces.ImageManager;
 import com.wevioo.fileback.message.ResponseMessage;
 import com.wevioo.fileback.model.Category;
-import com.wevioo.fileback.repository.CategoryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class CategoryService implements CategoryManager {
 
-    private final CategoryRepository categoryRepository;
+    private final com.wevioo.fileback.repository.CategoryRepository categoryRepository;
     private final ImageManager imageManager;
 
     public List<Category> getAllCategories() {

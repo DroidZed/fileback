@@ -76,8 +76,8 @@ public class UsersController {
     }
 
     @PutMapping(path = "/become-jobber")
-    public void becomeJobber(@RequestParam("idUser") Long idUser, @RequestBody Activity act)
+    public void becomeJobber(@RequestParam("idUser") Long idUser,@RequestParam("idCat") Long idCat, @RequestBody Activity act)
     {
-        this.userManagerLayer.becomeJobber(idUser, act);
+        this.userManagerLayer.becomeJobber(idUser, act, idCat);
     }
 }

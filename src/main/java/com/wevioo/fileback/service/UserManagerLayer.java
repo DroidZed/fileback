@@ -2,15 +2,13 @@ package com.wevioo.fileback.service;
 
 import com.wevioo.fileback.exceptions.UserNotFoundException;
 import com.wevioo.fileback.geolocationClasses.DisplayLatLng;
-import com.wevioo.fileback.interfaces.EmailManager;
-import com.wevioo.fileback.interfaces.GeoCoder;
-import com.wevioo.fileback.interfaces.ImageManager;
-import com.wevioo.fileback.interfaces.LocationManager;
-import com.wevioo.fileback.interfaces.UserManager;
+import com.wevioo.fileback.interfaces.*;
 import com.wevioo.fileback.message.ResponseMessage;
 import com.wevioo.fileback.model.Activity;
+import com.wevioo.fileback.model.Category;
 import com.wevioo.fileback.model.Locations;
 import com.wevioo.fileback.model.User;
+import com.wevioo.fileback.repository.CategoryRepository;
 import com.wevioo.fileback.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,6 +38,7 @@ public class UserManagerLayer implements UserManager {
     private final GeoCoder geoCoder;
     private final LocationManager locationManager;
     private final ImageManager imageManager;
+    private final CategoryRepository categoryRepository;
 
     public List<User> getAllUsers()
     {
@@ -73,14 +72,18 @@ public class UserManagerLayer implements UserManager {
     }
 
     @Override
-    public void becomeJobber(Long id, Activity act) {
-        this.userRepository.findById(id)
+    public void becomeJobber(Long id, Activity act, Long idCat) {
+
+        Optional<Category> optCat = this.categoryRepository.findById(idCat);
+
+        optCat.ifPresent(category -> this.userRepository.findById(id)
                 .map(u -> {
-                            u.setActivity(act);
-                            u.setTravailleur(Boolean.TRUE);
-                            return this.userRepository.save(u);
+                    act.setCategory(category);
+                    u.setActivity(act);
+                    u.setTravailleur(Boolean.TRUE);
+                    return this.userRepository.save(u);
                 })
-                .orElseThrow(() -> new UserNotFoundException(id));
+                .orElseThrow(() -> new UserNotFoundException(id)));
     }
 
     @Transactional
@@ -94,7 +97,7 @@ public class UserManagerLayer implements UserManager {
 
         User u = optionalUser.get();
 
-        u.setEtat(false);
+        u.setEtat(Boolean.FALSE);
 
         userRepository.save(u);
 
