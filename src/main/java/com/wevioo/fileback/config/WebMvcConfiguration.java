@@ -13,32 +13,29 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfiguration {
 
     @Bean
-    public WebMvcConfigurer corsConfigurer()
-    {
-        return new WebMvcConfigurer()
-        {
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
             @Override
-            public void addCorsMappings(@NotNull CorsRegistry registry)
-            {
+            public void addCorsMappings(@NotNull CorsRegistry registry) {
                 registry.addMapping("/*")
-                        .allowedMethods("GET","POST")
+                        .allowedMethods("GET", "POST")
                         .allowedHeaders("*")
                         .allowedOrigins("*");
 
                 registry.addMapping("/users/*/**")
-                        .allowedMethods("GET","POST","PUT")
+                        .allowedMethods("GET", "POST", "PUT")
                         .allowedHeaders("*")
                         .allowedOrigins("*")
                         .maxAge(3600);
 
                 registry.addMapping("/categories/*/**")
-                        .allowedMethods("GET","POST","PUT","DELETE")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowedHeaders("*")
                         .allowedOrigins("*")
                         .maxAge(3600);
 
                 registry.addMapping("/jobbers/*/**")
-                        .allowedMethods("GET","POST","PUT")
+                        .allowedMethods("GET", "POST", "PUT")
                         .allowedHeaders("*")
                         .allowedOrigins("*")
                         .maxAge(3600);
@@ -50,13 +47,13 @@ public class WebMvcConfiguration {
                         .maxAge(3600);
 
                 registry.addMapping("/need/*/*/**")
-                        .allowedMethods("GET","POST","PUT","DELETE")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowedHeaders("*")
                         .allowedOrigins("*")
                         .maxAge(3600);
 
                 registry.addMapping("/notifications/*/**")
-                        .allowedMethods("POST","GET","DELETE", "PUT")
+                        .allowedMethods("POST", "GET", "DELETE", "PUT")
                         .allowedHeaders("*")
                         .allowedOrigins("*")
                         .maxAge(3600);
@@ -68,7 +65,7 @@ public class WebMvcConfiguration {
                         .maxAge(3600);
 
                 registry.addMapping("/devis/*/**")
-                        .allowedMethods("GET","POST","PUT")
+                        .allowedMethods("GET", "POST", "PUT")
                         .allowedHeaders("*")
                         .allowedOrigins("*")
                         .maxAge(3600);
@@ -86,7 +83,4 @@ public class WebMvcConfiguration {
             }
         };
     }
-
-
-
 }

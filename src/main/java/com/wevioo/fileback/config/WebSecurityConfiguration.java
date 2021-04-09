@@ -45,7 +45,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf()
+        http.cors()
+                .and()
+                .headers()
+                .frameOptions()
+                .disable()
+                .and()
+                .csrf()
                 .disable()
                 .authorizeRequests()
                 .antMatchers(
@@ -65,6 +71,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        http
+                .addFilterBefore(
+                        jwtFilter,
+                        UsernamePasswordAuthenticationFilter.class
+                );
     }
 }
