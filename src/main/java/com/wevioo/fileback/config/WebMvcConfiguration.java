@@ -58,12 +58,6 @@ public class WebMvcConfiguration {
                         .allowedOrigins("*")
                         .maxAge(3600);
 
-                registry.addMapping("/messages/*/**")
-                        .allowedMethods("*")
-                        .allowedHeaders("*")
-                        .allowedOrigins("*")
-                        .maxAge(3600);
-
                 registry.addMapping("/devis/*/**")
                         .allowedMethods("GET", "POST", "PUT")
                         .allowedHeaders("*")
@@ -74,6 +68,18 @@ public class WebMvcConfiguration {
                         .allowedOrigins("*")
                         .allowedHeaders("*")
                         .allowedMethods("GET");
+
+                registry.addMapping("/chatroom/*")
+                        .allowedMethods("GET", "POST")
+                        .allowedHeaders("*")
+                        .allowedOrigins("*")
+                        .maxAge(3600);
+
+                registry.addMapping("/comment/*/**")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+                        .allowedHeaders("*")
+                        .allowedOrigins("*")
+                        .maxAge(3600);
             }
 
             @Override

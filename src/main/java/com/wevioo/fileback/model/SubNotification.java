@@ -1,12 +1,12 @@
 package com.wevioo.fileback.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

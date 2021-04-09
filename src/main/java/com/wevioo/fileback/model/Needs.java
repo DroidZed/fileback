@@ -1,15 +1,17 @@
 package com.wevioo.fileback.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wevioo.fileback.enums.EtatBesoin;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Proxy;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -74,4 +76,6 @@ public class Needs {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "need")
     private List<Devis> offres;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "besoin")
+    private Set<Comment> comments;
 }

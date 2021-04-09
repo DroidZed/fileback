@@ -6,7 +6,9 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

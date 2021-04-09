@@ -10,7 +10,9 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
+@ToString
 @Table(name = "users")
 @Proxy(lazy = false)
 public class User {

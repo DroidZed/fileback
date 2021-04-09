@@ -63,7 +63,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/swagger*/**",
                         "/v2/api-docs",
                         "/devis/html",
-                        "/logo.png"
+                        "/logo.png",
+                        "/chat"
                 )
                 .permitAll()
                 .anyRequest()
