@@ -15,9 +15,9 @@ public class ChatRoomController {
     private final ChatRoomManager chatRoomManager;
 
     @PostMapping(path = "/create")
-    public ChatRoom createChatRoom(@RequestParam("sender") Long sender, @RequestParam("receiver") Long receiver)
+    public ChatRoom createChatRoom(@RequestParam("user1") Long user1, @RequestParam("user2") Long user2)
     {
-        return this.chatRoomManager.createChatRoom(sender,receiver);
+        return this.chatRoomManager.createChatRoom(user1,user2);
     }
 
     @GetMapping(path = "/get-chatRoom")

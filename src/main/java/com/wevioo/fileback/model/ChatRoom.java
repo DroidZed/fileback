@@ -1,6 +1,5 @@
 package com.wevioo.fileback.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.Proxy;
 

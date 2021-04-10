@@ -2,7 +2,6 @@ package com.wevioo.fileback.service;
 
 import com.wevioo.fileback.exceptions.ChatRoomNotFoundException;
 import com.wevioo.fileback.interfaces.ChatRoomManager;
-import com.wevioo.fileback.model.ChatModel;
 import com.wevioo.fileback.model.ChatRoom;
 import com.wevioo.fileback.repository.ChatRoomRepository;
 import lombok.AllArgsConstructor;
