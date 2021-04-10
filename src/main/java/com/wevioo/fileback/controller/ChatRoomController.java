@@ -20,15 +20,21 @@ public class ChatRoomController {
         return this.chatRoomManager.createChatRoom(user1,user2);
     }
 
-    @GetMapping(path = "/get-chatRoom")
+    @GetMapping(path = "/get")
     public ChatRoom getChatRoom(@RequestParam("chatRoomId") Long chatRoomId)
     {
         return this.chatRoomManager.getChatRoom(chatRoomId);
     }
 
-    @GetMapping(path = "/get/{userId}")
-    public List<ChatRoom> getAllOfUser(@PathVariable Long userId)
+    @GetMapping(path = "/get/user1")
+    public List<ChatRoom> getAllOfUser1(@RequestParam("id") Long id)
     {
-        return this.chatRoomManager.getAllOfUser(userId);
+        return this.chatRoomManager.getAllOfUser1(id);
+    }
+
+    @GetMapping(path = "/get/user2")
+    public List<ChatRoom> getAllOfUser2(@RequestParam("id") Long id)
+    {
+        return this.chatRoomManager.getAllOfUser2(id);
     }
 }

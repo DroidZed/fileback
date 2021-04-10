@@ -32,4 +32,10 @@ public class ChatModel {
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
+
+    public ChatModel(String message, LocalDateTime now, ChatRoom chatRoom) {
+        this.message = message;
+        this.msgDate = now;
+        this.chatRoom = chatRoom;
+    }
 }

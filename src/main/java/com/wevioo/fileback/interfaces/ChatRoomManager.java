@@ -10,5 +10,7 @@ public interface ChatRoomManager {
 
     ChatRoom createChatRoom(Long user1, Long user2);
 
-    List<ChatRoom> getAllOfUser(Long user);
+    List<ChatRoom> getAllOfUser1(Long user1);
+
+    List<ChatRoom> getAllOfUser2(Long user2);
 }

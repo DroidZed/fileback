@@ -27,7 +27,7 @@ public class ChatRoom {
     @Column(name = "user_2_id")
     private Long user2Id;
 
-    @OneToMany(mappedBy = "chatRoom")
+    @OneToMany(fetch=FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.REFRESH}, mappedBy = "chatRoom")
     List<ChatModel> chatMessages;
 
     public ChatRoom(Long user1Id, Long user2Id) {

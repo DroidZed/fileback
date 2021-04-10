@@ -27,7 +27,12 @@ public class ChatRoomService implements ChatRoomManager {
     }
 
     @Override
-    public List<ChatRoom> getAllOfUser(Long user1) {
+    public List<ChatRoom> getAllOfUser1(Long user1) {
         return this.chatRoomRepository.findAllByUser1Id(user1);
+    }
+
+    @Override
+    public List<ChatRoom> getAllOfUser2(Long user2) {
+        return this.chatRoomRepository.findAllByUser2Id(user2);
     }
 }
