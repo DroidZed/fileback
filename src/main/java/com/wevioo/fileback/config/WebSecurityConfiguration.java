@@ -64,7 +64,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/v2/api-docs",
                         "/devis/html",
                         "/logo.png",
-                        "/chat"
+                        "/chat/*/**"
                 )
                 .permitAll()
                 .anyRequest()

@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface ChatRoomManager {
 
-    ChatRoom getChatRoom(Long sender, Long receiver);
+    ChatRoom getChatRoom(Long chatRoomId);
 
-    ChatRoom createChatRoom(Long sender, Long receiver);
+    ChatRoom createChatRoom(Long user1, Long user2);
+
+    List<ChatRoom> getAllOfUser(Long user);
 }

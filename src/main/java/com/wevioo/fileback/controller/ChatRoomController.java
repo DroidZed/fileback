@@ -5,6 +5,8 @@ import com.wevioo.fileback.model.ChatRoom;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping(path = "/chatroom")
@@ -18,9 +20,15 @@ public class ChatRoomController {
         return this.chatRoomManager.createChatRoom(sender,receiver);
     }
 
-    @GetMapping(path = "/get")
-    public ChatRoom getChatRoom(@RequestParam("sender") Long sender, @RequestParam("receiver") Long receiver)
+    @GetMapping(path = "/get-chatRoom")
+    public ChatRoom getChatRoom(@RequestParam("chatRoomId") Long chatRoomId)
     {
-        return this.chatRoomManager.getChatRoom(sender,receiver);
+        return this.chatRoomManager.getChatRoom(chatRoomId);
+    }
+
+    @GetMapping(path = "/get/{userId}")
+    public List<ChatRoom> getAllOfUser(@PathVariable Long userId)
+    {
+        return this.chatRoomManager.getAllOfUser(userId);
     }
 }

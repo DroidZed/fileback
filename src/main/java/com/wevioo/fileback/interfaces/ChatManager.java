@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ChatManager
 {
-    void deliverMessage(String to, ChatMessage chat);
+    void deliverMessage(ChatMessage chat);
 }

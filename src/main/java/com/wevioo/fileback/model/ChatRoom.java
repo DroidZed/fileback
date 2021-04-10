@@ -22,19 +22,17 @@ public class ChatRoom {
     @Column(name = "chat_room_id")
     private Long chatRoomId;
 
-    @Column(name = "sender_id")
-    private Long senderId;
+    @Column(name = "user_1_id")
+    private Long user1Id;
 
-    @Column(name = "receiver_id")
-    private Long receiverId;
+    @Column(name = "user_2_id")
+    private Long user2Id;
 
     @OneToMany(mappedBy = "chatRoom")
     List<ChatModel> chatMessages;
 
-    public ChatRoom(Long sender, Long receiver) {
-
-        this.senderId = sender;
-        this.receiverId = receiver;
-
+    public ChatRoom(Long user1Id, Long user2Id) {
+        this.user1Id = user1Id;
+        this.user2Id = user2Id;
     }
 }

@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -23,6 +24,9 @@ public class ChatModel {
 
     @Column(name = "message")
     private String message;
+
+    @Column(name = "msg_date")
+    private LocalDateTime msgDate;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE,CascadeType.REFRESH})

@@ -69,7 +69,7 @@ public class WebMvcConfiguration {
                         .allowedHeaders("*")
                         .allowedMethods("GET");
 
-                registry.addMapping("/chatroom/*")
+                registry.addMapping("/chatroom/*/**")
                         .allowedMethods("GET", "POST")
                         .allowedHeaders("*")
                         .allowedOrigins("*")

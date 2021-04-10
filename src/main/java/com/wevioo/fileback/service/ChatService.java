@@ -12,8 +12,11 @@ import com.wevioo.fileback.repository.ChatRoomRepository;
 import com.wevioo.fileback.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,9 +29,9 @@ public class ChatService implements ChatManager {
     private final ChatRoomRepository chatRoomRepository;
 
     @Override
-    public void deliverMessage(String to, ChatMessage msg)
+    @Async
+    public void deliverMessage(ChatMessage msg)
     {
-        System.out.println("handling send message: \n" + msg + "\nto: " + to);
 
         Long idchatroom = msg.getChatRoomId();
 
@@ -43,9 +46,10 @@ public class ChatService implements ChatManager {
 
         model.setMessage(msg.getMessage());
         model.setChatRoom(chatRoom);
+        model.setMsgDate(LocalDateTime.now());
 
-        ChatModel chat = this.chatModelRepository.save(model);
+        // TODO: this.chatModelRepository.save(model);
 
-        simpMessagingTemplate.convertAndSend("/topic/messages/" + to,  chat);
+        simpMessagingTemplate.convertAndSend("/topic/messages/" + chatRoom.getChatRoomId(),  model);
     }
 }
