@@ -7,7 +7,9 @@ import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

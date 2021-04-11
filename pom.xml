@@ -139,6 +139,11 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-messaging</artifactId>
         </dependency>
+        <!-- Spring Web flux (configures Spring Reactor Netty as default server -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

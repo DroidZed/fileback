@@ -1,5 +1,6 @@
 package com.wevioo.fileback.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.Proxy;
 
@@ -9,23 +10,22 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
+@Table(name = "comment")
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="evaluation")
 @Proxy(lazy = false)
-public class Evaluation {
+public class Comment {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long idEval;
-
-    private Integer evaluation;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long commentId;
 
     private String comment;
 
-    private Long evaluatorId;
+    private Long senderId;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE,CascadeType.REFRESH})
-    @JoinColumn(name = "id_user")
-    private User evaluated;
+    @JoinColumn(name = "id_need")
+    private Needs besoin;
 }
