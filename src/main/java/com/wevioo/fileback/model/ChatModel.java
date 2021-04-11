@@ -28,14 +28,11 @@ public class ChatModel {
     @Column(name = "msg_date")
     private LocalDateTime msgDate;
 
+    @Column(name = "sender_id")
+    private Long senderId;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
-
-    public ChatModel(String message, LocalDateTime now, ChatRoom chatRoom) {
-        this.message = message;
-        this.msgDate = now;
-        this.chatRoom = chatRoom;
-    }
 }

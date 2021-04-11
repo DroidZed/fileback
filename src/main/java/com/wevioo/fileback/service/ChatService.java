@@ -2,35 +2,50 @@ package com.wevioo.fileback.service;
 
 import com.wevioo.fileback.exceptions.ChatRoomNotFoundException;
 import com.wevioo.fileback.interfaces.ChatManager;
-import com.wevioo.fileback.message.ChatMessage;
 import com.wevioo.fileback.model.ChatModel;
-import com.wevioo.fileback.model.ChatRoom;
 import com.wevioo.fileback.repository.ChatModelRepository;
 import com.wevioo.fileback.repository.ChatRoomRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
 public class ChatService implements ChatManager {
 
-    private final SimpMessagingTemplate simpMessagingTemplate;
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatModelRepository chatModelRepository;
 
     @Override
-    public void deliverMessage(ChatMessage msg)
-    {
-        Long idchatroom = msg.getChatRoomId();
+    @Transactional
+    public ChatModel deliverMessage(ChatModel msg, Long to) {
 
-       ChatRoom chatRoom  = this.chatRoomRepository.findById(idchatroom)
-       .orElseThrow(() -> new
-            ChatRoomNotFoundException(idchatroom)
-       );
+        msg.setChatRoom(this.chatRoomRepository.findById(to)
+                .orElseThrow(
+                        () -> new ChatRoomNotFoundException(to)
+                ));
 
-        ChatModel model = new ChatModel(msg.getMessage(),LocalDateTime.now(),chatRoom);
+        return this.chatModelRepository.saveAndFlush(msg);
+    }
 
-        simpMessagingTemplate.convertAndSend("/topic/messages/" + chatRoom.getChatRoomId(),  model);
+    @Override
+    public List<ChatModel> getAllByChatRoomId(Long chatroomId) {
+        return this.chatModelRepository
+                .findAllByChatRoomId(chatroomId)
+                .stream()
+                .map(this::getChats)
+                .collect(Collectors.toList());
+    }
+
+    private ChatModel getChats(ChatModel entity) {
+        return new ChatModel(entity.getChatId(),
+                entity.getMessage(),
+                entity.getMsgDate(),
+                entity.getSenderId(),
+                entity.getChatRoom()
+        );
     }
 }
