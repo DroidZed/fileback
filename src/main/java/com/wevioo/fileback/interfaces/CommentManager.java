@@ -11,4 +11,6 @@ public interface CommentManager {
     CompletableFuture<ResponseEntity<?>> publishComment(Comment comment, Long needId);
 
     Set<Comment> getCommentsOfNeed(Long needId);
+
+    Comment getLastCommentPublishedOfNeed(Long needId);
 }

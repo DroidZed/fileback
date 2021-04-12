@@ -1,10 +1,81 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <title>Confirmer votre adresse mail</title>
-</head>
-<body>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
+    <style>
+        .gray {
+            padding:40px;
+            background-color: whitesmoke;
+        }
+        .centry {
+            text-align: center;
+        }
+        .logo {
+            width: 200px;
+            height: auto;
+        }
+        .phrase {
+            font-family: sans-serif;
+        }
+        .main {
+            display: grid;
+            place-items: center;
+        }
+        .btn {
+            margin: .25rem .125rem;
+            display: inline-block;
+            font-weight: 400;
+            line-height: 1.5;
+            text-align: center;
+            text-decoration: none;
+            vertical-align: middle;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+            background-color: transparent;
+            border: 1px solid transparent;
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            border-radius: .25rem;
+            transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        }
+        .btn-primary {
+            color: #fff;
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+        a {
+            text-decoration: none;
+            cursor: pointer;
+        }
+        a:visited {
+            color: #fff;
+        }
+        a:hover {
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+<body class="gray">
+<div class="main">
+    <div class="centry">
+        <img alt="logo" class="logo" th:src="'cid:logo.png'" />
+    </div>
+    <div class="centry">
+        <h2 class="phrase"> Veuillez activer votre compte </h2>
+    </div>
+    <div class="centry">
+        <a th:href="${'http://localhost:8080/confirm-account?token='+confirmationToken}">
+            <button class="btn btn-primary">
+                Cliquez ici pour activer votre compte.
+            </button>
+        </a>
+    </div>
+</div>
 </body>
 </html>

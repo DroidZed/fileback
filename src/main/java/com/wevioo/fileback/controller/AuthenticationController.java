@@ -45,4 +45,11 @@ public class AuthenticationController {
                                            @RequestParam("token") String confirmationToken) {
         return register.confirmAccount(modelAndView, confirmationToken);
     }
+
+    @GetMapping(path = "/confirm-account-html")
+    public ModelAndView confirmAccountHtml (ModelAndView modelAndView)
+    {
+        modelAndView.setViewName("accountVerified");
+        return modelAndView;
+    }
 }

@@ -1,20 +1,38 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Congratulations!</title>
+    <link rel="icon" href="/icon.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap');
+
+        .logo {
+            width: 15rem;
+            height: auto;
+        }
+
+        .main {
+            display: grid;
+            place-items: center;
+            height: 90vh;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .main h3 {
+            margin-top: 50px;
+            font-family: "Comfortaa", sans-serif;
+        }
+    </style>
 </head>
 <body>
 
-<h3>Congratulations! Your account has been activated and email is verified!</h3>
-
-<p style="color:red;">You'll be redirected back to the home page soon...</p>
-
-<script>
-    setTimeout(() => {
-        window.location.replace("http://localhost:4200");
-    }, 2500);
-</script>
+<div class="main">
+    <div>
+        <img src="/Flat_tick_icon.svg" class="logo" alt="tick"/>
+        <h3>Votre compte à été activé ! Vous pouvez fermer cet onglet.</h3>
+    </div>
+</div>
 
 </body>
 </html>

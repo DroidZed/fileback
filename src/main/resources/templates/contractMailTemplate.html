@@ -1,10 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Contract Info</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <style>
+        .gray {
+            padding:40px;
+            background-color: whitesmoke;
+        }
+        .centry {
+            text-align: center;
+        }
+        .logo {
+            width: 200px;
+            height: auto;
+        }
+        .phrase {
+            font-family: sans-serif;
+        }
+        .main {
+            display: grid;
+            place-items: center;
+        }
+    </style>
 </head>
-<body>
-
+<body class="gray">
+<div class="main">
+    <div class="centry">
+        <img alt="logo" class="logo" th:src="'cid:logo.png'" />
+    </div>
+    <div class="centry">
+        <h3 class="phrase"> Veuillez consulter en attachement le contrat. </h3>
+    </div>
+</div>
 </body>
 </html>

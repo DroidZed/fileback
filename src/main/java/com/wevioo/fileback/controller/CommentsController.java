@@ -22,6 +22,12 @@ public class CommentsController {
             return this.commentManager.getCommentsOfNeed(needId);
         }
 
+        @GetMapping(path = "/get/last")
+        public Comment getLastComment(@RequestParam("needId") Long needId)
+        {
+                return this.commentManager.getLastCommentPublishedOfNeed(needId);
+        }
+
         @PostMapping(path = "/send")
         public CompletableFuture<ResponseEntity<?>> publishComment(@RequestParam("needId") Long needId, @RequestBody Comment comment)
         {

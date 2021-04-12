@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class UsersController {
     private final UserManager userManagerLayer;
 
     @PostMapping(path = "invite")
-    public ResponseEntity<?> inviteUser(@RequestBody String email) {
+    public ResponseEntity<?> inviteUser(@RequestParam("email") String email) throws MessagingException {
         return this.userManagerLayer.inviteUserByMail(email);
     }
 

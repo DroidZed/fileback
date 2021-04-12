@@ -49,4 +49,9 @@ public class CommentService implements CommentManager {
        return this.needsRepository.findById(needId)
                .map(Needs::getComments).orElseThrow(() -> new NeedNotFoundException(needId));
     }
+
+    @Override
+    public Comment getLastCommentPublishedOfNeed(Long needId) {
+        return this.commentRepository.getLastComment(needId);
+    }
 }

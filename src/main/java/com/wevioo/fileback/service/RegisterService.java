@@ -13,6 +13,7 @@ import com.wevioo.fileback.repository.CategoryRepository;
 import com.wevioo.fileback.repository.ConfirmationTokenRepository;
 import com.wevioo.fileback.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -88,7 +89,6 @@ public class RegisterService implements Register {
         else
         {
             modelAndView.setViewName("errorpage");
-            modelAndView.addObject("message","The link is invalid or broken!");
         }
         return modelAndView;
     }
@@ -126,20 +126,13 @@ public class RegisterService implements Register {
         return ResponseEntity.ok(new ResponseMessage("Vérifier votre boite mail pour un lien de confirmation !"));
     }
 
+    @SneakyThrows
     private void sendMailAndSaveToken(User user) {
         ConfirmationToken confirmationToken = new ConfirmationToken(user);
 
         confirmationTokenRepository.save(confirmationToken);
 
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-
-        mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("Complete Registration!");
-
-        mailMessage.setText("To confirm your account, please click here : "
-                +"http://localhost:8080/confirm-account?token="+confirmationToken.getConfirmationToken());
-
-        emailManager.sendEmail(mailMessage);
+        emailManager.sendConfirmationMail(user.getEmail(), confirmationToken.getConfirmationToken());
     }
 
     private void setLocation(User user)

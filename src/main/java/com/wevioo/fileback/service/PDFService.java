@@ -122,11 +122,7 @@ public class PDFService implements PDFGenerator {
 
         String fname = pathToPDF + "\\" + "contrat_" + contract.getContractId() + ".pdf";
 
-        String subject = "Contrat de devis";
-
-        String body = "Veuillez consulter le contrat en accroche ! Tout les details concernant le travail sonts mentionnées dedans.";
-
-        emailManager.sendEMailWithAttach(email, subject, body, fname);
+        emailManager.sendEMailWithAttach(email, fname);
 
         return ResponseEntity.ok(new ResponseMessage("Email sent !"));
     }

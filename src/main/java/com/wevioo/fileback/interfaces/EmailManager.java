@@ -6,6 +6,7 @@ import javax.mail.MessagingException;
 
 public interface EmailManager {
 
-    void sendEmail(SimpleMailMessage email);
-    void sendEMailWithAttach(String to, String subject, String body, String attachment) throws MessagingException;
+    void inviteUser(String to) throws MessagingException;
+    void sendConfirmationMail(String to, String confirmationToken) throws MessagingException;
+    void sendEMailWithAttach(String to, String attachment) throws MessagingException;
 }

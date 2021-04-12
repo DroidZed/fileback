@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import java.util.List;
 import java.util.Optional;
 
@@ -104,18 +105,13 @@ public class UserManagerLayer implements UserManager {
         return ResponseEntity.ok(new ResponseMessage(format("Le compte ID = {0} à été désactivé avec succés !", id)));
     }
 
-    public ResponseEntity<?> inviteUserByMail(String email)
-    {
+    public ResponseEntity<?> inviteUserByMail(String email) throws MessagingException {
+
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
         mailMessage.setTo(email);
 
-        mailMessage.setSubject("Venez découvrire notre platforme !");
-
-        mailMessage.setText(
-                "On vous invite à découvrire notre plateforme de recherche de services à l'adresse : http://localhost:4200");
-
-        emailManager.sendEmail(mailMessage);
+        emailManager.inviteUser(email);
 
         return ResponseEntity.ok(new ResponseMessage("Email envoyé"));
     }
