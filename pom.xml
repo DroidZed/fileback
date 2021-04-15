@@ -138,7 +138,7 @@
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>html2pdf</artifactId>
-            <version>3.0.3</version>
+            <version>3.0.4</version>
         </dependency>
         <!-- Spring security messaging -->
         <dependency>
