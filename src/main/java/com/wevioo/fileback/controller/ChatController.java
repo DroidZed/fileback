@@ -2,7 +2,6 @@ package com.wevioo.fileback.controller;
 
 import com.wevioo.fileback.interfaces.ChatManager;
 import com.wevioo.fileback.model.ChatModel;
-import com.wevioo.fileback.model.ChatRoom;
 import lombok.AllArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;

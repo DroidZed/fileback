@@ -14,6 +14,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>fileback</name>
     <description>Internship project</description>
+    <packaging>jar</packaging>
     <properties>
         <java.version>15</java.version>
     </properties>

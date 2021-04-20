@@ -1,7 +1,5 @@
 package com.wevioo.fileback.interfaces;
 
-import org.springframework.mail.SimpleMailMessage;
-
 import javax.mail.MessagingException;
 
 public interface EmailManager {

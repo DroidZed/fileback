@@ -1,25 +1,22 @@
 package com.wevioo.fileback.service;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import com.wevioo.fileback.interfaces.EmailManager;
-import lombok.AllArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.ContentType;
-import javax.mail.internet.MimeMessage;
-import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 @Service
 public class EmailService implements EmailManager {

@@ -54,7 +54,7 @@ public class UserManagerLayer implements UserManager {
     public Page<User> paginateUsers(Integer page)
     {
 
-        return this.userRepository.findAll(PageRequest.of(page, 7));
+        return this.userRepository.findAll(PageRequest.of(page, 5));
     }
 
     public Long countAll()

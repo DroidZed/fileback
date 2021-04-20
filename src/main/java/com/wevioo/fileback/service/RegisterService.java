@@ -1,5 +1,10 @@
 package com.wevioo.fileback.service;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+
 import com.wevioo.fileback.geolocationClasses.DisplayLatLng;
 import com.wevioo.fileback.interfaces.EmailManager;
 import com.wevioo.fileback.interfaces.GeoCoder;
@@ -12,19 +17,15 @@ import com.wevioo.fileback.model.User;
 import com.wevioo.fileback.repository.CategoryRepository;
 import com.wevioo.fileback.repository.ConfirmationTokenRepository;
 import com.wevioo.fileback.repository.UserRepository;
-import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.concurrent.ExecutionException;
+import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 
 @Service
 @AllArgsConstructor
