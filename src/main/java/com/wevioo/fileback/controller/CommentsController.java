@@ -1,12 +1,13 @@
 package com.wevioo.fileback.controller;
 
 import com.wevioo.fileback.interfaces.CommentManager;
+import com.wevioo.fileback.message.CommentBox;
 import com.wevioo.fileback.model.Comment;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
@@ -17,13 +18,13 @@ public class CommentsController {
         private final CommentManager commentManager;
 
         @GetMapping(path = "/get/all")
-        public Set<Comment> getAllCommentsOfNeed(@RequestParam("needId") Long needId)
+        public List<CommentBox> getAllCommentsOfNeed(@RequestParam("needId") Long needId)
         {
             return this.commentManager.getCommentsOfNeed(needId);
         }
 
         @GetMapping(path = "/get/last")
-        public Comment getLastComment(@RequestParam("needId") Long needId)
+        public CommentBox getLastComment(@RequestParam("needId") Long needId)
         {
                 return this.commentManager.getLastCommentPublishedOfNeed(needId);
         }

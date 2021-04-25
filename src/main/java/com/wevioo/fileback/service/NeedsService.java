@@ -52,6 +52,11 @@ public class NeedsService implements NeedsManager {
     }
 
     @Override
+    public Long countComments(Long idNeed) {
+        return this.needsRepository.countComments(idNeed);
+    }
+
+    @Override
     public List<LocalDate> getLimitDates()
     {
         return this.needsRepository.getLimitDates();
@@ -69,6 +74,11 @@ public class NeedsService implements NeedsManager {
                     d.setEtatBesoin(EtatBesoin.CLOTURE);
                     return this.needsRepository.save(d);
                 }).orElseThrow(() -> new NeedNotFoundException(needId));
+    }
+
+    @Override
+    public Long countAllOfUser(Long idUser) {
+        return this.needsRepository.coundNeedsByIdUser(idUser);
     }
 
     @Override

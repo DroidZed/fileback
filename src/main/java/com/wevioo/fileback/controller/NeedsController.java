@@ -33,10 +33,22 @@ public class NeedsController {
         return this.needsManager.collectNeedsOfUser(userid);
     }
 
+    @GetMapping(path = "/count/needs")
+    public Long countNeedsOfUser(@RequestParam("idUser") Long idUser)
+    {
+        return this.needsManager.countAllOfUser(idUser);
+    }
+
     @GetMapping(path = "/get/all")
     public List<Needs> getAllNeeds()
     {
         return this.needsManager.getAll();
+    }
+
+    @GetMapping(path = "/count/comments")
+    public  Long countCommentsOfNeed(@RequestParam("idNeed") Long idNeed)
+    {
+        return this.needsManager.countComments(idNeed);
     }
 
 

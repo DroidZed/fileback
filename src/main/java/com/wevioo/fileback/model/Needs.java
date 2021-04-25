@@ -1,5 +1,6 @@
 package com.wevioo.fileback.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wevioo.fileback.enums.EtatBesoin;
 import lombok.*;
 import org.hibernate.annotations.Proxy;
@@ -75,6 +76,7 @@ public class Needs {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "need")
     private List<Devis> offres;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "besoin")
     private Set<Comment> comments;
 }

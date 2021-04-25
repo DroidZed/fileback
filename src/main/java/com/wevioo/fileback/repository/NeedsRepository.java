@@ -21,4 +21,10 @@ public interface NeedsRepository extends JpaRepository<Needs,Long> {
 
     @Query(value = "SELECT dateLimite from Needs order by dateLimite")
     List<LocalDate> getLimitDates();
+
+    @Query(value = "Select count(n.idNeed) from Needs n WHERE n.user.idUser = ?1")
+    Long coundNeedsByIdUser(Long idUser);
+
+    @Query(value = "select count(c.comment_id) from comment as c join needs n on c.id_need = n.id_need where n.id_need = ?1", nativeQuery = true)
+    Long countComments(Long idNeed);
 }

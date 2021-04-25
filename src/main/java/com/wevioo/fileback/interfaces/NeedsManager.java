@@ -11,17 +11,19 @@ import java.util.concurrent.CompletableFuture;
 
 public interface NeedsManager {
 
-    List<?> countByCategory();
-    List<LocalDate> getLimitDates();
     List<Needs> getAll();
+    List<?> countByCategory();
+    Long countComments(Long idNeed);
+    List<LocalDate> getLimitDates();
     void cloturerBesoin(Long needId);
+    Long countAllOfUser(Long idUser);
+    ResponseEntity<?> deleteAllTheNeeds();
     ResponseEntity<?> getNeedByID(Long id);
-    ResponseEntity<?> injectNewNeed(Needs besoin, Long catid, Long userid);
+    ResponseEntity<?> deleteOne(Long needid);
     List<Needs> collectNeedsOfUser(Long userid);
     List<Needs> collectNeedsOfCategory(Long catid);
-    ResponseEntity<?> deleteAllTheNeeds();
-    ResponseEntity<?> deleteOne(Long needid);
     ResponseEntity<?> modifyNeed(Long needid, Needs need);
+    ResponseEntity<?> injectNewNeed(Needs besoin, Long catid, Long userid);
     CompletableFuture<ResponseEntity<?>> getImageA(Long needId) throws IOException;
     CompletableFuture<ResponseEntity<?>> getImageB(Long needId) throws IOException;
     CompletableFuture<ResponseEntity<?>> getImageC(Long needId) throws IOException;
@@ -30,4 +32,5 @@ public interface NeedsManager {
     CompletableFuture<ResponseEntity<?>> uploadNeedPicB(MultipartFile needImageB, Long need_id);
     CompletableFuture<ResponseEntity<?>> uploadNeedPicC(MultipartFile needImageC, Long need_id);
     CompletableFuture<ResponseEntity<?>> uploadNeedPicD(MultipartFile needImageD, Long need_id);
+
 }
