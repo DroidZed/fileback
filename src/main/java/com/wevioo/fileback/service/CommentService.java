@@ -9,7 +9,6 @@ import com.wevioo.fileback.model.Needs;
 import com.wevioo.fileback.model.User;
 import com.wevioo.fileback.repository.CommentRepository;
 import com.wevioo.fileback.repository.NeedsRepository;
-import com.wevioo.fileback.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
