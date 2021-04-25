@@ -81,15 +81,17 @@ public class CommentService implements CommentManager {
 
         CommentBox cbox = new CommentBox();
 
-        cbox.setCommentObject(c);
+        if (c != null) {
 
-        User details = this.userManagerLayer.getAUserById(c.getSenderId());
+            cbox.setCommentObject(c);
 
-        cbox.setCommentOwnerFullName(details.getFullName());
+            User details = this.userManagerLayer.getAUserById(c.getSenderId());
 
-        cbox.setCommentOwnerImage("http://localhost:8080/users/image/get/"+c.getSenderId());
+            cbox.setCommentOwnerFullName(details.getFullName());
 
+            cbox.setCommentOwnerImage("http://localhost:8080/users/image/get/" + c.getSenderId());
+
+        }
         return cbox;
-
     }
 }
